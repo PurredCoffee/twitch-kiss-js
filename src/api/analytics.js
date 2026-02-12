@@ -40,7 +40,7 @@ module.exports = (twitchBot, api) => ({
      * @param {{started: Date, ended: Date}?} timeFrame The reporting window's start date. The start date must be on or after January 31, 2018. If you specify an earlier date, the API ignores it and uses January 31, 2018. If you don't specify a start and end date, the report includes all available data since January 31, 2018.The report contains one row of data for each day in the reporting window.
      * @param {number?} first The maximum number of report URLs to return per page in the response. The minimum page size is 1 URL per page and the maximum is 100 URLs per page. The default is 20. *NOTE*: While you may specify a maximum value of 100, the response will contain at most 20 URLs per page.
      */
-    getExtensionAnalytics(extensionId=null, type="overview_v2", timeFrame=null, first=null) {
+    getExtensionAnalytics(extensionId=null, type="overview_v2", timeFrame=null, first=20) {
         if(extensionId && typeof extensionId != 'string') return TypeError('extensionId is not a string');
         if(type && !["overview_v2"].includes(type)) return TypeError('type is not one of "overview_v2"');
         if(timeFrame) {
@@ -83,7 +83,7 @@ module.exports = (twitchBot, api) => ({
      * @param {{started: Date, ended: Date}?} timeFrame The reporting window's start date. The start date must be on or after January 31, 2018. If you specify an earlier date, the API ignores it and uses January 31, 2018. If you don't specify a start and end date, the report includes all available data since January 31, 2018.The report contains one row of data for each day in the reporting window.
      * @param {number?} first The maximum number of report URLs to return per page in the response. The minimum page size is 1 URL per page and the maximum is 100 URLs per page. The default is 20. *NOTE*: While you may specify a maximum value of 100, the response will contain at most 20 URLs per page.
      */
-    getGameAnalytics(gameId=null, type="overview_v2", timeFrame=null, first=null, after=null) {
+    getGameAnalytics(gameId=null, type="overview_v2", timeFrame=null, first=20, after=null) {
         if(gameId && typeof gameId != 'string') return TypeError('gameId is not a string');
         if(type && !["overview_v2"].includes(type)) return TypeError('type is not one of "overview_v2"');
         if(timeFrame) {
