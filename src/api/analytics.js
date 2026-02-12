@@ -42,12 +42,16 @@ module.exports = (twitchBot, api) => ({
      */
     getExtensionAnalytics(extensionId=null, type="overview_v2", timeFrame=null, first=20) {
         if(extensionId && typeof extensionId != 'string') return TypeError('extensionId is not a string');
-        if(type && !["overview_v2"].includes(type)) return TypeError('type is not one of "overview_v2"');
+        if(!type) type="overview_v2";
+        if(!["overview_v2"].includes(type)) return TypeError('type is not one of "overview_v2"');
         if(timeFrame) {
             if(!timeFrame.started || !(timeFrame.started instanceof Date)) return TypeError('timeframe.started is not a Date!');
             if(!timeFrame.ended || !(timeFrame.ended instanceof Date)) return TypeError('timeframe.ended is not a Date!');
+            timeFrame.ended.setHours(0, 0, 0, 0);
+            timeFrame.started.setHours(0, 0, 0, 0);
         }
-        if(first && (typeof first != 'number' || first <= 0 || first > 100)) return TypeError('first is not a number or 100 < first <= 0');
+        if(!first) first = 20;
+        if(typeof first != 'number' || first <= 0 || first > 100) return TypeError('first is not a number or 100 < first <= 0');
         return api.getExtensionAnalytics(extensionId, type, timeFrame?rfc(timeFrame.started):null, timeFrame?rfc(timeFrame.ended):null, first, null);
     },
     /**
@@ -85,12 +89,16 @@ module.exports = (twitchBot, api) => ({
      */
     getGameAnalytics(gameId=null, type="overview_v2", timeFrame=null, first=20, after=null) {
         if(gameId && typeof gameId != 'string') return TypeError('gameId is not a string');
-        if(type && !["overview_v2"].includes(type)) return TypeError('type is not one of "overview_v2"');
+        if(!type) type="overview_v2";
+        if(!["overview_v2"].includes(type)) return TypeError('type is not one of "overview_v2"');
         if(timeFrame) {
             if(!timeFrame.started || !(timeFrame.started instanceof Date)) return TypeError('timeframe.started is not a Date!');
             if(!timeFrame.ended || !(timeFrame.ended instanceof Date)) return TypeError('timeframe.ended is not a Date!');
+            timeFrame.ended.setHours(0, 0, 0, 0);
+            timeFrame.started.setHours(0, 0, 0, 0);
         }
-        if(first && (typeof first != 'number' || first <= 0 || first > 100)) return TypeError('first is not a number or 100 < first <= 0');
+        if(!first) first = 20;
+        if(typeof first != 'number' || first <= 0 || first > 100) return TypeError('first is not a number or 100 < first <= 0');
         return api.getGameAnalytics(gameId, type, timeFrame?rfc(timeFrame.started):null, timeFrame?rfc(timeFrame.ended):null, first, null);
     }
 })
