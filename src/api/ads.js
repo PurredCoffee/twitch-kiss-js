@@ -33,7 +33,7 @@ module.exports = (twitchBot, api) => ({
      * @returns 
      */
     startCommercial(length) {
-        if(typeof length != 'number') throw TypeError('length is not a number!');
+        if(typeof length != 'number') throw Promise.reject(TypeError('length is not a number!'));
         return api.startCommercial(twitchBot.userID ?? "", length);
     },
     /**
