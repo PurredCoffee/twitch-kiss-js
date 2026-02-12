@@ -65,6 +65,6 @@ module.exports = (twitchBot, api) => ({
         return api.getAdSchedule(twitchBot.userID ?? "");
     },
     snoozeNextAd() {
-        return api.
+        return api.snoozeNextAd(twitchBot.userID ?? "");
     }
 })
