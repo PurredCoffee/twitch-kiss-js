@@ -1,0 +1,1 @@
+module.exports = /** @type {const} **/ (Symbol('katzentatzentanz.kiss.twitch'));
