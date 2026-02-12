@@ -58,16 +58,83 @@ module.exports = (twitchBot, api) => ({
         if(!count) count=10;
         if(typeof count != 'number' || count <= 0 || count > 100) return Promise.reject(TypeError('first is not a number or 100 < first <= 0'));
         if(started) {
-            if(!period) return Promise.reject(TypeError('timeframe.started is not a Date!'));
+            if(!period) return Promise.reject(TypeError('started is not a Date!'));
             if(!(started instanceof Date)) return Promise.reject(TypeError('started is not a Date!'));
             started.setHours(8, 0, 0, 0);
         }
+        if(userId && typeof userId != 'string') return Promise.reject(TypeError('userId is not a string'));
         return api.getBitsLeaderboard(count, period, started?rfc(started):null, userId);
     },
-    getCheermotes() {
-        return api.getCheermotes();
-    },
-    getExtensionTransactions() {
-        return api.getExtensionTransactions();
+    /**
+     * Gets a list of Cheermotes that users can use to cheer Bits in any Bits-enabled channel’s chat room. Cheermotes are animated emotes that viewers can assign Bits to.
+     *
+     * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-cheermotes)
+     *
+     * ---
+     * Example Response:
+     * ```json
+     * {
+     *   "data": [
+     *     {
+     *       "prefix": "Cheer",
+     *       "tiers": [
+     *         {
+     *           "min_bits": 1,
+     *           "id": "1",
+     *           "color": "#979797",
+     *           "images": {
+     *             "dark": {
+     *               "animated": {
+     *                 "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/dark/animated/1/1.gif",
+     *                 "1.5": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/dark/animated/1/1.5.gif",
+     *                 "2": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/dark/animated/1/2.gif",
+     *                 "3": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/dark/animated/1/3.gif",
+     *                 "4": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/dark/animated/1/4.gif"
+     *               },
+     *               "static": {
+     *                 "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/dark/static/1/1.png",
+     *                 "1.5": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/dark/static/1/1.5.png",
+     *                 "2": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/dark/static/1/2.png",
+     *                 "3": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/dark/static/1/3.png",
+     *                 "4": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/dark/static/1/4.png"
+     *               }
+     *             },
+     *             "light": {
+     *               "animated": {
+     *                 "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/animated/1/1.gif",
+     *                 "1.5": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/animated/1/1.5.gif",
+     *                 "2": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/animated/1/2.gif",
+     *                 "3": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/animated/1/3.gif",
+     *                 "4": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/animated/1/4.gif"
+     *               },
+     *               "static": {
+     *                 "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/static/1/1.png",
+     *                 "1.5": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/static/1/1.5.png",
+     *                 "2": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/static/1/2.png",
+     *                 "3": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/static/1/3.png",
+     *                 "4": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/static/1/4.png"
+     *               }
+     *             }
+     *           },
+     *           "can_cheer": true,
+     *           "show_in_bits_card": true
+     *         }
+     *         ...
+     *       ],
+     *       "type": "global_first_party",
+     *       "order": 1,
+     *       "last_updated": "2018-05-22T00:06:04Z",
+     *       "is_charitable": false
+     *     },
+     *     ...
+     *   ]
+     * }
+     * ```
+     * ---
+     * @param {string?} broadcasterId The ID of the broadcaster whose custom Cheermotes you want to get. Specify the broadcaster’s ID if you want to include the broadcaster’s Cheermotes in the response (not all broadcasters upload Cheermotes). If not specified, the response contains only global Cheermotes. If the broadcaster uploaded Cheermotes, the type field in the response is set to channel_custom.
+     */
+    getCheermotes(broadcasterId) {
+        if(broadcasterId && typeof broadcasterId != 'string') return Promise.reject(TypeError('broadcasterId is not a string'));
+        return api.getCheermotes(broadcasterId);
     }
 })
