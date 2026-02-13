@@ -1591,7 +1591,7 @@ module.exports = (reqFunc) => ({
          *
          * ---
          * @param {string} broadcasterId The ID of the broadcaster whose custom rewards you want to get. This ID must match the user ID found in the OAuth token.
-         * @param {string?} id A list of IDs to filter the rewards by. To specify more than one ID, include this parameter for each reward you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 50 IDs.Duplicate IDs are ignored. The response contains only the IDs that were found. If none of the IDs were found, the response is 404 Not Found.
+         * @param {string[]?} id A list of IDs to filter the rewards by. To specify more than one ID, include this parameter for each reward you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 50 IDs.Duplicate IDs are ignored. The response contains only the IDs that were found. If none of the IDs were found, the response is 404 Not Found.
          * @param {boolean?} onlyManageableRewards A Boolean value that determines whether the response contains only the custom rewards that the app may manage (the app is identified by the ID in the Client-Id header). Set to *true* to get only the custom rewards that the app may manage. The default is *false*.
          * @returns {Promise<GetCustomRewardResponse>} 
          */
@@ -1632,8 +1632,13 @@ module.exports = (reqFunc) => ({
          * @prop {GetCustomRewardRedemptionResponse_Data_Reward} reward The reward that the user redeemed.
          */
         /**
+         * @typedef GetCustomRewardRedemptionResponse_Pagination
+         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+         */
+        /**
          * @typedef GetCustomRewardRedemptionResponse
          * @prop {GetCustomRewardRedemptionResponse_Data[]} data The list of redemptions for the specified reward. The list is empty if there are no redemptions that match the redemption criteria.
+         * @prop {GetCustomRewardRedemptionResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
          */
         /**
          * Gets a list of redemptions for a custom reward.
@@ -9613,8 +9618,13 @@ module.exports = (reqFunc) => ({
          * @prop {GetChannelStreamScheduleResponse_Data_Pagination} pagination The information used to page through a list of results. The object is empty if there are no more pages left to page through. [Read more](https://dev.twitch.tv/docs/api/guide#pagination).
          */
         /**
+         * @typedef GetChannelStreamScheduleResponse_Pagination
+         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+         */
+        /**
          * @typedef GetChannelStreamScheduleResponse
          * @prop {GetChannelStreamScheduleResponse_Data} data The broadcaster’s streaming schedule.
+         * @prop {GetChannelStreamScheduleResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
          */
         /**
          * Gets the broadcaster’s streaming schedule.
@@ -10040,8 +10050,13 @@ The Content-Type response header is set to `text/calendar`.
          * @prop {string} id An ID that uniquely identifies the game or category.
          */
         /**
+         * @typedef SearchCategoriesResponse_Pagination
+         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+         */
+        /**
          * @typedef SearchCategoriesResponse
          * @prop {SearchCategoriesResponse_Data[]} data The list of games or categories that match the query. The list is empty if there are no matches.
+         * @prop {SearchCategoriesResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
          */
         /**
          * Gets the games or categories that match the specified query.
@@ -10117,8 +10132,13 @@ The Content-Type response header is set to `text/calendar`.
          * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the broadcaster started streaming. The string is empty if the broadcaster is not streaming live.
          */
         /**
+         * @typedef SearchChannelsResponse_Pagination
+         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+         */
+        /**
          * @typedef SearchChannelsResponse
          * @prop {SearchChannelsResponse_Data[]} data The list of channels that match the query. The list is empty if there are no matches.
+         * @prop {SearchChannelsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
          */
         /**
          * Gets the channels that match the specified query and have streamed content within the past 6 months.
@@ -11386,8 +11406,13 @@ The Content-Type response header is set to `text/calendar`.
          * @prop {string} displayName The blocked user’s display name.
          */
         /**
+         * @typedef GetUserBlockListResponse_Pagination
+         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+         */
+        /**
          * @typedef GetUserBlockListResponse
          * @prop {GetUserBlockListResponse_Data[]} data The list of blocked users. The list is in descending order by when the user was blocked.
+         * @prop {GetUserBlockListResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
          */
         /**
          * Gets the list of users that the broadcaster has blocked.
