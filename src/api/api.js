@@ -215,13 +215,9 @@ module.exports = (reqFunc) => ({
          * @prop {GetExtensionAnalyticsResponse_Data_Date_range} dateRange The reporting window’s start and end dates, in RFC3339 format.
          */
         /**
-         * @typedef GetExtensionAnalyticsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetExtensionAnalyticsResponse
          * @prop {GetExtensionAnalyticsResponse_Data[]} data A list of reports. The reports are returned in no particular order; however, the data within each report is in ascending order by date (newest first). The report contains one row of data per day of the reporting window; the report contains rows for only those days that the extension was used. The array is empty if there are no reports.
-         * @prop {GetExtensionAnalyticsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetExtensionAnalyticsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets an analytics report for one or more extensions.
@@ -299,13 +295,9 @@ module.exports = (reqFunc) => ({
          * @prop {GetGameAnalyticsResponse_Data_Date_range} dateRange The reporting window’s start and end dates, in RFC3339 format.
          */
         /**
-         * @typedef GetGameAnalyticsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetGameAnalyticsResponse
          * @prop {GetGameAnalyticsResponse_Data[]} data A list of reports. The reports are returned in no particular order; however, the data within each report is in ascending order by date (newest first). The report contains one row of data per day of the reporting window; the report contains rows for only those days that the game was used. A report is available only if the game was broadcast for at least 5 hours over the reporting period. The array is empty if there are no reports.
-         * @prop {GetGameAnalyticsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetGameAnalyticsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets an analytics report for one or more games.
@@ -683,13 +675,9 @@ module.exports = (reqFunc) => ({
          * @prop {GetExtensionTransactionsResponse_Data_Product_data} productData Contains details about the digital product.
          */
         /**
-         * @typedef GetExtensionTransactionsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetExtensionTransactionsResponse
          * @prop {GetExtensionTransactionsResponse_Data[]} data The list of transactions.
-         * @prop {GetExtensionTransactionsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetExtensionTransactionsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets an extension’s list of transactions.
@@ -1006,13 +994,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} followedAt The UTC timestamp when the user started following the broadcaster.
          */
         /**
-         * @typedef GetFollowedChannelsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetFollowedChannelsResponse
          * @prop {GetFollowedChannelsResponse_Data[]} data The list of broadcasters that the user follows. The list is in descending order by `followed_at` (with the most recently followed broadcaster first). The list is empty if the user doesn’t follow anyone.
-         * @prop {GetFollowedChannelsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read more](https://dev.twitch.tv/docs/api/guide#pagination).
+         * @prop {(() => Promise<GetFollowedChannelsResponse>)?} nextPage Retrieves the next page of data
          * @prop {number} total The total number of broadcasters that the user follows. As someone pages through the list, the number may change as the user follows or unfollows broadcasters.
          */
         /**
@@ -1632,13 +1616,9 @@ module.exports = (reqFunc) => ({
          * @prop {GetCustomRewardRedemptionResponse_Data_Reward} reward The reward that the user redeemed.
          */
         /**
-         * @typedef GetCustomRewardRedemptionResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetCustomRewardRedemptionResponse
          * @prop {GetCustomRewardRedemptionResponse_Data[]} data The list of redemptions for the specified reward. The list is empty if there are no redemptions that match the redemption criteria.
-         * @prop {GetCustomRewardRedemptionResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetCustomRewardRedemptionResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets a list of redemptions for a custom reward.
@@ -2197,13 +2177,9 @@ module.exports = (reqFunc) => ({
          * @prop {GetCharityCampaignDonationsResponse_Data_Amount} amount An object that contains the amount of money that the user donated.
          */
         /**
-         * @typedef GetCharityCampaignDonationsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetCharityCampaignDonationsResponse
          * @prop {GetCharityCampaignDonationsResponse_Data[]} data A list that contains the donations that users have made to the broadcaster’s charity campaign. The list is empty if the broadcaster is not currently running a charity campaign; the donation information is not available after the campaign ends.
-         * @prop {GetCharityCampaignDonationsResponse_Pagination} pagination An object that contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetCharityCampaignDonationsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets the list of donations that users have made to the broadcaster’s active charity campaign.
@@ -2291,13 +2267,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} userName The user’s display name.
          */
         /**
-         * @typedef GetChattersResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetChattersResponse
          * @prop {GetChattersResponse_Data[]} data The list of users that are connected to the broadcaster’s chat room. The list is empty if no users are connected to the chat room.
-         * @prop {GetChattersResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetChattersResponse>)?} nextPage Retrieves the next page of data
          * @prop {number} total The total number of users that are connected to the broadcaster’s chat room. As you page through the list, the number of users may change as users join and leave the chat room.
          */
         /**
@@ -3012,14 +2984,10 @@ module.exports = (reqFunc) => ({
          * - light
          */
         /**
-         * @typedef GetUserEmotesResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetUserEmotesResponse
          * @prop {GetUserEmotesResponse_Data[]} data 
          * @prop {string} template A templated URL. Uses the values from the id, format, scale, and theme_mode fields to replace the like-named placeholder strings in the templated URL to create a CDN (content delivery network) URL that you use to fetch the emote. For information about what the template looks like and how to use it to fetch emotes, see [Emote CDN URL](https://dev.twitch.tv/docs/irc/emotes#cdn-template) format.
-         * @prop {GetUserEmotesResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. For more information about pagination support, see [Twitch API Guide - Pagination](https://dev.twitch.tv/docs/api/guide#pagination).
+         * @prop {(() => Promise<GetUserEmotesResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Retrieves emotes available to the user across all channels.
@@ -3654,13 +3622,9 @@ module.exports = (reqFunc) => ({
          * @prop {boolean} isFeatured A Boolean value that indicates if the clip is featured or not.
          */
         /**
-         * @typedef GetClipsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after or before query parameter to this value depending on whether you’re paging forwards or backwards.
-         */
-        /**
          * @typedef GetClipsResponse
          * @prop {GetClipsResponse_Data[]} data The list of video clips. For clips returned by game_id or broadcaster_id, the list is in descending order by view count. For lists returned by id, the list is in the same order as the input IDs.
-         * @prop {GetClipsResponse_Pagination} pagination The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetClipsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets one or more video clips.
@@ -4100,13 +4064,9 @@ module.exports = (reqFunc) => ({
          * @prop {GetConduitShardsResponse_Data_Transport} transport The transport details used to send the notifications.
          */
         /**
-         * @typedef GetConduitShardsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetConduitShardsResponse
          * @prop {GetConduitShardsResponse_Data[]} data List of information about a conduit's shards.
-         * @prop {GetConduitShardsResponse_Pagination} pagination Contains information used to page through a list of results. The object is empty if there are no more pages left to page through.
+         * @prop {(() => Promise<GetConduitShardsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets a lists of all shards for a conduit.
@@ -4488,13 +4448,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} lastUpdated The UTC date and time (in RFC3339 format) of when the entitlement was last updated.
          */
         /**
-         * @typedef GetDropsEntitlementsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after query parameter to this value to page forward through the results.
-         */
-        /**
          * @typedef GetDropsEntitlementsResponse
          * @prop {GetDropsEntitlementsResponse_Data[]} data The list of entitlements.
-         * @prop {GetDropsEntitlementsResponse_Pagination} pagination The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetDropsEntitlementsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets an organization’s list of entitlements that have been granted to a game, a user, or both.
@@ -4926,7 +4882,7 @@ module.exports = (reqFunc) => ({
         /**
          * @typedef GetExtensionLiveChannelsResponse
          * @prop {GetExtensionLiveChannelsResponse_Data[]} data The list of broadcasters that are streaming live and that have installed or activated the extension.
-         * @prop {string} pagination This field contains the cursor used to page through the results. The field is empty if there are no more pages left to page through. Note that this field is a string compared to other endpoints that use a *Pagination* object. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetExtensionLiveChannelsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets a list of broadcasters that are streaming live and have installed or activated the extension.
@@ -5898,13 +5854,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} igdbId The ID that [IGDB](https://www.igdb.com/) uses to identify this game. If the IGDB ID is not available to Twitch, this field is set to an empty string.
          */
         /**
-         * @typedef GetTopGamesResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after or before query parameter to get the next or previous page of results.
-         */
-        /**
          * @typedef GetTopGamesResponse
          * @prop {GetTopGamesResponse_Data[]} data The list of broadcasts. The broadcasts are sorted by the number of viewers, with the most popular first.
-         * @prop {GetTopGamesResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetTopGamesResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets information about all broadcasts on Twitch.
@@ -7347,13 +7299,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} moderatorName The moderator’s display name.
          */
         /**
-         * @typedef GetBannedUsersResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetBannedUsersResponse
          * @prop {GetBannedUsersResponse_Data[]} data The list of users that were banned or put in a timeout.
-         * @prop {GetBannedUsersResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetBannedUsersResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets all users that the broadcaster banned or put in a timeout.
@@ -7560,13 +7508,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} resolutionText Text input by the resolver (moderator) of the unban. request
          */
         /**
-         * @typedef GetUnbanRequestsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetUnbanRequestsResponse
          * @prop {GetUnbanRequestsResponse_Data[]} data A list that contains information about the channel's unban requests.
-         * @prop {GetUnbanRequestsResponse_Pagination} pagination Contains information used to page through a list of results. The object is empty if there are no more pages left to page through.
+         * @prop {(() => Promise<GetUnbanRequestsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets a list of unban requests for a broadcaster’s channel.
@@ -7745,13 +7689,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} expiresAt The UTC date and time (in RFC3339 format) that the blocked term is set to expire. After the block expires, users may use the term in the broadcaster’s chat room.This field is *null* if the term was added manually or was permanently blocked by AutoMod.
          */
         /**
-         * @typedef GetBlockedTermsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetBlockedTermsResponse
          * @prop {GetBlockedTermsResponse_Data[]} data The list of blocked terms. The list is in descending order of when they were created (see the `created_at` timestamp).
-         * @prop {GetBlockedTermsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetBlockedTermsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets the broadcaster’s list of non-private, blocked words or phrases.
@@ -7960,13 +7900,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} broadcasterName The channels’ display name.
          */
         /**
-         * @typedef GetModeratedChannelsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetModeratedChannelsResponse
          * @prop {GetModeratedChannelsResponse_Data[]} data The list of channels that the user has moderator privileges in.
-         * @prop {GetModeratedChannelsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through.
+         * @prop {(() => Promise<GetModeratedChannelsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets a list of channels that the specified user has moderator privileges in.
@@ -8033,13 +7969,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} userName The user’s display name.
          */
         /**
-         * @typedef GetModeratorsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetModeratorsResponse
          * @prop {GetModeratorsResponse_Data[]} data The list of moderators.
-         * @prop {GetModeratorsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetModeratorsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets all users allowed to moderate the broadcaster’s chat room.
@@ -8178,13 +8110,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} userLogin The user’s login name.
          */
         /**
-         * @typedef GetVIPsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetVIPsResponse
          * @prop {GetVIPsResponse_Data[]} data The list of VIPs. The list is empty if the broadcaster doesn’t have VIP users.
-         * @prop {GetVIPsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetVIPsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets a list of the broadcaster’s VIPs.
@@ -8691,13 +8619,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} endedAt The UTC date and time (in RFC3339 format) of when the poll ended. If `status` is ACTIVE, this field is set to *null*.
          */
         /**
-         * @typedef GetPollsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request's after query parameter.
-         */
-        /**
          * @typedef GetPollsResponse
          * @prop {GetPollsResponse_Data[]} data A list of polls. The polls are returned in descending order of start time unless you specify IDs in the request, in which case they're returned in the same order as you passed them in the request. The list is empty if the broadcaster hasn't created polls.
-         * @prop {GetPollsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetPollsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets a list of polls that the broadcaster created.
@@ -9099,13 +9023,9 @@ module.exports = (reqFunc) => ({
          * @prop {string} lockedAt The UTC date and time of when the Prediction was locked. If `status` is not LOCKED, this is set to *null*.
          */
         /**
-         * @typedef GetPredictionsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetPredictionsResponse
          * @prop {GetPredictionsResponse_Data[]} data The broadcaster’s list of Channel Points Predictions. The list is sorted in descending ordered by when the prediction began (the most recent prediction is first). The list is empty if the broadcaster hasn’t created predictions.
-         * @prop {GetPredictionsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetPredictionsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets a list of Channel Points Predictions that the broadcaster created.
@@ -9605,26 +9525,18 @@ module.exports = (reqFunc) => ({
          * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation ends.
          */
         /**
-         * @typedef GetChannelStreamScheduleResponse_Data_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after query parameter to this value.
-         */
-        /**
          * @typedef GetChannelStreamScheduleResponse_Data
          * @prop {GetChannelStreamScheduleResponse_Data_Segments[]} segments The list of broadcasts in the broadcaster’s streaming schedule.
          * @prop {string} broadcasterId The ID of the broadcaster that owns the broadcast schedule.
          * @prop {string} broadcasterName The broadcaster’s display name.
          * @prop {string} broadcasterLogin The broadcaster’s login name.
          * @prop {GetChannelStreamScheduleResponse_Data_Vacation} vacation The dates when the broadcaster is on vacation and not streaming. Is set to *null* if vacation mode is not enabled.
-         * @prop {GetChannelStreamScheduleResponse_Data_Pagination} pagination The information used to page through a list of results. The object is empty if there are no more pages left to page through. [Read more](https://dev.twitch.tv/docs/api/guide#pagination).
-         */
-        /**
-         * @typedef GetChannelStreamScheduleResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+         * @prop {(() => Promise<GetChannelStreamScheduleResponse_Data>)?} nextPage Retrieves the next page of data
          */
         /**
          * @typedef GetChannelStreamScheduleResponse
          * @prop {GetChannelStreamScheduleResponse_Data} data The broadcaster’s streaming schedule.
-         * @prop {GetChannelStreamScheduleResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetChannelStreamScheduleResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets the broadcaster’s streaming schedule.
@@ -10050,13 +9962,9 @@ The Content-Type response header is set to `text/calendar`.
          * @prop {string} id An ID that uniquely identifies the game or category.
          */
         /**
-         * @typedef SearchCategoriesResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef SearchCategoriesResponse
          * @prop {SearchCategoriesResponse_Data[]} data The list of games or categories that match the query. The list is empty if there are no matches.
-         * @prop {SearchCategoriesResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<SearchCategoriesResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets the games or categories that match the specified query.
@@ -10132,13 +10040,9 @@ The Content-Type response header is set to `text/calendar`.
          * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the broadcaster started streaming. The string is empty if the broadcaster is not streaming live.
          */
         /**
-         * @typedef SearchChannelsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef SearchChannelsResponse
          * @prop {SearchChannelsResponse_Data[]} data The list of channels that match the query. The list is empty if there are no matches.
-         * @prop {SearchChannelsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<SearchChannelsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets the channels that match the specified query and have streamed content within the past 6 months.
@@ -10328,13 +10232,9 @@ The Content-Type response header is set to `text/calendar`.
          * @prop {boolean} isMature *IMPORTANT* This field is deprecated and returns only `false`.A Boolean value that indicates whether the stream is meant for mature audiences.
          */
         /**
-         * @typedef GetStreamsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after or before query parameter to this value depending on whether you’re paging forwards or backwards.
-         */
-        /**
          * @typedef GetStreamsResponse
          * @prop {GetStreamsResponse_Data[]} data The list of streams.
-         * @prop {GetStreamsResponse_Pagination} pagination The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetStreamsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets a list of all streams.
@@ -10476,13 +10376,9 @@ The Content-Type response header is set to `text/calendar`.
          * @prop {boolean} isMature *IMPORTANT* This field is deprecated and returns only `false`.A Boolean value that indicates whether the stream is meant for mature audiences.
          */
         /**
-         * @typedef GetFollowedStreamsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after query parameter to this value.
-         */
-        /**
          * @typedef GetFollowedStreamsResponse
          * @prop {GetFollowedStreamsResponse_Data[]} data The list of live streams of broadcasters that the specified user follows. The list is in descending order by the number of viewers watching the stream. Because viewers come and go during a stream, it’s possible to find duplicate or missing streams in the list as you page through the results. The list is empty if none of the followed broadcasters are streaming live.
-         * @prop {GetFollowedStreamsResponse_Pagination} pagination The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetFollowedStreamsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets the list of broadcasters that the user follows and that are streaming live.
@@ -10812,13 +10708,9 @@ The Content-Type response header is set to `text/calendar`.
          * @prop {Map<string,string>} localizationDescriptions A dictionary that contains the localized descriptions of the tag. The key is in the form, <locale>-<country/region>. For example, en-us. The value is the localized description.
          */
         /**
-         * @typedef GetAllStreamTagsResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after query parameter to this value to page forwards through the results.
-         */
-        /**
          * @typedef GetAllStreamTagsResponse
          * @prop {GetAllStreamTagsResponse_Data[]} data The list of stream tags that the broadcaster can apply to their channel.
-         * @prop {GetAllStreamTagsResponse_Pagination} pagination The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetAllStreamTagsResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets the list of all stream tags that Twitch defines. You can also filter the list by one or more tag IDs.
@@ -11406,13 +11298,9 @@ The Content-Type response header is set to `text/calendar`.
          * @prop {string} displayName The blocked user’s display name.
          */
         /**
-         * @typedef GetUserBlockListResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
-         */
-        /**
          * @typedef GetUserBlockListResponse
          * @prop {GetUserBlockListResponse_Data[]} data The list of blocked users. The list is in descending order by when the user was blocked.
-         * @prop {GetUserBlockListResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetUserBlockListResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets the list of users that the broadcaster has blocked.
@@ -11990,13 +11878,9 @@ The Content-Type response header is set to `text/calendar`.
          * @prop {GetVideosResponse_Data_Muted_segments[]} mutedSegments The segments that Twitch Audio Recognition muted; otherwise, *null*.
          */
         /**
-         * @typedef GetVideosResponse_Pagination
-         * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request's after or before query parameter depending on whether you're paging forwards or backwards through the results.
-         */
-        /**
          * @typedef GetVideosResponse
          * @prop {GetVideosResponse_Data[]} data The list of published videos that match the filter criteria.
-         * @prop {GetVideosResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+         * @prop {(() => Promise<GetVideosResponse>)?} nextPage Retrieves the next page of data
          */
         /**
          * Gets information about one or more published videos.
