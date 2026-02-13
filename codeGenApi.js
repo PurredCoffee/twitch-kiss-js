@@ -95,16 +95,25 @@ function convertParam(param, name, prevName) {
         case 'int64': param.type = 'number'; break;
         case 'bool': param.type = 'boolean'; break;
     }
+    if(name == 'pagination') {
+        return {
+            name: 'nextPage',
+            original: name,
+            type: `(() => Promise<${prevName}>)?`,
+            //@ts-ignore
+            required: (param.required)?param.required: undefined,
+            description: "Retrieves the next page of data"
+        }
+    }
     if(param.type.startsWith('map')) {
         param.type = param.type.replaceAll(/map<(.*),(.*)>/g, 'Map<$1,$2>');
     }
     if(param.attr) {
-        //
         const values = Object.entries(param.attr).map(([v, attr]) => convertParam(attr, v, `${prevName}_${classIfy(name)}`));
         addStr('        /**');
         addStr(`         * @typedef ${prevName}_${classIfy(name)}`);
         for(let v of values) {
-            addStr(`         * @prop {${v.type}} ${v.name} ${v.description?.replaceAll('\n', '\n         *\n         * ')}`)
+            addStr(`         * @prop {${v.type}} ${v.name} ${v.description?.replaceAll('\n', '\n         *\n         * ')}`);
         }
         addStr('         */');
         param.type = `${prevName}_${classIfy(name)}` + (param.type.endsWith('[]')?"[]":"");
@@ -151,11 +160,6 @@ function processFunc(doc, name) {
     for(let v in doc.reqBody) {
         //@ts-ignore
         params.push({body: true, ...convertParam(doc.reqBody[v], v, classIfy(name)+"Request")});
-    }
-    for(let v in doc.queryRestraints) {
-        let a = params.find(a => a.name === v);
-        //@ts-ignore
-        if(a) a.restraint = doc.queryRestraints[v];
     }
     addStr('        /**');
     addStr(`         * ${doc.short.replaceAll('\n', '\n         *\n         * ')}`);
@@ -208,7 +212,7 @@ function processFunc(doc, name) {
             }
             addStr(`         *`);
             addStr(`         * ---`);
-        })
+        });
     }
     for(let v of params) {
         addStr(`         * @param {${v.type}${v.required?"":"?"}} ${v.name} ${v.description?.replaceAll('\n', '\n         *\n         * ')}`)
