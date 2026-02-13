@@ -1720,7 +1720,7 @@ module.exports = (reqFunc) => ({
          * - UNFULFILLED
          *
          * *NOTE*: This field is required only if you don’t specify the id query parameter.*NOTE*: Canceled and fulfilled redemptions are returned for only a few days after they’re canceled or fulfilled.
-         * @param {string?} id A list of IDs to filter the redemptions by. To specify more than one ID, include this parameter for each redemption you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 50 IDs.Duplicate IDs are ignored. The response contains only the IDs that were found. If none of the IDs were found, the response is 404 Not Found.
+         * @param {string[]?} id A list of IDs to filter the redemptions by. To specify more than one ID, include this parameter for each redemption you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 50 IDs.Duplicate IDs are ignored. The response contains only the IDs that were found. If none of the IDs were found, the response is 404 Not Found.
          * @param {"OLDEST"|"NEWEST"?} sort The order to sort redemptions by. The possible case-sensitive values are:
          *
          * - OLDEST
