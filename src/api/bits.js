@@ -55,14 +55,14 @@ module.exports = (twitchBot, api) => ({
      * @param {string?} userId An ID that identifies a user that cheered bits in the channel. If count is greater than 1, the response may include users ranked above and below the specified user. To get the leaderboard’s top leaders, don’t specify a user ID.
      */
     getBitsLeaderboard(count=10, period='all', started=null, userId=null) {
-        if(!count) count=10;
+        if(count == null) count=10;
         if(typeof count != 'number' || count <= 0 || count > 100) return Promise.reject(TypeError('first is not a number or 100 < first <= 0'));
-        if(started) {
+        if(started != null) {
             if(!period) return Promise.reject(TypeError('started is not a Date!'));
             if(!(started instanceof Date)) return Promise.reject(TypeError('started is not a Date!'));
             started.setHours(8, 0, 0, 0);
         }
-        if(userId && typeof userId != 'string') return Promise.reject(TypeError('userId is not a string'));
+        if(userId != null && typeof userId != 'string') return Promise.reject(TypeError('userId is not a string'));
         return api.getBitsLeaderboard(count, period, started?rfc(started):null, userId);
     },
     /**

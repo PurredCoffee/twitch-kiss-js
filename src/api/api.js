@@ -1187,17 +1187,17 @@ module.exports = (reqFunc) => ({
         /**
          * @typedef CreateCustomRewardsResponse_Data_Max_per_stream_setting
          * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is *true* if the reward applies a limit.
-         * @prop {bigint} maxPerStream The maximum number of redemptions allowed per live stream.
+         * @prop {number} maxPerStream The maximum number of redemptions allowed per live stream.
          */
         /**
          * @typedef CreateCustomRewardsResponse_Data_Max_per_user_per_stream_setting
          * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is *true* if the reward applies a limit.
-         * @prop {bigint} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
+         * @prop {number} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
          */
         /**
          * @typedef CreateCustomRewardsResponse_Data_Global_cooldown_setting
          * @prop {boolean} isEnabled A Boolean value that determines whether to apply a cooldown period. Is *true* if a cooldown period is enabled.
-         * @prop {bigint} globalCooldownSeconds The cooldown period, in seconds.
+         * @prop {number} globalCooldownSeconds The cooldown period, in seconds.
          */
         /**
          * @typedef CreateCustomRewardsResponse_Data
@@ -1301,7 +1301,7 @@ module.exports = (reqFunc) => ({
          * ---
          * @param {string} broadcasterId The ID of the broadcaster to add the custom reward to. This ID must match the user ID found in the OAuth token.
          * @param {string} title The custom reward’s title. The title may contain a maximum of 45 characters and it must be unique amongst all of the broadcaster’s custom rewards.
-         * @param {bigint} cost The cost of the reward, in Channel Points. The minimum is 1 point.
+         * @param {number} cost The cost of the reward, in Channel Points. The minimum is 1 point.
          * @param {string?} prompt The prompt shown to the viewer when they redeem the reward. Specify a prompt if `is_user_input_required` is *true*. The prompt is limited to a maximum of 200 characters.
          * @param {boolean?} isEnabled A Boolean value that determines whether the reward is enabled. Viewers see only enabled rewards. The default is *true*.
          * @param {string?} backgroundColor The background color to use for the reward. Specify the color using Hex format (for example, #9147FF).
@@ -1377,17 +1377,17 @@ module.exports = (reqFunc) => ({
         /**
          * @typedef GetCustomRewardResponse_Data_Max_per_stream_setting
          * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is *true* if the reward applies a limit.
-         * @prop {bigint} maxPerStream The maximum number of redemptions allowed per live stream.
+         * @prop {number} maxPerStream The maximum number of redemptions allowed per live stream.
          */
         /**
          * @typedef GetCustomRewardResponse_Data_Max_per_user_per_stream_setting
          * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is *true* if the reward applies a limit.
-         * @prop {bigint} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
+         * @prop {number} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
          */
         /**
          * @typedef GetCustomRewardResponse_Data_Global_cooldown_setting
          * @prop {boolean} isEnabled A Boolean value that determines whether to apply a cooldown period. Is *true* if a cooldown period is enabled.
-         * @prop {bigint} globalCooldownSeconds The cooldown period, in seconds.
+         * @prop {number} globalCooldownSeconds The cooldown period, in seconds.
          */
         /**
          * @typedef GetCustomRewardResponse_Data
@@ -1609,7 +1609,7 @@ module.exports = (reqFunc) => ({
          * @prop {string} id The ID that uniquely identifies the redeemed reward.
          * @prop {string} title The reward’s title.
          * @prop {string} prompt The prompt displayed to the viewer if user input is required.
-         * @prop {bigint} cost The reward’s cost, in Channel Points.
+         * @prop {number} cost The reward’s cost, in Channel Points.
          */
         /**
          * @typedef GetCustomRewardRedemptionResponse_Data
@@ -1771,12 +1771,12 @@ module.exports = (reqFunc) => ({
         /**
          * @typedef UpdateCustomRewardResponse_Data_Max_per_stream_setting
          * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is *true* if the reward applies a limit.
-         * @prop {bigint} maxPerStream The maximum number of redemptions allowed per live stream.
+         * @prop {number} maxPerStream The maximum number of redemptions allowed per live stream.
          */
         /**
          * @typedef UpdateCustomRewardResponse_Data_Max_per_user_per_stream_setting
          * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is *true* if the reward applies a limit.
-         * @prop {bigint} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
+         * @prop {number} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
          */
         /**
          * @typedef UpdateCustomRewardResponse_Data_Global_cooldown_setting
@@ -1790,7 +1790,7 @@ module.exports = (reqFunc) => ({
          * @prop {string} id The ID that uniquely identifies this custom reward.
          * @prop {string} title The title of the reward.
          * @prop {string} prompt The prompt shown to the viewer when they redeem the reward if user input is required. See the `is_user_input_required` field.
-         * @prop {bigint} cost The cost of the reward in Channel Points.
+         * @prop {number} cost The cost of the reward in Channel Points.
          * @prop {UpdateCustomRewardResponse_Data_Image} image A set of custom images for the reward. This field is *null* if the broadcaster didn’t upload images.
          * @prop {UpdateCustomRewardResponse_Data_Default_image} defaultImage A set of default images for the reward.
          * @prop {string} backgroundColor The background color to use for the reward. The color is in Hex format (for example, #00E5CB).
@@ -1799,7 +1799,7 @@ module.exports = (reqFunc) => ({
          * @prop {UpdateCustomRewardResponse_Data_Max_per_stream_setting} maxPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per live stream.
          * @prop {UpdateCustomRewardResponse_Data_Max_per_user_per_stream_setting} maxPerUserPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per user per live stream.
          * @prop {UpdateCustomRewardResponse_Data_Global_cooldown_setting} globalCooldownSetting The settings used to determine whether to apply a cooldown period between redemptions and the length of the cooldown.
-         * @prop {bigint} globalCooldownSeconds The cooldown period, in seconds.
+         * @prop {number} globalCooldownSeconds The cooldown period, in seconds.
          * @prop {boolean} isPaused A Boolean value that determines whether the reward is currently paused. Is *true* if the reward is paused. Viewers can’t redeem paused rewards.
          * @prop {boolean} isInStock A Boolean value that determines whether the reward is currently in stock. Is *true* if the reward is in stock. Viewers can’t redeem out of stock rewards.
          * @prop {boolean} shouldRedemptionsSkipRequestQueue A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If *false*, status is set to UNFULFILLED and follows the normal request queue process.
@@ -1948,16 +1948,16 @@ module.exports = (reqFunc) => ({
          * @param {string} id The ID of the reward to update.
          * @param {string?} title The reward’s title. The title may contain a maximum of 45 characters and it must be unique amongst all of the broadcaster’s custom rewards.
          * @param {string?} prompt The prompt shown to the viewer when they redeem the reward. Specify a prompt if `is_user_input_required` is *true*. The prompt is limited to a maximum of 200 characters.
-         * @param {bigint?} cost The cost of the reward, in channel points. The minimum is 1 point.
+         * @param {number?} cost The cost of the reward, in channel points. The minimum is 1 point.
          * @param {string?} backgroundColor The background color to use for the reward. Specify the color using Hex format (for example, \#00E5CB).
          * @param {boolean?} isEnabled A Boolean value that indicates whether the reward is enabled. Set to *true* to enable the reward. Viewers see only enabled rewards.
          * @param {boolean?} isUserInputRequired A Boolean value that determines whether users must enter information to redeem the reward. Set to *true* if user input is required. See the `prompt` field.
          * @param {boolean?} isMaxPerStreamEnabled A Boolean value that determines whether to limit the maximum number of redemptions allowed per live stream (see the `max_per_stream` field). Set to *true* to limit redemptions.
-         * @param {bigint?} maxPerStream The maximum number of redemptions allowed per live stream. Applied only if `is_max_per_stream_enabled` is *true*. The minimum value is 1.
+         * @param {number?} maxPerStream The maximum number of redemptions allowed per live stream. Applied only if `is_max_per_stream_enabled` is *true*. The minimum value is 1.
          * @param {boolean?} isMaxPerUserPerStreamEnabled A Boolean value that determines whether to limit the maximum number of redemptions allowed per user per stream (see `max_per_user_per_stream`). The minimum value is 1. Set to *true* to limit redemptions.
-         * @param {bigint?} maxPerUserPerStream The maximum number of redemptions allowed per user per stream. Applied only if `is_max_per_user_per_stream_enabled` is *true*.
+         * @param {number?} maxPerUserPerStream The maximum number of redemptions allowed per user per stream. Applied only if `is_max_per_user_per_stream_enabled` is *true*.
          * @param {boolean?} isGlobalCooldownEnabled A Boolean value that determines whether to apply a cooldown period between redemptions. Set to *true* to apply a cooldown period. For the duration of the cooldown period, see `global_cooldown_seconds`.
-         * @param {bigint?} globalCooldownSeconds The cooldown period, in seconds. Applied only if `is_global_cooldown_enabled` is *true*. The minimum value is 1; however, for it to be shown in the Twitch UX, the minimum value is 60.
+         * @param {number?} globalCooldownSeconds The cooldown period, in seconds. Applied only if `is_global_cooldown_enabled` is *true*. The minimum value is 1; however, for it to be shown in the Twitch UX, the minimum value is 60.
          * @param {boolean?} isPaused A Boolean value that determines whether to pause the reward. Set to *true* to pause the reward. Viewers can’t redeem paused rewards..
          * @param {boolean?} shouldRedemptionsSkipRequestQueue A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If *false*, status is set to UNFULFILLED and follows the normal request queue process.
          * @returns {Promise<UpdateCustomRewardResponse>} 
@@ -1976,7 +1976,7 @@ module.exports = (reqFunc) => ({
          * @prop {string} id The ID that uniquely identifies the reward.
          * @prop {string} title The reward’s title.
          * @prop {string} prompt The prompt displayed to the viewer if user input is required.
-         * @prop {bigint} cost The reward’s cost, in Channel Points.
+         * @prop {number} cost The reward’s cost, in Channel Points.
          */
         /**
          * @typedef UpdateRedemptionStatusResponse_Data

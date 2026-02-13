@@ -92,7 +92,7 @@ function convertParam(param, name, prevName) {
         case 'integer': param.type = 'number'; break;
         case 'float': param.type = 'number'; break;
         case 'unsigned integer': param.type = 'number'; break;
-        case 'int64': param.type = 'bigint'; break;
+        case 'int64': param.type = 'number'; break;
         case 'bool': param.type = 'boolean'; break;
     }
     if(param.type.startsWith('map')) {
