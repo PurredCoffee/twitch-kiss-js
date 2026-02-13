@@ -55,7 +55,9 @@ module.exports = (twitchBot, api) => ({
      * }
      * ```
      * ---
-     * @param {"bg-BG"|"cs-CZ"|"da-DK"|"da-DK"|"de-DE"|"el-GR"|"en-GB"|"en-US"|"es-ES"|"es-MX"|"fi-FI"|"fr-FR"|"hu-HU"|"it-IT"|"ja-JP"|"ko-KR"|"nl-NL"|"no-NO"|"pl-PL"|"pt-BT"|"pt-PT"|"ro-RO"|"ru-RU"|"sk-SK"|"sv-SE"|"th-TH"|"tr-TR"|"vi-VN"|"zh-CN"|"zh-TW"} locale Locale for the Content Classification Labels. You may specify a maximum of 1 locale.
+     * @param {"bg-BG"|"cs-CZ"|"da-DK"|"da-DK"|"de-DE"|"el-GR"|"en-GB"|"en-US"|"es-ES"|"es-MX"|"fi-FI"|"fr-FR"|"hu-HU"|"it-IT"|"ja-JP"|"ko-KR"|"nl-NL"|"no-NO"|"pl-PL"|"pt-BT"|"pt-PT"|"ro-RO"|"ru-RU"|"sk-SK"|"sv-SE"|"th-TH"|"tr-TR"|"vi-VN"|"zh-CN"|"zh-TW"} locale Defaults 'en-US'.
+     * 
+     * Locale for the Content Classification Labels. You may specify a maximum of 1 locale.
      */
     getContentClassificationLabels(locale='en-US') {
         if(locale != null && !["bg-BG", "cs-CZ", "da-DK", "da-DK", "de-DE", "el-GR", "en-GB", "en-US", "es-ES", "es-MX", "fi-FI", "fr-FR", "hu-HU", "it-IT", "ja-JP", "ko-KR", "nl-NL", "no-NO", "pl-PL", "pt-BT", "pt-PT", "ro-RO", "ru-RU", "sk-SK", "sv-SE", "th-TH", "tr-TR", "vi-VN", "zh-CN", "zh-TW"].includes(locale))
