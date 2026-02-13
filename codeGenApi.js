@@ -216,7 +216,7 @@ function processFunc(doc, name) {
     addStr(`         * @returns {Promise<${Object.keys(doc.body).length > 0?classIfy(name) + "Response":"void"}>} ${doc.bodyInfo?doc.bodyInfo:""}`)
     addStr(`         */`);
     addStr(`        ${funcIfy(name)}(${params.map(v => v.name + (v.required?"":"=null")).join(", ")}) {`);
-    addStr(`            return reqFunc("${doc.url}",`);
+    addStr(`            return reqFunc("${doc.method}", "${doc.url}",`);
     addStr(`                [${doc.scopes.map(v => '"'+v+'"').join(', ')}],`);
     addStr(`                [${doc.token.map(v => '"'+v+'"').join(', ')}],`);
     addStr(`                {${params.filter(v => !v.body).map(v => v.original + ": " + v.name).join(', ')}},`);
@@ -228,7 +228,7 @@ function processFunc(doc, name) {
 
 addStr('//@ts-check');
 addStr('/**');
-addStr(' * @param {(url: string, scopes: string[], token: string[], params: {}, body: {}, errorCodes: {}) => Promise<any>} reqFunc');
+addStr(' * @param {(method: string, url: string, scopes: string[], token: string[], params: {}, body: {}, errorCodes: {}) => Promise<any>} reqFunc');
 addStr(' */');
 addStr("module.exports = (reqFunc) => ({")
 Object.keys(docs).forEach((v) => {

@@ -1,6 +1,6 @@
 //@ts-check
 /**
- * @param {(url: string, scopes: string[], token: string[], params: {}, body: {}, errorCodes: {}) => Promise<any>} reqFunc
+ * @param {(method: string, url: string, scopes: string[], token: string[], params: {}, body: {}, errorCodes: {}) => Promise<any>} reqFunc
  */
 module.exports = (reqFunc) => ({
     Ads: {
@@ -66,7 +66,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<StartCommercialResponse>} 
          */
         startCommercial(broadcasterId, length) {
-            return reqFunc("https://api.twitch.tv/helix/channels/commercial",
+            return reqFunc("POST", "https://api.twitch.tv/helix/channels/commercial",
                 ["channel:edit:commercial"],
                 ["user"],
                 {},
@@ -132,7 +132,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetAdScheduleResponse>} 
          */
         getAdSchedule(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/channels/ads",
+            return reqFunc("GET", "https://api.twitch.tv/helix/channels/ads",
                 ["channel:read:ads"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -192,7 +192,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<SnoozeNextAdResponse>} 
          */
         snoozeNextAd(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/channels/ads/schedule/snooze",
+            return reqFunc("POST", "https://api.twitch.tv/helix/channels/ads/schedule/snooze",
                 ["channel:manage:ads"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -278,7 +278,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetExtensionAnalyticsResponse>} 
          */
         getExtensionAnalytics(extensionId=null, type=null, startedAt=null, endedAt=null, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/analytics/extensions",
+            return reqFunc("GET", "https://api.twitch.tv/helix/analytics/extensions",
                 ["analytics:read:extensions"],
                 ["user"],
                 {extension_id: extensionId, type: type, started_at: startedAt, ended_at: endedAt, first: first, after: after},
@@ -389,7 +389,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetGameAnalyticsResponse>} 
          */
         getGameAnalytics(gameId=null, type=null, startedAt=null, endedAt=null, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/analytics/games",
+            return reqFunc("GET", "https://api.twitch.tv/helix/analytics/games",
                 ["analytics:read:games"],
                 ["user"],
                 {game_id: gameId, type: type, started_at: startedAt, ended_at: endedAt, first: first, after: after},
@@ -484,7 +484,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetBitsLeaderboardResponse>} 
          */
         getBitsLeaderboard(count=null, period=null, startedAt=null, userId=null) {
-            return reqFunc("https://api.twitch.tv/helix/bits/leaderboard",
+            return reqFunc("GET", "https://api.twitch.tv/helix/bits/leaderboard",
                 ["bits:read"],
                 ["user"],
                 {count: count, period: period, started_at: startedAt, user_id: userId},
@@ -642,7 +642,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetCheermotesResponse>} 
          */
         getCheermotes(broadcasterId=null) {
-            return reqFunc("https://api.twitch.tv/helix/bits/cheermotes",
+            return reqFunc("GET", "https://api.twitch.tv/helix/bits/cheermotes",
                 [],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId},
@@ -782,7 +782,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetExtensionTransactionsResponse>} 
          */
         getExtensionTransactions(extensionId, id=null, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/extensions/transactions",
+            return reqFunc("GET", "https://api.twitch.tv/helix/extensions/transactions",
                 [],
                 ["app"],
                 {extension_id: extensionId, id: id, first: first, after: after},
@@ -857,7 +857,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetChannelInformationResponse>} 
          */
         getChannelInformation(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/channels",
+            return reqFunc("GET", "https://api.twitch.tv/helix/channels",
                 [],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId},
@@ -928,7 +928,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         modifyChannelInformation(broadcasterId, gameId=null, broadcasterLanguage=null, title=null, delay=null, tags=null, contentClassificationLabels=null, isBrandedContent=null) {
-            return reqFunc("https://api.twitch.tv/helix/channels",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/channels",
                 ["channel:manage:broadcast"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -990,7 +990,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetChannelEditorsResponse>} 
          */
         getChannelEditors(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/channels/editors",
+            return reqFunc("GET", "https://api.twitch.tv/helix/channels/editors",
                 ["channel:read:editors"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -1089,7 +1089,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetFollowedChannelsResponse>} 
          */
         getFollowedChannels(userId, broadcasterId=null, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/channels/followed",
+            return reqFunc("GET", "https://api.twitch.tv/helix/channels/followed",
                 ["user:read:follows"],
                 ["user"],
                 {user_id: userId, broadcaster_id: broadcasterId, first: first, after: after},
@@ -1162,7 +1162,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         getChannelFollowers() {
-            return reqFunc("undefined",
+            return reqFunc("undefined", "undefined",
                 ["moderator:read:followers"],
                 ["user"],
                 {},
@@ -1316,7 +1316,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<CreateCustomRewardsResponse>} 
          */
         createCustomRewards(broadcasterId, title, cost, prompt=null, isEnabled=null, backgroundColor=null, isUserInputRequired=null, isMaxPerStreamEnabled=null, maxPerStream=null, isMaxPerUserPerStreamEnabled=null, maxPerUserPerStream=null, isGlobalCooldownEnabled=null, globalCooldownSeconds=null, shouldRedemptionsSkipRequestQueue=null) {
-            return reqFunc("https://api.twitch.tv/helix/channel_points/custom_rewards",
+            return reqFunc("POST", "https://api.twitch.tv/helix/channel_points/custom_rewards",
                 ["channel:manage:redemptions"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -1354,7 +1354,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         deleteCustomReward(broadcasterId, id) {
-            return reqFunc("https://api.twitch.tv/helix/channel_points/custom_rewards",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/channel_points/custom_rewards",
                 ["channel:manage:redemptions"],
                 ["user"],
                 {broadcaster_id: broadcasterId, id: id},
@@ -1596,7 +1596,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetCustomRewardResponse>} 
          */
         getCustomReward(broadcasterId, id=null, onlyManageableRewards=null) {
-            return reqFunc("https://api.twitch.tv/helix/channel_points/custom_rewards",
+            return reqFunc("GET", "https://api.twitch.tv/helix/channel_points/custom_rewards",
                 ["channel:read:redemptions", "channel:manage:redemptions"],
                 ["user"],
                 {broadcaster_id: broadcasterId, id: id, only_manageable_rewards: onlyManageableRewards},
@@ -1748,7 +1748,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetCustomRewardRedemptionResponse>} 
          */
         getCustomRewardRedemption(broadcasterId, rewardId, status, id=null, sort=null, after=null, first=null) {
-            return reqFunc("https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions",
+            return reqFunc("GET", "https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions",
                 ["channel:read:redemptions", "channel:manage:redemptions"],
                 ["user"],
                 {broadcaster_id: broadcasterId, reward_id: rewardId, status: status, id: id, sort: sort, after: after, first: first},
@@ -1963,7 +1963,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<UpdateCustomRewardResponse>} 
          */
         updateCustomReward(broadcasterId, id, title=null, prompt=null, cost=null, backgroundColor=null, isEnabled=null, isUserInputRequired=null, isMaxPerStreamEnabled=null, maxPerStream=null, isMaxPerUserPerStreamEnabled=null, maxPerUserPerStream=null, isGlobalCooldownEnabled=null, globalCooldownSeconds=null, isPaused=null, shouldRedemptionsSkipRequestQueue=null) {
-            return reqFunc("https://api.twitch.tv/helix/channel_points/custom_rewards",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/channel_points/custom_rewards",
                 ["channel:manage:redemptions"],
                 ["user"],
                 {broadcaster_id: broadcasterId, id: id},
@@ -2070,7 +2070,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<UpdateRedemptionStatusResponse>} 
          */
         updateRedemptionStatus(id, broadcasterId, rewardId, status) {
-            return reqFunc("https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions",
                 ["channel:manage:redemptions"],
                 ["user"],
                 {id: id, broadcaster_id: broadcasterId, reward_id: rewardId},
@@ -2168,7 +2168,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetCharityCampaignResponse>} 
          */
         getCharityCampaign(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/charity/campaigns",
+            return reqFunc("GET", "https://api.twitch.tv/helix/charity/campaigns",
                 ["channel:read:charity"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -2269,7 +2269,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetCharityCampaignDonationsResponse>} 
          */
         getCharityCampaignDonations(broadcasterId, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/charity/donations",
+            return reqFunc("GET", "https://api.twitch.tv/helix/charity/donations",
                 ["channel:read:charity"],
                 ["user"],
                 {broadcaster_id: broadcasterId, first: first, after: after},
@@ -2349,7 +2349,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetChattersResponse>} 
          */
         getChatters(broadcasterId, moderatorId, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/chat/chatters",
+            return reqFunc("GET", "https://api.twitch.tv/helix/chat/chatters",
                 ["moderator:read:chatters"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, first: first, after: after},
@@ -2492,7 +2492,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetChannelEmotesResponse>} 
          */
         getChannelEmotes(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/chat/emotes",
+            return reqFunc("GET", "https://api.twitch.tv/helix/chat/emotes",
                 [],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId},
@@ -2561,7 +2561,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         getGlobalEmotes() {
-            return reqFunc("https://api.twitch.tv/helix/chat/emotes/global",
+            return reqFunc("GET", "https://api.twitch.tv/helix/chat/emotes/global",
                 [],
                 ["app", "user"],
                 {},
@@ -2671,7 +2671,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetEmoteSetsResponse>} 
          */
         getEmoteSets(emoteSetId) {
-            return reqFunc("https://api.twitch.tv/helix/chat/emotes/set",
+            return reqFunc("GET", "https://api.twitch.tv/helix/chat/emotes/set",
                 [],
                 ["app", "user"],
                 {emote_set_id: emoteSetId},
@@ -2745,7 +2745,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         getChannelChatBadges() {
-            return reqFunc("https://api.twitch.tv/helix/chat/badges",
+            return reqFunc("GET", "https://api.twitch.tv/helix/chat/badges",
                 [],
                 ["app", "user"],
                 {},
@@ -2806,7 +2806,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         getGlobalChatBadges() {
-            return reqFunc("https://api.twitch.tv/helix/chat/badges/global",
+            return reqFunc("GET", "https://api.twitch.tv/helix/chat/badges/global",
                 [],
                 ["app", "user"],
                 {},
@@ -2884,7 +2884,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetChatSettingsResponse>} 
          */
         getChatSettings(broadcasterId, moderatorId=null) {
-            return reqFunc("https://api.twitch.tv/helix/chat/settings",
+            return reqFunc("GET", "https://api.twitch.tv/helix/chat/settings",
                 [],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -2953,7 +2953,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetSharedChatSessionResponse>} 
          */
         getSharedChatSession(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/shared_chat/session",
+            return reqFunc("GET", "https://api.twitch.tv/helix/shared_chat/session",
                 [],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId},
@@ -3075,7 +3075,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetUserEmotesResponse>} 
          */
         getUserEmotes(userId, after=null, broadcasterId=null) {
-            return reqFunc("https://api.twitch.tv/helix/chat/emotes/user",
+            return reqFunc("GET", "https://api.twitch.tv/helix/chat/emotes/user",
                 ["user:read:emotes"],
                 ["user"],
                 {user_id: userId, after: after, broadcaster_id: broadcasterId},
@@ -3177,7 +3177,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<UpdateChatSettingsResponse>} 
          */
         updateChatSettings(broadcasterId, moderatorId, emoteMode=null, followerMode=null, followerModeDuration=null, nonModeratorChatDelay=null, nonModeratorChatDelayDuration=null, slowMode=null, slowModeWaitTime=null, subscriberMode=null, uniqueChatMode=null) {
-            return reqFunc("https://api.twitch.tv/helix/chat/settings",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/chat/settings",
                 [],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -3231,7 +3231,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         sendChatAnnouncement(broadcasterId, moderatorId, message, color=null) {
-            return reqFunc("https://api.twitch.tv/helix/chat/announcements",
+            return reqFunc("POST", "https://api.twitch.tv/helix/chat/announcements",
                 [],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -3274,7 +3274,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         sendAShoutout(fromBroadcasterId, toBroadcasterId, moderatorId) {
-            return reqFunc("https://api.twitch.tv/helix/chat/shoutouts",
+            return reqFunc("POST", "https://api.twitch.tv/helix/chat/shoutouts",
                 [],
                 ["user"],
                 {from_broadcaster_id: fromBroadcasterId, to_broadcaster_id: toBroadcasterId, moderator_id: moderatorId},
@@ -3355,7 +3355,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<SendChatMessageResponse>} 
          */
         sendChatMessage(broadcasterId, senderId, message, replyParentMessageId=null, forSourceOnly=null) {
-            return reqFunc("https://api.twitch.tv/helix/chat/messages",
+            return reqFunc("POST", "https://api.twitch.tv/helix/chat/messages",
                 ["user:write:chat"],
                 ["app", "user"],
                 {},
@@ -3420,7 +3420,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetUserChatColorResponse>} 
          */
         getUserChatColor(userId) {
-            return reqFunc("https://api.twitch.tv/helix/chat/color",
+            return reqFunc("GET", "https://api.twitch.tv/helix/chat/color",
                 [],
                 ["app", "user"],
                 {user_id: userId},
@@ -3485,7 +3485,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         updateUserChatColor(userId, color) {
-            return reqFunc("https://api.twitch.tv/helix/chat/color",
+            return reqFunc("PUT", "https://api.twitch.tv/helix/chat/color",
                 ["user:manage:chat_color"],
                 ["user"],
                 {user_id: userId, color: color},
@@ -3552,7 +3552,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<CreateClipResponse>} 
          */
         createClip(broadcasterId, title=null, duration=null) {
-            return reqFunc("https://api.twitch.tv/helix/clips",
+            return reqFunc("POST", "https://api.twitch.tv/helix/clips",
                 ["clips:edit"],
                 ["user"],
                 {broadcaster_id: broadcasterId, title: title, duration: duration},
@@ -3620,7 +3620,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<CreateClipFromVODResponse>} 
          */
         createClipFromVOD(editorId, broadcasterId, vodId, vodOffset, duration=null, title) {
-            return reqFunc("https://api.twitch.tv/helix/videos/clips",
+            return reqFunc("POST", "https://api.twitch.tv/helix/videos/clips",
                 ["editor:manage:clips", "channel:manage:clips"],
                 ["app", "user"],
                 {editor_id: editorId, broadcaster_id: broadcasterId, vod_id: vodId, vod_offset: vodOffset, duration: duration, title: title},
@@ -3769,7 +3769,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetClipsResponse>} 
          */
         getClips(broadcasterId, gameId, id, startedAt=null, endedAt=null, first=null, before=null, after=null, isFeatured=null) {
-            return reqFunc("https://api.twitch.tv/helix/clips",
+            return reqFunc("GET", "https://api.twitch.tv/helix/clips",
                 [],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId, game_id: gameId, id: id, started_at: startedAt, ended_at: endedAt, first: first, before: before, after: after, is_featured: isFeatured},
@@ -3838,7 +3838,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetClipsDownloadResponse>} 
          */
         getClipsDownload(editorId, broadcasterId, clipId) {
-            return reqFunc("https://api.twitch.tv/helix/clips/downloads",
+            return reqFunc("GET", "https://api.twitch.tv/helix/clips/downloads",
                 ["editor:manage:clips", "channel:manage:clips"],
                 ["app", "user"],
                 {editor_id: editorId, broadcaster_id: broadcasterId, clip_id: clipId},
@@ -3901,7 +3901,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetConduitsResponse>} 
          */
         getConduits() {
-            return reqFunc("https://api.twitch.tv/helix/eventsub/conduits",
+            return reqFunc("GET", "https://api.twitch.tv/helix/eventsub/conduits",
                 [],
                 ["app"],
                 {},
@@ -3961,7 +3961,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<CreateConduitsResponse>} 
          */
         createConduits(shardCount) {
-            return reqFunc("https://api.twitch.tv/helix/eventsub/conduits",
+            return reqFunc("POST", "https://api.twitch.tv/helix/eventsub/conduits",
                 [],
                 ["app"],
                 {},
@@ -4011,7 +4011,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<UpdateConduitsResponse>} 
          */
         updateConduits(id, shardCount) {
-            return reqFunc("https://api.twitch.tv/helix/eventsub/conduits",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/eventsub/conduits",
                 [],
                 ["app"],
                 {},
@@ -4046,7 +4046,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         deleteConduit(id) {
-            return reqFunc("https://api.twitch.tv/helix/eventsub/conduits",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/eventsub/conduits",
                 [],
                 ["app"],
                 {id: id},
@@ -4187,7 +4187,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetConduitShardsResponse>} 
          */
         getConduitShards(conduitId, status=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/eventsub/conduits/shards",
+            return reqFunc("GET", "https://api.twitch.tv/helix/eventsub/conduits/shards",
                 [],
                 ["app"],
                 {conduit_id: conduitId, status: status, after: after},
@@ -4367,7 +4367,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<UpdateConduitShardsResponse>} 
          */
         updateConduitShards(conduitId, shards) {
-            return reqFunc("https://api.twitch.tv/helix/eventsub/conduits/shards",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/eventsub/conduits/shards",
                 [],
                 ["app"],
                 {},
@@ -4460,7 +4460,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetContentClassificationLabelsResponse>} 
          */
         getContentClassificationLabels(locale=null) {
-            return reqFunc("https://api.twitch.tv/helix/content_classification_labels",
+            return reqFunc("GET", "https://api.twitch.tv/helix/content_classification_labels",
                 [],
                 ["app", "user"],
                 {locale: locale},
@@ -4574,7 +4574,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetDropsEntitlementsResponse>} 
          */
         getDropsEntitlements(id=null, userId=null, gameId=null, fulfillmentStatus=null, after=null, first=null) {
-            return reqFunc("https://api.twitch.tv/helix/entitlements/drops",
+            return reqFunc("GET", "https://api.twitch.tv/helix/entitlements/drops",
                 [],
                 ["app", "user"],
                 {id: id, user_id: userId, game_id: gameId, fulfillment_status: fulfillmentStatus, after: after, first: first},
@@ -4677,7 +4677,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<UpdateDropsEntitlementsResponse>} 
          */
         updateDropsEntitlements(entitlementIds=null, fulfillmentStatus=null) {
-            return reqFunc("https://api.twitch.tv/helix/entitlements/drops",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/entitlements/drops",
                 [],
                 ["app", "user"],
                 {},
@@ -4756,7 +4756,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetExtensionConfigurationSegmentResponse>} 
          */
         getExtensionConfigurationSegment(broadcasterId=null, extensionId, segment) {
-            return reqFunc("https://api.twitch.tv/helix/extensions/configurations",
+            return reqFunc("GET", "https://api.twitch.tv/helix/extensions/configurations",
                 [],
                 ["JWT"],
                 {broadcaster_id: broadcasterId, extension_id: extensionId, segment: segment},
@@ -4812,7 +4812,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         setExtensionConfigurationSegment(extensionId, segment, broadcasterId=null, content=null, version=null) {
-            return reqFunc("https://api.twitch.tv/helix/extensions/configurations",
+            return reqFunc("PUT", "https://api.twitch.tv/helix/extensions/configurations",
                 [],
                 ["JWT"],
                 {},
@@ -4858,7 +4858,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         setExtensionRequiredConfiguration(broadcasterId, extensionId, extensionVersion, requiredConfiguration) {
-            return reqFunc("https://api.twitch.tv/helix/extensions/required_configuration",
+            return reqFunc("PUT", "https://api.twitch.tv/helix/extensions/required_configuration",
                 [],
                 ["JWT"],
                 {broadcaster_id: broadcasterId},
@@ -4902,7 +4902,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         sendExtensionPubSubMessage() {
-            return reqFunc("undefined",
+            return reqFunc("undefined", "undefined",
                 [],
                 ["JWT"],
                 {},
@@ -4986,7 +4986,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetExtensionLiveChannelsResponse>} 
          */
         getExtensionLiveChannels(extensionId, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/extensions/live",
+            return reqFunc("GET", "https://api.twitch.tv/helix/extensions/live",
                 [],
                 ["app", "user"],
                 {extension_id: extensionId, first: first, after: after},
@@ -5039,7 +5039,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         getExtensionSecrets() {
-            return reqFunc("https://api.twitch.tv/helix/extensions/jwt/secrets",
+            return reqFunc("GET", "https://api.twitch.tv/helix/extensions/jwt/secrets",
                 [],
                 ["JWT"],
                 {},
@@ -5117,7 +5117,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<CreateExtensionSecretResponse>} 
          */
         createExtensionSecret(extensionId, delay=null) {
-            return reqFunc("https://api.twitch.tv/helix/extensions/jwt/secrets",
+            return reqFunc("POST", "https://api.twitch.tv/helix/extensions/jwt/secrets",
                 [],
                 ["JWT"],
                 {extension_id: extensionId, delay: delay},
@@ -5165,7 +5165,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         sendExtensionChatMessage(broadcasterId, text, extensionId, extensionVersion) {
-            return reqFunc("https://api.twitch.tv/helix/extensions/chat",
+            return reqFunc("POST", "https://api.twitch.tv/helix/extensions/chat",
                 [],
                 ["JWT"],
                 {broadcaster_id: broadcasterId},
@@ -5364,7 +5364,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetExtensionsResponse>} 
          */
         getExtensions(extensionId, extensionVersion=null) {
-            return reqFunc("https://api.twitch.tv/helix/extensions",
+            return reqFunc("GET", "https://api.twitch.tv/helix/extensions",
                 [],
                 ["JWT"],
                 {extension_id: extensionId, extension_version: extensionVersion},
@@ -5564,7 +5564,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetReleasedExtensionsResponse>} 
          */
         getReleasedExtensions(extensionId, extensionVersion=null) {
-            return reqFunc("https://api.twitch.tv/helix/extensions/released",
+            return reqFunc("GET", "https://api.twitch.tv/helix/extensions/released",
                 [],
                 ["app", "user"],
                 {extension_id: extensionId, extension_version: extensionVersion},
@@ -5642,7 +5642,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetExtensionBitsProductsResponse>} 
          */
         getExtensionBitsProducts(shouldIncludeAll=null) {
-            return reqFunc("https://api.twitch.tv/helix/bits/extensions",
+            return reqFunc("GET", "https://api.twitch.tv/helix/bits/extensions",
                 [],
                 ["app"],
                 {should_include_all: shouldIncludeAll},
@@ -5711,7 +5711,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         updateExtensionBitsProduct() {
-            return reqFunc("https://api.twitch.tv/helix/bits/extensions",
+            return reqFunc("PUT", "https://api.twitch.tv/helix/bits/extensions",
                 [],
                 ["app"],
                 {},
@@ -5765,7 +5765,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         createEventSubSubscription() {
-            return reqFunc("undefined",
+            return reqFunc("undefined", "undefined",
                 [],
                 ["app", "user"],
                 {},
@@ -5798,7 +5798,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         deleteEventSubSubscription() {
-            return reqFunc("undefined",
+            return reqFunc("undefined", "undefined",
                 [],
                 ["app", "user"],
                 {},
@@ -5875,7 +5875,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         getEventSubSubscriptions() {
-            return reqFunc("undefined",
+            return reqFunc("undefined", "undefined",
                 [],
                 ["app", "user"],
                 {},
@@ -5945,7 +5945,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetTopGamesResponse>} 
          */
         getTopGames(first=null, after=null, before=null) {
-            return reqFunc("https://api.twitch.tv/helix/games/top",
+            return reqFunc("GET", "https://api.twitch.tv/helix/games/top",
                 [],
                 ["app", "user"],
                 {first: first, after: after, before: before},
@@ -6011,7 +6011,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetGamesResponse>} 
          */
         getGames(id, name, igdbId) {
-            return reqFunc("https://api.twitch.tv/helix/games",
+            return reqFunc("GET", "https://api.twitch.tv/helix/games",
                 [],
                 ["app", "user"],
                 {id: id, name: name, igdb_id: igdbId},
@@ -6103,7 +6103,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetCreatorGoalsResponse>} 
          */
         getCreatorGoals(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/goals",
+            return reqFunc("GET", "https://api.twitch.tv/helix/goals",
                 ["channel:read:goals"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -6163,7 +6163,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetChannelGuestStarSettingsResponse>} 
          */
         getChannelGuestStarSettings(broadcasterId, moderatorId) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/channel_settings",
+            return reqFunc("GET", "https://api.twitch.tv/helix/guest_star/channel_settings",
                 ["channel:read:guest_star", "channel:manage:guest_star", "moderator:read:guest_star", "moderator:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -6206,7 +6206,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         updateChannelGuestStarSettings(broadcasterId, isModeratorSendLiveEnabled=null, slotCount=null, isBrowserSourceAudioEnabled=null, groupLayout=null, regenerateBrowserSources=null) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/channel_settings",
+            return reqFunc("PUT", "https://api.twitch.tv/helix/guest_star/channel_settings",
                 ["channel:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -6333,7 +6333,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetGuestStarSessionResponse>} 
          */
         getGuestStarSession(broadcasterId, moderatorId) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/session",
+            return reqFunc("GET", "https://api.twitch.tv/helix/guest_star/session",
                 ["channel:read:guest_star", "channel:manage:guest_star", "moderator:read:guest_star", "moderator:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -6441,7 +6441,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<CreateGuestStarSessionResponse>} 
          */
         createGuestStarSession(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/session",
+            return reqFunc("POST", "https://api.twitch.tv/helix/guest_star/session",
                 ["channel:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -6550,7 +6550,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<EndGuestStarSessionResponse>} 
          */
         endGuestStarSession(broadcasterId, sessionId) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/session",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/guest_star/session",
                 ["channel:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId, session_id: sessionId},
@@ -6615,7 +6615,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetGuestStarInvitesResponse>} 
          */
         getGuestStarInvites(broadcasterId, moderatorId, sessionId) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/invites",
+            return reqFunc("GET", "https://api.twitch.tv/helix/guest_star/invites",
                 ["channel:read:guest_star", "channel:manage:guest_star", "moderator:read:guest_star", "moderator:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, session_id: sessionId},
@@ -6650,7 +6650,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         sendGuestStarInvite(broadcasterId, moderatorId, sessionId, guestId) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/invites",
+            return reqFunc("POST", "https://api.twitch.tv/helix/guest_star/invites",
                 ["channel:manage:guest_star", "moderator:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, session_id: sessionId, guest_id: guestId},
@@ -6685,7 +6685,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         deleteGuestStarInvite(broadcasterId, moderatorId, sessionId, guestId) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/invites",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/guest_star/invites",
                 ["channel:manage:guest_star", "moderator:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, session_id: sessionId, guest_id: guestId},
@@ -6735,7 +6735,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         assignGuestStarSlot(broadcasterId, moderatorId, sessionId, guestId, slotId) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/slot",
+            return reqFunc("POST", "https://api.twitch.tv/helix/guest_star/slot",
                 ["channel:manage:guest_star", "moderator:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, session_id: sessionId, guest_id: guestId, slot_id: slotId},
@@ -6771,7 +6771,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         updateGuestStarSlot(broadcasterId, moderatorId, sessionId, sourceSlotId, destinationSlotId=null) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/slot",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/guest_star/slot",
                 ["channel:manage:guest_star", "moderator:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, session_id: sessionId, source_slot_id: sourceSlotId, destination_slot_id: destinationSlotId},
@@ -6811,7 +6811,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         deleteGuestStarSlot(broadcasterId, moderatorId, sessionId, guestId, slotId, shouldReinviteGuest=null) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/slot",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/guest_star/slot",
                 ["channel:manage:guest_star", "moderator:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, session_id: sessionId, guest_id: guestId, slot_id: slotId, should_reinvite_guest: shouldReinviteGuest},
@@ -6853,7 +6853,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         updateGuestStarSlotSettings(broadcasterId, moderatorId, sessionId, slotId, isAudioEnabled=null, isVideoEnabled=null, isLive=null, volume=null) {
-            return reqFunc("https://api.twitch.tv/helix/guest_star/slot_settings",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/guest_star/slot_settings",
                 ["channel:manage:guest_star", "moderator:manage:guest_star"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, session_id: sessionId, slot_id: slotId, is_audio_enabled: isAudioEnabled, is_video_enabled: isVideoEnabled, is_live: isLive, volume: volume},
@@ -7012,7 +7012,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetHypeTrainStatusResponse>} 
          */
         getHypeTrainStatus(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/hypetrain/status",
+            return reqFunc("GET", "https://api.twitch.tv/helix/hypetrain/status",
                 ["channel:read:hype_train"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -7103,7 +7103,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<CheckAutoModStatusResponse>} 
          */
         checkAutoModStatus(broadcasterId, data) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/enforcements/status",
+            return reqFunc("POST", "https://api.twitch.tv/helix/moderation/enforcements/status",
                 ["moderation:read"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -7152,7 +7152,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         manageHeldAutoModMessages(userId, msgId, action) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/automod/message",
+            return reqFunc("POST", "https://api.twitch.tv/helix/moderation/automod/message",
                 ["moderator:manage:automod"],
                 ["user"],
                 {},
@@ -7229,7 +7229,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetAutoModSettingsResponse>} 
          */
         getAutoModSettings(broadcasterId, moderatorId) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/automod/settings",
+            return reqFunc("GET", "https://api.twitch.tv/helix/moderation/automod/settings",
                 ["moderator:read:automod_settings"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -7321,7 +7321,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<UpdateAutoModSettingsResponse>} 
          */
         updateAutoModSettings(broadcasterId, moderatorId, aggression=null, bullying=null, disability=null, misogyny=null, overallLevel=null, raceEthnicityOrReligion=null, sexBasedTerms=null, sexualitySexOrGender=null, swearing=null) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/automod/settings",
+            return reqFunc("PUT", "https://api.twitch.tv/helix/moderation/automod/settings",
                 ["moderator:manage:automod_settings"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -7414,7 +7414,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetBannedUsersResponse>} 
          */
         getBannedUsers(broadcasterId, userId=null, first=null, after=null, before=null) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/banned",
+            return reqFunc("GET", "https://api.twitch.tv/helix/moderation/banned",
                 ["moderation:read", "moderator:manage:banned_users"],
                 ["user"],
                 {broadcaster_id: broadcasterId, user_id: userId, first: first, after: after, before: before},
@@ -7477,7 +7477,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<BanUserResponse>} 
          */
         banUser(broadcasterId, moderatorId, data) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/bans",
+            return reqFunc("POST", "https://api.twitch.tv/helix/moderation/bans",
                 ["moderator:manage:banned_users"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -7518,7 +7518,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         unbanUser(broadcasterId, moderatorId, userId) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/bans",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/moderation/bans",
                 ["moderator:manage:banned_users"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, user_id: userId},
@@ -7632,7 +7632,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetUnbanRequestsResponse>} 
          */
         getUnbanRequests(broadcasterId, moderatorId, status, userId=null, after=null, first=null) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/unban_requests",
+            return reqFunc("GET", "https://api.twitch.tv/helix/moderation/unban_requests",
                 ["moderator:read:unban_requests", "moderator:manage:unban_requests"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, status: status, user_id: userId, after: after, first: first},
@@ -7721,7 +7721,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<ResolveUnbanRequestsResponse>} 
          */
         resolveUnbanRequests(broadcasterId, moderatorId, unbanRequestId, status, resolutionText=null) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/unban_requests",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/moderation/unban_requests",
                 ["moderator:manage:unban_requests"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, unban_request_id: unbanRequestId, status: status, resolution_text: resolutionText},
@@ -7803,7 +7803,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetBlockedTermsResponse>} 
          */
         getBlockedTerms(broadcasterId, moderatorId, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/blocked_terms",
+            return reqFunc("GET", "https://api.twitch.tv/helix/moderation/blocked_terms",
                 ["moderator:read:blocked_terms", "moderator:manage:blocked_terms"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, first: first, after: after},
@@ -7864,7 +7864,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<AddBlockedTermResponse>} 
          */
         addBlockedTerm(broadcasterId, moderatorId, text) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/blocked_terms",
+            return reqFunc("POST", "https://api.twitch.tv/helix/moderation/blocked_terms",
                 ["moderator:manage:blocked_terms"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -7898,7 +7898,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         removeBlockedTerm(broadcasterId, moderatorId, id) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/blocked_terms",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/moderation/blocked_terms",
                 ["moderator:manage:blocked_terms"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, id: id},
@@ -7940,7 +7940,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         deleteChatMessages(broadcasterId, moderatorId, messageId=null) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/chat",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/moderation/chat",
                 ["moderator:manage:chat_messages"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, message_id: messageId},
@@ -8013,7 +8013,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetModeratedChannelsResponse>} 
          */
         getModeratedChannels(userId, after=null, first=null) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/channels",
+            return reqFunc("GET", "https://api.twitch.tv/helix/moderation/channels",
                 ["user:read:moderated_channels"],
                 ["user"],
                 {user_id: userId, after: after, first: first},
@@ -8082,7 +8082,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetModeratorsResponse>} 
          */
         getModerators(broadcasterId, userId=null, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/moderators",
+            return reqFunc("GET", "https://api.twitch.tv/helix/moderation/moderators",
                 ["moderation:read", "channel:manage:moderators"],
                 ["user"],
                 {broadcaster_id: broadcasterId, user_id: userId, first: first, after: after},
@@ -8120,7 +8120,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         addChannelModerator(broadcasterId, userId) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/moderators",
+            return reqFunc("POST", "https://api.twitch.tv/helix/moderation/moderators",
                 ["channel:manage:moderators"],
                 ["user"],
                 {broadcaster_id: broadcasterId, user_id: userId},
@@ -8158,7 +8158,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         removeChannelModerator(broadcasterId, userId) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/moderators",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/moderation/moderators",
                 ["channel:manage:moderators"],
                 ["user"],
                 {broadcaster_id: broadcasterId, user_id: userId},
@@ -8227,7 +8227,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetVIPsResponse>} 
          */
         getVIPs(userId=null, broadcasterId, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/channels/vips",
+            return reqFunc("GET", "https://api.twitch.tv/helix/channels/vips",
                 ["channel:read:vips", "channel:manage:vips"],
                 ["user"],
                 {user_id: userId, broadcaster_id: broadcasterId, first: first, after: after},
@@ -8265,7 +8265,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         addChannelVIP(userId, broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/channels/vips",
+            return reqFunc("POST", "https://api.twitch.tv/helix/channels/vips",
                 ["channel:manage:vips"],
                 ["user"],
                 {user_id: userId, broadcaster_id: broadcasterId},
@@ -8305,7 +8305,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         removeChannelVIP(userId, broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/channels/vips",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/channels/vips",
                 ["channel:manage:vips"],
                 ["user"],
                 {user_id: userId, broadcaster_id: broadcasterId},
@@ -8375,7 +8375,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<UpdateShieldModeStatusResponse>} 
          */
         updateShieldModeStatus(broadcasterId, moderatorId, isActive) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/shield_mode",
+            return reqFunc("PUT", "https://api.twitch.tv/helix/moderation/shield_mode",
                 ["moderator:manage:shield_mode"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -8442,7 +8442,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetShieldModeStatusResponse>} 
          */
         getShieldModeStatus(broadcasterId, moderatorId) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/shield_mode",
+            return reqFunc("GET", "https://api.twitch.tv/helix/moderation/shield_mode",
                 ["moderator:read:shield_mode", "moderator:manage:shield_mode"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -8513,7 +8513,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<WarnChatUserResponse>} 
          */
         warnChatUser(broadcasterId, moderatorId, data) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/warnings",
+            return reqFunc("POST", "https://api.twitch.tv/helix/moderation/warnings",
                 ["moderator:manage:warnings"],
                 ["user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -8571,7 +8571,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         addSuspiciousStatusToChatUser(broadcasterId, moderatorId) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/suspicious_users",
+            return reqFunc("POST", "https://api.twitch.tv/helix/moderation/suspicious_users",
                 ["moderator:manage:suspicious_users"],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId},
@@ -8638,7 +8638,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<RemoveSuspiciousStatusFromChatUserResponse>} 
          */
         removeSuspiciousStatusFromChatUser(broadcasterId, moderatorId, userId) {
-            return reqFunc("https://api.twitch.tv/helix/moderation/suspicious_users",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/moderation/suspicious_users",
                 ["moderator:manage:suspicious_users"],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId, moderator_id: moderatorId, user_id: userId},
@@ -8767,7 +8767,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetPollsResponse>} 
          */
         getPolls(broadcasterId, id=null, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/polls",
+            return reqFunc("GET", "https://api.twitch.tv/helix/polls",
                 ["channel:read:polls", "channel:manage:polls"],
                 ["user"],
                 {broadcaster_id: broadcasterId, id: id, first: first, after: after},
@@ -8908,7 +8908,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<CreatePollResponse>} 
          */
         createPoll(broadcasterId, title, choices, duration, channelPointsVotingEnabled=null, channelPointsPerVote=null) {
-            return reqFunc("https://api.twitch.tv/helix/polls",
+            return reqFunc("POST", "https://api.twitch.tv/helix/polls",
                 ["channel:manage:polls"],
                 ["user"],
                 {},
@@ -9037,7 +9037,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<EndPollResponse>} 
          */
         endPoll(broadcasterId, id, status) {
-            return reqFunc("https://api.twitch.tv/helix/polls",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/polls",
                 ["channel:manage:polls"],
                 ["user"],
                 {},
@@ -9171,7 +9171,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetPredictionsResponse>} 
          */
         getPredictions(broadcasterId, id=null, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/predictions",
+            return reqFunc("GET", "https://api.twitch.tv/helix/predictions",
                 ["channel:read:predictions", "channel:manage:predictions"],
                 ["user"],
                 {broadcaster_id: broadcasterId, id: id, first: first, after: after},
@@ -9320,7 +9320,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<CreatePredictionResponse>} 
          */
         createPrediction(broadcasterId, title, outcomes, predictionWindow) {
-            return reqFunc("https://api.twitch.tv/helix/predictions",
+            return reqFunc("POST", "https://api.twitch.tv/helix/predictions",
                 ["channel:manage:predictions"],
                 ["user"],
                 {},
@@ -9461,7 +9461,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<EndPredictionResponse>} 
          */
         endPrediction(broadcasterId, id, status, winningOutcomeId=null) {
-            return reqFunc("https://api.twitch.tv/helix/predictions",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/predictions",
                 ["channel:manage:predictions"],
                 ["user"],
                 {},
@@ -9530,7 +9530,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<StartARaidResponse>} 
          */
         startARaid(fromBroadcasterId, toBroadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/raids",
+            return reqFunc("POST", "https://api.twitch.tv/helix/raids",
                 ["channel:manage:raids"],
                 ["user"],
                 {from_broadcaster_id: fromBroadcasterId, to_broadcaster_id: toBroadcasterId},
@@ -9569,7 +9569,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<void>} 
          */
         cancelARaid(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/raids",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/raids",
                 ["channel:manage:raids"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -9678,7 +9678,7 @@ module.exports = (reqFunc) => ({
          * @returns {Promise<GetChannelStreamScheduleResponse>} 
          */
         getChannelStreamSchedule(broadcasterId, id=null, startTime=null, utcOffset=null, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/schedule",
+            return reqFunc("GET", "https://api.twitch.tv/helix/schedule",
                 [],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId, id: id, start_time: startTime, utc_offset: utcOffset, first: first, after: after},
@@ -9731,7 +9731,7 @@ module.exports = (reqFunc) => ({
 The Content-Type response header is set to `text/calendar`.
          */
         getChannelICalendar(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/schedule/icalendar",
+            return reqFunc("GET", "https://api.twitch.tv/helix/schedule/icalendar",
                 [],
                 [],
                 {broadcaster_id: broadcasterId},
@@ -9767,7 +9767,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<void>} 
          */
         updateChannelStreamSchedule(broadcasterId, isVacationEnabled=null, vacationStartTime=null, vacationEndTime=null, timezone=null) {
-            return reqFunc("https://api.twitch.tv/helix/schedule/settings",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/schedule/settings",
                 ["channel:manage:schedule"],
                 ["user"],
                 {broadcaster_id: broadcasterId, is_vacation_enabled: isVacationEnabled, vacation_start_time: vacationStartTime, vacation_end_time: vacationEndTime, timezone: timezone},
@@ -9877,7 +9877,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<CreateChannelStreamScheduleSegmentResponse>} 
          */
         createChannelStreamScheduleSegment(broadcasterId, startTime, timezone, duration, isRecurring=null, categoryId=null, title=null) {
-            return reqFunc("https://api.twitch.tv/helix/schedule/segment",
+            return reqFunc("POST", "https://api.twitch.tv/helix/schedule/segment",
                 ["channel:manage:schedule"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -9985,7 +9985,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<UpdateChannelStreamScheduleSegmentResponse>} 
          */
         updateChannelStreamScheduleSegment(broadcasterId, id, startTime=null, duration=null, categoryId=null, title=null, isCanceled=null, timezone=null) {
-            return reqFunc("https://api.twitch.tv/helix/schedule/segment",
+            return reqFunc("PATCH", "https://api.twitch.tv/helix/schedule/segment",
                 ["channel:manage:schedule"],
                 ["user"],
                 {broadcaster_id: broadcasterId, id: id},
@@ -10023,7 +10023,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<void>} 
          */
         deleteChannelStreamScheduleSegment(broadcasterId, id) {
-            return reqFunc("https://api.twitch.tv/helix/schedule/segment",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/schedule/segment",
                 ["channel:manage:schedule"],
                 ["user"],
                 {broadcaster_id: broadcasterId, id: id},
@@ -10093,7 +10093,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<SearchCategoriesResponse>} 
          */
         searchCategories(query, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/search/categories",
+            return reqFunc("GET", "https://api.twitch.tv/helix/search/categories",
                 [],
                 ["app", "user"],
                 {query: query, first: first, after: after},
@@ -10222,7 +10222,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<SearchChannelsResponse>} 
          */
         searchChannels(query, liveOnly=null, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/search/channels",
+            return reqFunc("GET", "https://api.twitch.tv/helix/search/channels",
                 [],
                 ["app", "user"],
                 {query: query, live_only: liveOnly, first: first, after: after},
@@ -10277,7 +10277,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetStreamKeyResponse>} 
          */
         getStreamKey(broadcasterId) {
-            return reqFunc("undefined",
+            return reqFunc("https://api.twitch.tv/helix/streams/key", "undefined",
                 ["channel:read:stream_key"],
                 ["user"],
                 {broadcaster_id: broadcasterId},
@@ -10425,7 +10425,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetStreamsResponse>} 
          */
         getStreams(userId=null, userLogin=null, gameId=null, type=null, language=null, first=null, before=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/streams",
+            return reqFunc("GET", "https://api.twitch.tv/helix/streams",
                 [],
                 ["app", "user"],
                 {user_id: userId, user_login: userLogin, game_id: gameId, type: type, language: language, first: first, before: before, after: after},
@@ -10520,7 +10520,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetFollowedStreamsResponse>} 
          */
         getFollowedStreams(userId, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/streams/followed",
+            return reqFunc("GET", "https://api.twitch.tv/helix/streams/followed",
                 ["user:read:follows"],
                 ["user"],
                 {user_id: userId, first: first, after: after},
@@ -10595,7 +10595,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<CreateStreamMarkerResponse>} 
          */
         createStreamMarker(userId, description=null) {
-            return reqFunc("https://api.twitch.tv/helix/streams/markers",
+            return reqFunc("POST", "https://api.twitch.tv/helix/streams/markers",
                 ["channel:manage:broadcast"],
                 ["user"],
                 {},
@@ -10663,7 +10663,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<void>} 
          */
         getStreamMarkers() {
-            return reqFunc("https://api.twitch.tv/helix/streams/markers",
+            return reqFunc("GET", "https://api.twitch.tv/helix/streams/markers",
                 ["user:read:broadcast", "channel:manage:broadcast"],
                 ["user"],
                 {},
@@ -10726,7 +10726,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<void>} 
          */
         getBroadcasterSubscriptions() {
-            return reqFunc("undefined",
+            return reqFunc("undefined", "undefined",
                 ["channel:read:subscriptions"],
                 ["user"],
                 {},
@@ -10774,7 +10774,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<void>} 
          */
         checkUserSubscription() {
-            return reqFunc("undefined",
+            return reqFunc("undefined", "undefined",
                 ["user:read:subscription"],
                 ["user"],
                 {},
@@ -10869,7 +10869,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetAllStreamTagsResponse>} 
          */
         getAllStreamTags(tagId=null, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/tags/streams",
+            return reqFunc("GET", "https://api.twitch.tv/helix/tags/streams",
                 [],
                 ["app", "user"],
                 {tag_id: tagId, first: first, after: after},
@@ -10948,7 +10948,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetStreamTagsResponse>} 
          */
         getStreamTags(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/streams/tags",
+            return reqFunc("GET", "https://api.twitch.tv/helix/streams/tags",
                 [],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId},
@@ -11025,7 +11025,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetChannelTeamsResponse>} 
          */
         getChannelTeams(broadcasterId) {
-            return reqFunc("https://api.twitch.tv/helix/teams/channel",
+            return reqFunc("GET", "https://api.twitch.tv/helix/teams/channel",
                 [],
                 ["app", "user"],
                 {broadcaster_id: broadcasterId},
@@ -11118,7 +11118,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetTeamsResponse>} 
          */
         getTeams(name, id) {
-            return reqFunc("https://api.twitch.tv/helix/teams",
+            return reqFunc("GET", "https://api.twitch.tv/helix/teams",
                 [],
                 ["app", "user"],
                 {name: name, id: id},
@@ -11207,7 +11207,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetUsersResponse>} 
          */
         getUsers(id=null, login=null) {
-            return reqFunc("https://api.twitch.tv/helix/users",
+            return reqFunc("GET", "https://api.twitch.tv/helix/users",
                 [],
                 ["app", "user"],
                 {id: id, login: login},
@@ -11297,7 +11297,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<UpdateUserResponse>} 
          */
         updateUser(description=null) {
-            return reqFunc("https://api.twitch.tv/helix/users",
+            return reqFunc("PUT", "https://api.twitch.tv/helix/users",
                 ["user:edit"],
                 ["user"],
                 {description: description},
@@ -11371,7 +11371,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetAuthorizationByUserResponse>} 
          */
         getAuthorizationByUser(userId) {
-            return reqFunc("https://api.twitch.tv/helix/authorization/users",
+            return reqFunc("GET", "https://api.twitch.tv/helix/authorization/users",
                 [],
                 ["app"],
                 {user_id: userId},
@@ -11438,7 +11438,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetUserBlockListResponse>} 
          */
         getUserBlockList(broadcasterId, first=null, after=null) {
-            return reqFunc("https://api.twitch.tv/helix/users/blocks",
+            return reqFunc("GET", "https://api.twitch.tv/helix/users/blocks",
                 ["user:read:blocked_users"],
                 ["user"],
                 {broadcaster_id: broadcasterId, first: first, after: after},
@@ -11489,7 +11489,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<void>} 
          */
         blockUser(targetUserId, sourceContext=null, reason=null) {
-            return reqFunc("https://api.twitch.tv/helix/users/blocks",
+            return reqFunc("PUT", "https://api.twitch.tv/helix/users/blocks",
                 ["user:manage:blocked_users"],
                 ["user"],
                 {target_user_id: targetUserId, source_context: sourceContext, reason: reason},
@@ -11524,7 +11524,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<void>} 
          */
         unblockUser(targetUserId) {
-            return reqFunc("https://api.twitch.tv/helix/users/blocks",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/users/blocks",
                 ["user:manage:blocked_users"],
                 ["user"],
                 {target_user_id: targetUserId},
@@ -11640,7 +11640,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetUserExtensionsResponse>} 
          */
         getUserExtensions() {
-            return reqFunc("https://api.twitch.tv/helix/users/extensions/list",
+            return reqFunc("GET", "https://api.twitch.tv/helix/users/extensions/list",
                 ["user:read:broadcast", "user:edit:broadcast"],
                 ["user"],
                 {},
@@ -11761,7 +11761,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetUserActiveExtensionsResponse>} 
          */
         getUserActiveExtensions(userId=null) {
-            return reqFunc("https://api.twitch.tv/helix/users/extensions",
+            return reqFunc("GET", "https://api.twitch.tv/helix/users/extensions",
                 [],
                 ["app", "user"],
                 {user_id: userId},
@@ -11923,7 +11923,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<UpdateUserExtensionsResponse>} 
          */
         updateUserExtensions(data) {
-            return reqFunc("https://api.twitch.tv/helix/users/extensions",
+            return reqFunc("PUT", "https://api.twitch.tv/helix/users/extensions",
                 ["user:edit:broadcast"],
                 ["user"],
                 {},
@@ -12074,7 +12074,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<GetVideosResponse>} 
          */
         getVideos(id, userId, gameId, language=null, period=null, sort=null, type=null, first=null, after=null, before=null) {
-            return reqFunc("https://api.twitch.tv/helix/videos",
+            return reqFunc("GET", "https://api.twitch.tv/helix/videos",
                 [],
                 ["app", "user"],
                 {id: id, user_id: userId, game_id: gameId, language: language, period: period, sort: sort, type: type, first: first, after: after, before: before},
@@ -12125,7 +12125,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<DeleteVideosResponse>} 
          */
         deleteVideos(id) {
-            return reqFunc("https://api.twitch.tv/helix/videos",
+            return reqFunc("DELETE", "https://api.twitch.tv/helix/videos",
                 ["channel:manage:videos"],
                 ["user"],
                 {id: id},
@@ -12171,7 +12171,7 @@ The Content-Type response header is set to `text/calendar`.
          * @returns {Promise<void>} 
          */
         sendWhisper(fromUserId, toUserId) {
-            return reqFunc("https://api.twitch.tv/helix/whispers",
+            return reqFunc("POST", "https://api.twitch.tv/helix/whispers",
                 ["user:manage:whispers"],
                 ["user"],
                 {from_user_id: fromUserId, to_user_id: toUserId},
