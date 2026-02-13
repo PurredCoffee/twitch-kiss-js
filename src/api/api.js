@@ -1711,7 +1711,7 @@ module.exports = (reqFunc) => ({
          * ---
          * @param {string} broadcasterId The ID of the broadcaster that owns the custom reward. This ID must match the user ID found in the user OAuth token.
          * @param {string} rewardId The ID that identifies the custom reward whose redemptions you want to get.
-         * @param {"CANCELED"|"FULFILLED"|"UNFULFILLED"} status The status of the redemptions to return. The possible case-sensitive values are:
+         * @param {"CANCELED"|"FULFILLED"|"UNFULFILLED"?} status The status of the redemptions to return. The possible case-sensitive values are:
          *
          * - CANCELED
          *
@@ -1732,7 +1732,7 @@ module.exports = (reqFunc) => ({
          * @param {number?} first The maximum number of redemptions to return per page in the response. The minimum page size is 1 redemption per page and the maximum is 50. The default is 20.
          * @returns {Promise<GetCustomRewardRedemptionResponse>} 
          */
-        getCustomRewardRedemption(broadcasterId, rewardId, status, id=null, sort=null, after=null, first=null) {
+        getCustomRewardRedemption(broadcasterId, rewardId, status=null, id=null, sort=null, after=null, first=null) {
             return reqFunc("GET", "https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions",
                 ["channel:read:redemptions", "channel:manage:redemptions"],
                 ["user"],
@@ -2042,7 +2042,7 @@ module.exports = (reqFunc) => ({
          * ```
          *
          * ---
-         * @param {string} id A list of IDs that identify the redemptions to update. To specify more than one ID, include this parameter for each redemption you want to update. For example, `id=1234&id=5678`. You may specify a maximum of 50 IDs.
+         * @param {string[]} id A list of IDs that identify the redemptions to update. To specify more than one ID, include this parameter for each redemption you want to update. For example, `id=1234&id=5678`. You may specify a maximum of 50 IDs.
          * @param {string} broadcasterId The ID of the broadcaster that’s updating the redemption. This ID must match the user ID in the user access token.
          * @param {string} rewardId The ID that identifies the reward that’s been redeemed.
          * @param {"CANCELED"|"FULFILLED"} status The status to set the redemption to. Possible values are:
