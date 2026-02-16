@@ -8,5 +8,8 @@
   "private": true,
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "kiss-typecheck": "https://github.com/PurredCoffee/kiss-typecheck.git"
   }
 }
