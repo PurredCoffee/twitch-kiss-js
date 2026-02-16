@@ -1,19 +1,2658 @@
 //@ts-check
 /**
+ * @typedef StartCommercialResponse_Data
+ * @prop {number} length The length of the commercial you requested. If you request a commercial that’s longer than 180 seconds, the API uses 180 seconds.
+ * @prop {string} message A message that indicates whether Twitch was able to serve an ad.
+ * @prop {number} retryAfter The number of seconds you must wait before running another commercial.
+ */
+/**
+ * @typedef StartCommercialResponse
+ * @prop {StartCommercialResponse_Data[]} data An array that contains a single object with the status of your start commercial request.
+ */
+/**
+ * @typedef GetAdScheduleResponse_Data
+ * @prop {number} snoozeCount The number of snoozes available for the broadcaster.
+ * @prop {string} snoozeRefreshAt The UTC timestamp when the broadcaster will gain an additional snooze, in RFC3339 format.
+ * @prop {string} nextAdAt The UTC timestamp of the broadcaster’s next scheduled ad, in RFC3339 format. Empty if the channel has no ad scheduled or is not live.
+ * @prop {number} duration The length in seconds of the scheduled upcoming ad break.
+ * @prop {string} lastAdAt The UTC timestamp of the broadcaster’s last ad-break, in RFC3339 format. Empty if the channel has not run an ad or is not live.
+ * @prop {number} prerollFreeTime The amount of pre-roll free time remaining for the channel in seconds. Returns 0 if they are currently not pre-roll free.
+ */
+/**
+ * @typedef GetAdScheduleResponse
+ * @prop {GetAdScheduleResponse_Data[]} data A list that contains information related to the channel’s ad schedule.
+ */
+/**
+ * @typedef SnoozeNextAdResponse_Data
+ * @prop {number} snoozeCount The number of snoozes available for the broadcaster.
+ * @prop {string} snoozeRefreshAt The UTC timestamp when the broadcaster will gain an additional snooze, in RFC3339 format.
+ * @prop {string} nextAdAt The UTC timestamp of the broadcaster’s next scheduled ad, in RFC3339 format.
+ */
+/**
+ * @typedef SnoozeNextAdResponse
+ * @prop {SnoozeNextAdResponse_Data[]} data A list that contains information about the channel’s snoozes and next upcoming ad after successfully snoozing.
+ */
+/**
+ * @typedef GetExtensionAnalyticsResponse_Data_Date_range
+ * @prop {string} startedAt The reporting window’s start date.
+ * @prop {string} endedAt The reporting window’s end date.
+ */
+/**
+ * @typedef GetExtensionAnalyticsResponse_Data
+ * @prop {string} extensionId An ID that identifies the extension that the report was generated for.
+ * @prop {string} uRL The URL that you use to download the report. The URL is valid for 5 minutes.
+ * @prop {string} type The type of report.
+ * @prop {GetExtensionAnalyticsResponse_Data_Date_range} dateRange The reporting window’s start and end dates, in RFC3339 format.
+ */
+/**
+ * @typedef GetExtensionAnalyticsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetExtensionAnalyticsResponse
+ * @prop {GetExtensionAnalyticsResponse_Data[]} data A list of reports. The reports are returned in no particular order; however, the data within each report is in ascending order by date (newest first). The report contains one row of data per day of the reporting window; the report contains rows for only those days that the extension was used. The array is empty if there are no reports.
+ * @prop {GetExtensionAnalyticsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetGameAnalyticsResponse_Data_Date_range
+ * @prop {string} startedAt The reporting window’s start date.
+ * @prop {string} endedAt The reporting window’s end date.
+ */
+/**
+ * @typedef GetGameAnalyticsResponse_Data
+ * @prop {string} gameId An ID that identifies the game that the report was generated for.
+ * @prop {string} uRL The URL that you use to download the report. The URL is valid for 5 minutes.
+ * @prop {string} type The type of report.
+ * @prop {GetGameAnalyticsResponse_Data_Date_range} dateRange The reporting window’s start and end dates, in RFC3339 format.
+ */
+/**
+ * @typedef GetGameAnalyticsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetGameAnalyticsResponse
+ * @prop {GetGameAnalyticsResponse_Data[]} data A list of reports. The reports are returned in no particular order; however, the data within each report is in ascending order by date (newest first). The report contains one row of data per day of the reporting window; the report contains rows for only those days that the game was used. A report is available only if the game was broadcast for at least 5 hours over the reporting period. The array is empty if there are no reports.
+ * @prop {GetGameAnalyticsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetBitsLeaderboardResponse_Data
+ * @prop {string} userId An ID that identifies a user on the leaderboard.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userName The user’s display name.
+ * @prop {number} rank The user’s position on the leaderboard.
+ * @prop {number} score The number of Bits the user has cheered.
+ */
+/**
+ * @typedef GetBitsLeaderboardResponse_Date_range
+ * @prop {string} startedAt The reporting window’s start date.
+ * @prop {string} endedAt The reporting window’s end date.
+ */
+/**
+ * @typedef GetBitsLeaderboardResponse
+ * @prop {GetBitsLeaderboardResponse_Data[]} data A list of leaderboard leaders. The leaders are returned in rank order by how much they’ve cheered. The array is empty if nobody has cheered bits.
+ * @prop {GetBitsLeaderboardResponse_Date_range} dateRange The reporting window’s start and end dates, in RFC3339 format. The dates are calculated by using the started_at and period query parameters. If you don’t specify the started_at query parameter, the fields contain empty strings.
+ * @prop {number} total The number of ranked users in `data`. This is the value in the count query parameter or the total number of entries on the leaderboard, whichever is less.
+ */
+/**
+ * @typedef GetCheermotesResponse_Data_Tiers_Images_Dark
+ * @prop {Map<string,string>} animated Each format of sizes: 1, 1.5, 2, 3, and 4. The value of each size contains the URL to the image.
+ * @prop {Map<string,string>} static Each format of sizes: 1, 1.5, 2, 3, and 4. The value of each size contains the URL to the image.
+ */
+/**
+ * @typedef GetCheermotesResponse_Data_Tiers_Images_Light
+ * @prop {Map<string,string>} animated Each format of sizes: 1, 1.5, 2, 3, and 4. The value of each size contains the URL to the image.
+ * @prop {Map<string,string>} static Each format of sizes: 1, 1.5, 2, 3, and 4. The value of each size contains the URL to the image.
+ */
+/**
+ * @typedef GetCheermotesResponse_Data_Tiers_Images
+ * @prop {GetCheermotesResponse_Data_Tiers_Images_Dark} dark The dark theme variants of the cheermote
+ * @prop {GetCheermotesResponse_Data_Tiers_Images_Light} light The light theme variants of the cheermote
+ */
+/**
+ * @typedef GetCheermotesResponse_Data_Tiers
+ * @prop {number} minBits The minimum number of Bits that you must cheer at this tier level. The maximum number of Bits that you can cheer at this level is determined by the required minimum Bits of the next tier level minus 1. For example, if `min_bits` is 1 and `min_bits` for the next tier is 100, the Bits range for this tier level is 1 through 99. The minimum Bits value of the last tier is the maximum number of Bits you can cheer using this Cheermote. For example, 10000.
+ * @prop {"1"|"100"|"500"|"1000"|"5000"|"10000"|"100000"} id The tier level. Possible tiers are:
+         *
+         * - 1
+         *
+         * - 100
+         *
+         * - 500
+         *
+         * - 1000
+         *
+         * - 5000
+         *
+         * - 10000
+         *
+         * - 100000
+ * @prop {string} color The hex code of the color associated with this tier level (for example, #979797).
+ * @prop {GetCheermotesResponse_Data_Tiers_Images} images The animated and static image sets for the Cheermote. The dictionary of images is organized by theme, format, and size. The theme keys are dark and light. Each theme is a dictionary of formats: animated and static. Each format is a dictionary of sizes: 1, 1.5, 2, 3, and 4. The value of each size contains the URL to the image.
+ * @prop {boolean} canCheer A Boolean value that determines whether users can cheer at this tier level.
+ * @prop {boolean} showInBitsCard A Boolean value that determines whether this tier level is shown in the Bits card. Is *true* if this tier level is shown in the Bits card.
+ */
+/**
+ * @typedef GetCheermotesResponse_Data
+ * @prop {string} prefix The name portion of the Cheermote string that you use in chat to cheer Bits. The full Cheermote string is the concatenation of {prefix} + {number of Bits}. For example, if the prefix is “Cheer” and you want to cheer 100 Bits, the full Cheermote string is Cheer100. When the Cheermote string is entered in chat, Twitch converts it to the image associated with the Bits tier that was cheered.
+ * @prop {GetCheermotesResponse_Data_Tiers[]} tiers A list of tier levels that the Cheermote supports. Each tier identifies the range of Bits that you can cheer at that tier level and an image that graphically identifies the tier level.
+ * @prop {"global_first_party"|"global_third_party"|"channel_custom"|"display_only"|"sponsored"} type The type of Cheermote. Possible values are:
+         *
+         * - global_first_party — A Twitch-defined Cheermote that is shown in the Bits card.
+         *
+         * - global_third_party — A Twitch-defined Cheermote that is not shown in the Bits card.
+         *
+         * - channel_custom — A broadcaster-defined Cheermote.
+         *
+         * - display_only — Do not use; for internal use only.
+         *
+         * - sponsored — A sponsor-defined Cheermote. When used, the sponsor adds additional Bits to the amount that the user cheered. For example, if the user cheered Terminator100, the broadcaster might receive 110 Bits, which includes the sponsor's 10 Bits contribution.
+ * @prop {number} order The order that the Cheermotes are shown in the Bits card. The numbers may not be consecutive. For example, the numbers may jump from 1 to 7 to 13. The order numbers are unique within a Cheermote type (for example, global_first_party) but may not be unique amongst all Cheermotes in the response.
+ * @prop {string} lastUpdated The date and time, in RFC3339 format, when this Cheermote was last updated.
+ * @prop {boolean} isCharitable A Boolean value that indicates whether this Cheermote provides a charitable contribution match during charity campaigns.
+ */
+/**
+ * @typedef GetCheermotesResponse
+ * @prop {GetCheermotesResponse_Data[]} data The list of Cheermotes. The list is in ascending order by the `order` field’s value.
+ */
+/**
+ * @typedef GetExtensionTransactionsResponse_Data_Product_data_Cost
+ * @prop {number} amount The amount exchanged for the digital product.
+ * @prop {"bits"} type The type of currency exchanged. Possible values are:
+         *
+         * - bits
+ */
+/**
+ * @typedef GetExtensionTransactionsResponse_Data_Product_data
+ * @prop {string} sku An ID that identifies the digital product.
+ * @prop {string} domain Set to `twitch.ext.` + `<the extension's ID>`.
+ * @prop {GetExtensionTransactionsResponse_Data_Product_data_Cost} cost Contains details about the digital product’s cost.
+ * @prop {boolean} inDevelopment A Boolean value that determines whether the product is in development. Is *true* if the digital product is in development and cannot be exchanged.
+ * @prop {string} displayName The name of the digital product.
+ * @prop {string} expiration This field is always empty since you may purchase only unexpired products.
+ * @prop {boolean} broadcast A Boolean value that determines whether the data was broadcast to all instances of the extension. Is *true* if the data was broadcast to all instances.
+ */
+/**
+ * @typedef GetExtensionTransactionsResponse_Data
+ * @prop {string} id An ID that identifies the transaction.
+ * @prop {string} timestamp The UTC date and time (in RFC3339 format) of the transaction.
+ * @prop {string} broadcasterId The ID of the broadcaster that owns the channel where the transaction occurred.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} userId The ID of the user that purchased the digital product.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userName The user’s display name.
+ * @prop {"BITS_IN_EXTENSION"} productType The type of transaction. Possible values are:
+         *
+         * - BITS_IN_EXTENSION
+ * @prop {GetExtensionTransactionsResponse_Data_Product_data} productData Contains details about the digital product.
+ */
+/**
+ * @typedef GetExtensionTransactionsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetExtensionTransactionsResponse
+ * @prop {GetExtensionTransactionsResponse_Data[]} data The list of transactions.
+ * @prop {GetExtensionTransactionsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetChannelInformationResponse_Data
+ * @prop {string} broadcasterId An ID that uniquely identifies the broadcaster.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} broadcasterLanguage The broadcaster’s preferred language. The value is an ISO 639-1 two-letter language code (for example, en for English). The value is set to “other” if the language is not a Twitch supported language.
+ * @prop {string} gameName The name of the game that the broadcaster is playing or last played. The value is an empty string if the broadcaster has never played a game.
+ * @prop {string} gameId An ID that uniquely identifies the game that the broadcaster is playing or last played. The value is an empty string if the broadcaster has never played a game.
+ * @prop {string} title The title of the stream that the broadcaster is currently streaming or last streamed. The value is an empty string if the broadcaster has never streamed.
+ * @prop {number} delay The value of the broadcaster’s stream delay setting, in seconds. This field’s value defaults to zero unless 1) the request specifies a user access token, 2) the ID in the broadcaster_id query parameter matches the user ID in the access token, and 3) the broadcaster has partner status and they set a non-zero stream delay value.
+ * @prop {string[][]} tags The tags applied to the channel.
+ * @prop {string[][]} contentClassificationLabels The CCLs applied to the channel.
+ * @prop {boolean} isBrandedContent Boolean flag indicating if the channel has branded content.
+ */
+/**
+ * @typedef GetChannelInformationResponse
+ * @prop {GetChannelInformationResponse_Data[]} data A list that contains information about the specified channels. The list is empty if the specified channels weren’t found.
+ */
+/**
+ * @typedef ModifyChannelInformationRequest_Content_classification_labels
+ * @prop {"DebatedSocialIssuesAndPolitics"|"DrugsIntoxication"|"SexualThemes"|"ViolentGraphic"|"Gambling"|"ProfanityVulgarity"} id ID of the [Content Classification Labels](https://help.twitch.tv/s/article/content-classification-labels) that must be added/removed from the channel. Can be one of the following values:
+         *
+         * - DebatedSocialIssuesAndPolitics
+         *
+         * - DrugsIntoxication
+         *
+         * - SexualThemes
+         *
+         * - ViolentGraphic
+         *
+         * - Gambling
+         *
+         * - ProfanityVulgarity
+ * @prop {boolean} isEnabled Boolean flag indicating whether the label should be enabled (true) or disabled for the channel.
+ */
+/**
+ * @typedef GetChannelEditorsResponse_Data
+ * @prop {string} userId An ID that uniquely identifies a user with editor permissions.
+ * @prop {string} userName The user’s display name.
+ * @prop {string} createdAt The date and time, in RFC3339 format, when the user became one of the broadcaster’s editors.
+ */
+/**
+ * @typedef GetChannelEditorsResponse
+ * @prop {GetChannelEditorsResponse_Data[]} data A list of users that are editors for the specified broadcaster. The list is empty if the broadcaster doesn’t have editors.
+ */
+/**
+ * @typedef GetFollowedChannelsResponse_Data
+ * @prop {string} broadcasterId An ID that uniquely identifies the broadcaster that this user is following.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} followedAt The UTC timestamp when the user started following the broadcaster.
+ */
+/**
+ * @typedef GetFollowedChannelsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetFollowedChannelsResponse
+ * @prop {GetFollowedChannelsResponse_Data[]} data The list of broadcasters that the user follows. The list is in descending order by `followed_at` (with the most recently followed broadcaster first). The list is empty if the user doesn’t follow anyone.
+ * @prop {GetFollowedChannelsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read more](https://dev.twitch.tv/docs/api/guide#pagination).
+ * @prop {number} total The total number of broadcasters that the user follows. As someone pages through the list, the number may change as the user follows or unfollows broadcasters.
+ */
+/**
+ * @typedef CreateCustomRewardsResponse_Data_Image
+ * @prop {string} url1x The URL to a small version of the image.
+ * @prop {string} url2x The URL to a medium version of the image.
+ * @prop {string} url4x The URL to a large version of the image.
+ */
+/**
+ * @typedef CreateCustomRewardsResponse_Data_Default_image
+ * @prop {string} url1x The URL to a small version of the image.
+ * @prop {string} url2x The URL to a medium version of the image.
+ * @prop {string} url4x The URL to a large version of the image.
+ */
+/**
+ * @typedef CreateCustomRewardsResponse_Data_Max_per_stream_setting
+ * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is *true* if the reward applies a limit.
+ * @prop {number} maxPerStream The maximum number of redemptions allowed per live stream.
+ */
+/**
+ * @typedef CreateCustomRewardsResponse_Data_Max_per_user_per_stream_setting
+ * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is *true* if the reward applies a limit.
+ * @prop {number} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
+ */
+/**
+ * @typedef CreateCustomRewardsResponse_Data_Global_cooldown_setting
+ * @prop {boolean} isEnabled A Boolean value that determines whether to apply a cooldown period. Is *true* if a cooldown period is enabled.
+ * @prop {number} globalCooldownSeconds The cooldown period, in seconds.
+ */
+/**
+ * @typedef CreateCustomRewardsResponse_Data
+ * @prop {string} broadcasterId The ID that uniquely identifies the broadcaster.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} id The ID that uniquely identifies this custom reward.
+ * @prop {string} title The title of the reward.
+ * @prop {string} prompt The prompt shown to the viewer when they redeem the reward if user input is required (see the `is_user_input_required` field).
+ * @prop {number} cost The cost of the reward in Channel Points.
+ * @prop {CreateCustomRewardsResponse_Data_Image} image A set of custom images for the reward. This field is set to *null* if the broadcaster didn’t upload images.
+ * @prop {CreateCustomRewardsResponse_Data_Default_image} defaultImage A set of default images for the reward.
+ * @prop {string} backgroundColor The background color to use for the reward. The color is in Hex format (for example, #00E5CB).
+ * @prop {boolean} isEnabled A Boolean value that determines whether the reward is enabled. Is *true* if enabled; otherwise, *false*. Disabled rewards aren’t shown to the user.
+ * @prop {boolean} isUserInputRequired A Boolean value that determines whether the user must enter information when redeeming the reward. Is *true* if the reward requires user input.
+ * @prop {CreateCustomRewardsResponse_Data_Max_per_stream_setting} maxPerStreamSetting The settings used to determine whether to apply a maximum to the number to the redemptions allowed per live stream.
+ * @prop {CreateCustomRewardsResponse_Data_Max_per_user_per_stream_setting} maxPerUserPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per user per live stream.
+ * @prop {CreateCustomRewardsResponse_Data_Global_cooldown_setting} globalCooldownSetting The settings used to determine whether to apply a cooldown period between redemptions and the length of the cooldown.
+ * @prop {boolean} isPaused A Boolean value that determines whether the reward is currently paused. Is *true* if the reward is paused. Viewers can’t redeem paused rewards.
+ * @prop {boolean} isInStock A Boolean value that determines whether the reward is currently in stock. Is *true* if the reward is in stock. Viewers can’t redeem out of stock rewards.
+ * @prop {boolean} shouldRedemptionsSkipRequestQueue A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If *false*, status is UNFULFILLED and follows the normal request queue process.
+ * @prop {number} redemptionsRedeemedCurrentStream The number of redemptions redeemed during the current live stream. The number counts against the `max_per_stream_setting` limit. This field is *null* if the broadcaster’s stream isn’t live or max_per_stream_setting isn’t enabled.
+ * @prop {string} cooldownExpiresAt The timestamp of when the cooldown period expires. Is *null* if the reward isn’t in a cooldown state (see the `global_cooldown_setting` field).
+ */
+/**
+ * @typedef CreateCustomRewardsResponse
+ * @prop {CreateCustomRewardsResponse_Data[]} data A list that contains the single custom reward you created.
+ */
+/**
+ * @typedef GetCustomRewardResponse_Data_Image
+ * @prop {string} url1x The URL to a small version of the image.
+ * @prop {string} url2x The URL to a medium version of the image.
+ * @prop {string} url4x The URL to a large version of the image.
+ */
+/**
+ * @typedef GetCustomRewardResponse_Data_Default_image
+ * @prop {string} url1x The URL to a small version of the image.
+ * @prop {string} url2x The URL to a medium version of the image.
+ * @prop {string} url4x The URL to a large version of the image.
+ */
+/**
+ * @typedef GetCustomRewardResponse_Data_Max_per_stream_setting
+ * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is *true* if the reward applies a limit.
+ * @prop {number} maxPerStream The maximum number of redemptions allowed per live stream.
+ */
+/**
+ * @typedef GetCustomRewardResponse_Data_Max_per_user_per_stream_setting
+ * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is *true* if the reward applies a limit.
+ * @prop {number} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
+ */
+/**
+ * @typedef GetCustomRewardResponse_Data_Global_cooldown_setting
+ * @prop {boolean} isEnabled A Boolean value that determines whether to apply a cooldown period. Is *true* if a cooldown period is enabled.
+ * @prop {number} globalCooldownSeconds The cooldown period, in seconds.
+ */
+/**
+ * @typedef GetCustomRewardResponse_Data
+ * @prop {string} broadcasterId The ID that uniquely identifies the broadcaster.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} id The ID that uniquely identifies this custom reward.
+ * @prop {string} title The title of the reward.
+ * @prop {string} prompt The prompt shown to the viewer when they redeem the reward if user input is required (see the `is_user_input_required` field).
+ * @prop {number} cost The cost of the reward in Channel Points.
+ * @prop {GetCustomRewardResponse_Data_Image} image A set of custom images for the reward. This field is *null* if the broadcaster didn’t upload images.
+ * @prop {GetCustomRewardResponse_Data_Default_image} defaultImage A set of default images for the reward.
+ * @prop {string} backgroundColor The background color to use for the reward. The color is in Hex format (for example, #00E5CB).
+ * @prop {boolean} isEnabled A Boolean value that determines whether the reward is enabled. Is *true* if enabled; otherwise, *false*. Disabled rewards aren’t shown to the user.
+ * @prop {boolean} isUserInputRequired A Boolean value that determines whether the user must enter information when redeeming the reward. Is *true* if the user is prompted.
+ * @prop {GetCustomRewardResponse_Data_Max_per_stream_setting} maxPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per live stream.
+ * @prop {GetCustomRewardResponse_Data_Max_per_user_per_stream_setting} maxPerUserPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per user per live stream.
+ * @prop {GetCustomRewardResponse_Data_Global_cooldown_setting} globalCooldownSetting The settings used to determine whether to apply a cooldown period between redemptions and the length of the cooldown.
+ * @prop {boolean} isPaused A Boolean value that determines whether the reward is currently paused. Is *true* if the reward is paused. Viewers can’t redeem paused rewards.
+ * @prop {boolean} isInStock A Boolean value that determines whether the reward is currently in stock. Is *true* if the reward is in stock. Viewers can’t redeem out of stock rewards.
+ * @prop {boolean} shouldRedemptionsSkipRequestQueue A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If *false*, status is set to UNFULFILLED and follows the normal request queue process.
+ * @prop {number} redemptionsRedeemedCurrentStream The number of redemptions redeemed during the current live stream. The number counts against the `max_per_stream_setting` limit. This field is *null* if the broadcaster’s stream isn’t live or max_per_stream_setting isn’t enabled.
+ * @prop {string} cooldownExpiresAt The timestamp of when the cooldown period expires. Is *null* if the reward isn’t in a cooldown state. See the `global_cooldown_setting` field.
+ */
+/**
+ * @typedef GetCustomRewardResponse
+ * @prop {GetCustomRewardResponse_Data[]} data A list of custom rewards. The list is in ascending order by `id`. If the broadcaster hasn’t created custom rewards, the list is empty.
+ */
+/**
+ * @typedef GetCustomRewardRedemptionResponse_Data_Reward
+ * @prop {string} id The ID that uniquely identifies the redeemed reward.
+ * @prop {string} title The reward’s title.
+ * @prop {string} prompt The prompt displayed to the viewer if user input is required.
+ * @prop {number} cost The reward’s cost, in Channel Points.
+ */
+/**
+ * @typedef GetCustomRewardRedemptionResponse_Data
+ * @prop {string} broadcasterId The ID that uniquely identifies the broadcaster.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} id The ID that uniquely identifies this redemption.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userId The ID that uniquely identifies the user that redeemed the reward.
+ * @prop {string} userName The user’s display name.
+ * @prop {string} userInput The text the user entered at the prompt when they redeemed the reward; otherwise, an empty string if user input was not required.
+ * @prop {"CANCELED"|"FULFILLED"|"UNFULFILLED"} status The state of the redemption. Possible values are:
+         *
+         * - CANCELED
+         *
+         * - FULFILLED
+         *
+         * - UNFULFILLED
+ * @prop {string} redeemedAt The date and time of when the reward was redeemed, in RFC3339 format.
+ * @prop {GetCustomRewardRedemptionResponse_Data_Reward} reward The reward that the user redeemed.
+ */
+/**
+ * @typedef GetCustomRewardRedemptionResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetCustomRewardRedemptionResponse
+ * @prop {GetCustomRewardRedemptionResponse_Data[]} data The list of redemptions for the specified reward. The list is empty if there are no redemptions that match the redemption criteria.
+ * @prop {GetCustomRewardRedemptionResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef UpdateCustomRewardResponse_Data_Image
+ * @prop {string} url1x The URL to a small version of the image.
+ * @prop {string} url2x The URL to a medium version of the image.
+ * @prop {string} url4x The URL to a large version of the image.
+ */
+/**
+ * @typedef UpdateCustomRewardResponse_Data_Default_image
+ * @prop {string} url1x The URL to a small version of the image.
+ * @prop {string} url2x The URL to a medium version of the image.
+ * @prop {string} url4x The URL to a large version of the image.
+ */
+/**
+ * @typedef UpdateCustomRewardResponse_Data_Max_per_stream_setting
+ * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is *true* if the reward applies a limit.
+ * @prop {number} maxPerStream The maximum number of redemptions allowed per live stream.
+ */
+/**
+ * @typedef UpdateCustomRewardResponse_Data_Max_per_user_per_stream_setting
+ * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is *true* if the reward applies a limit.
+ * @prop {number} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
+ */
+/**
+ * @typedef UpdateCustomRewardResponse_Data_Global_cooldown_setting
+ * @prop {boolean} isEnabled A Boolean value that determines whether to apply a cooldown period. Is *true* if a cooldown period is enabled.
+ */
+/**
+ * @typedef UpdateCustomRewardResponse_Data
+ * @prop {string} broadcasterId The ID that uniquely identifies the broadcaster.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} id The ID that uniquely identifies this custom reward.
+ * @prop {string} title The title of the reward.
+ * @prop {string} prompt The prompt shown to the viewer when they redeem the reward if user input is required. See the `is_user_input_required` field.
+ * @prop {number} cost The cost of the reward in Channel Points.
+ * @prop {UpdateCustomRewardResponse_Data_Image} image A set of custom images for the reward. This field is *null* if the broadcaster didn’t upload images.
+ * @prop {UpdateCustomRewardResponse_Data_Default_image} defaultImage A set of default images for the reward.
+ * @prop {string} backgroundColor The background color to use for the reward. The color is in Hex format (for example, #00E5CB).
+ * @prop {boolean} isEnabled A Boolean value that determines whether the reward is enabled. Is *true* if enabled; otherwise, *false*. Disabled rewards aren’t shown to the user.
+ * @prop {boolean} isUserInputRequired A Boolean value that determines whether the user must enter information when they redeem the reward. Is *true* if the user is prompted.
+ * @prop {UpdateCustomRewardResponse_Data_Max_per_stream_setting} maxPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per live stream.
+ * @prop {UpdateCustomRewardResponse_Data_Max_per_user_per_stream_setting} maxPerUserPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per user per live stream.
+ * @prop {UpdateCustomRewardResponse_Data_Global_cooldown_setting} globalCooldownSetting The settings used to determine whether to apply a cooldown period between redemptions and the length of the cooldown.
+ * @prop {number} globalCooldownSeconds The cooldown period, in seconds.
+ * @prop {boolean} isPaused A Boolean value that determines whether the reward is currently paused. Is *true* if the reward is paused. Viewers can’t redeem paused rewards.
+ * @prop {boolean} isInStock A Boolean value that determines whether the reward is currently in stock. Is *true* if the reward is in stock. Viewers can’t redeem out of stock rewards.
+ * @prop {boolean} shouldRedemptionsSkipRequestQueue A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If *false*, status is set to UNFULFILLED and follows the normal request queue process.
+ * @prop {number} redemptionsRedeemedCurrentStream The number of redemptions redeemed during the current live stream. The number counts against the `max_per_stream_setting` limit. This field is *null* if the broadcaster’s stream isn’t live or max_per_stream_setting isn’t enabled.
+ * @prop {string} cooldownExpiresAt The timestamp of when the cooldown period expires. Is *null* if the reward isn’t in a cooldown state. See the `global_cooldown_setting` field.
+ */
+/**
+ * @typedef UpdateCustomRewardResponse
+ * @prop {UpdateCustomRewardResponse_Data[]} data The list contains the single reward that you updated.
+ */
+/**
+ * @typedef UpdateRedemptionStatusResponse_Data_Reward
+ * @prop {string} id The ID that uniquely identifies the reward.
+ * @prop {string} title The reward’s title.
+ * @prop {string} prompt The prompt displayed to the viewer if user input is required.
+ * @prop {number} cost The reward’s cost, in Channel Points.
+ */
+/**
+ * @typedef UpdateRedemptionStatusResponse_Data
+ * @prop {string} broadcasterId The ID that uniquely identifies the broadcaster.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} id The ID that uniquely identifies this redemption..
+ * @prop {string} userId The ID of the user that redeemed the reward.
+ * @prop {string} userName The user’s display name.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {UpdateRedemptionStatusResponse_Data_Reward} reward An object that describes the reward that the user redeemed.
+ * @prop {string} userInput The text that the user entered at the prompt when they redeemed the reward; otherwise, an empty string if user input was not required.
+ * @prop {"CANCELED"|"FULFILLED"|"UNFULFILLED"} status The state of the redemption. Possible values are:
+         *
+         * - CANCELED
+         *
+         * - FULFILLED
+         *
+         * - UNFULFILLED
+ * @prop {string} redeemedAt The date and time of when the reward was redeemed, in RFC3339 format.
+ */
+/**
+ * @typedef UpdateRedemptionStatusResponse
+ * @prop {UpdateRedemptionStatusResponse_Data[]} data The list contains the single redemption that you updated.
+ */
+/**
+ * @typedef GetCharityCampaignResponse_Data_Current_amount
+ * @prop {number} value The monetary amount. The amount is specified in the currency’s minor unit. For example, the minor units for USD is cents, so if the amount is $5.50 USD, `value` is set to 550.
+ * @prop {number} decimalPlaces The number of decimal places used by the currency. For example, USD uses two decimal places. Use this number to translate `value` from minor units to major units by using the formula:`value / 10^decimal_places`
+ * @prop {string} currency The ISO-4217 three-letter currency code that identifies the type of currency in `value`.
+ */
+/**
+ * @typedef GetCharityCampaignResponse_Data_Target_amount
+ * @prop {number} value The monetary amount. The amount is specified in the currency’s minor unit. For example, the minor units for USD is cents, so if the amount is $5.50 USD, `value` is set to 550.
+ * @prop {number} decimalPlaces The number of decimal places used by the currency. For example, USD uses two decimal places. Use this number to translate `value` from minor units to major units by using the formula:`value / 10^decimal_places`
+ * @prop {string} currency The ISO-4217 three-letter currency code that identifies the type of currency in `value`.
+ */
+/**
+ * @typedef GetCharityCampaignResponse_Data
+ * @prop {string} id An ID that identifies the charity campaign.
+ * @prop {string} broadcasterId An ID that identifies the broadcaster that’s running the campaign.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} charityName The charity’s name.
+ * @prop {string} charityDescription A description of the charity.
+ * @prop {string} charityLogo A URL to an image of the charity’s logo. The image’s type is PNG and its size is 100px X 100px.
+ * @prop {string} charityWebsite A URL to the charity’s website.
+ * @prop {GetCharityCampaignResponse_Data_Current_amount} currentAmount The current amount of donations that the campaign has received.
+ * @prop {GetCharityCampaignResponse_Data_Target_amount} targetAmount The campaign’s fundraising goal. This field is *null* if the broadcaster has not defined a fundraising goal.
+ */
+/**
+ * @typedef GetCharityCampaignResponse
+ * @prop {GetCharityCampaignResponse_Data[]} data A list that contains the charity campaign that the broadcaster is currently running. The list is empty if the broadcaster is not running a charity campaign; the campaign information is not available after the campaign ends.
+ */
+/**
+ * @typedef GetCharityCampaignDonationsResponse_Data_Amount
+ * @prop {number} value The monetary amount. The amount is specified in the currency’s minor unit. For example, the minor units for USD is cents, so if the amount is $5.50 USD, `value` is set to 550.
+ * @prop {number} decimalPlaces The number of decimal places used by the currency. For example, USD uses two decimal places. Use this number to translate `value` from minor units to major units by using the formula:`value / 10^decimal_places`
+ * @prop {string} currency The ISO-4217 three-letter currency code that identifies the type of currency in `value`.
+ */
+/**
+ * @typedef GetCharityCampaignDonationsResponse_Data
+ * @prop {string} id An ID that identifies the donation. The ID is unique across campaigns.
+ * @prop {string} campaignId An ID that identifies the charity campaign that the donation applies to.
+ * @prop {string} userId An ID that identifies a user that donated money to the campaign.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userName The user’s display name.
+ * @prop {GetCharityCampaignDonationsResponse_Data_Amount} amount An object that contains the amount of money that the user donated.
+ */
+/**
+ * @typedef GetCharityCampaignDonationsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetCharityCampaignDonationsResponse
+ * @prop {GetCharityCampaignDonationsResponse_Data[]} data A list that contains the donations that users have made to the broadcaster’s charity campaign. The list is empty if the broadcaster is not currently running a charity campaign; the donation information is not available after the campaign ends.
+ * @prop {GetCharityCampaignDonationsResponse_Pagination} pagination An object that contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetChattersResponse_Data
+ * @prop {string} userId The ID of a user that’s connected to the broadcaster’s chat room.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userName The user’s display name.
+ */
+/**
+ * @typedef GetChattersResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetChattersResponse
+ * @prop {GetChattersResponse_Data[]} data The list of users that are connected to the broadcaster’s chat room. The list is empty if no users are connected to the chat room.
+ * @prop {GetChattersResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ * @prop {number} total The total number of users that are connected to the broadcaster’s chat room. As you page through the list, the number of users may change as users join and leave the chat room.
+ */
+/**
+ * @typedef GetChannelEmotesResponse_Data_Images
+ * @prop {string} url1x A URL to the small version (28px x 28px) of the emote.
+ * @prop {string} url2x A URL to the medium version (56px x 56px) of the emote.
+ * @prop {string} url4x A URL to the large version (112px x 112px) of the emote.
+ */
+/**
+ * @typedef GetChannelEmotesResponse_Data
+ * @prop {string} id An ID that identifies this emote.
+ * @prop {string} name The name of the emote. This is the name that viewers type in the chat window to get the emote to appear.
+ * @prop {GetChannelEmotesResponse_Data_Images} images The image URLs for the emote. These image URLs always provide a static, non-animated emote image with a light background.*NOTE:* You should use the templated URL in the `template` field to fetch the image instead of using these URLs.
+ * @prop {string} tier The subscriber tier at which the emote is unlocked. This field contains the tier information only if `emote_type` is set to `subscriptions`, otherwise, it's an empty string.
+ * @prop {"bitstier"|"follower"|"subscriptions"} emoteType The type of emote. The possible values are:
+         *
+         * - bitstier — A custom Bits tier emote.
+         *
+         * - follower — A custom follower emote.
+         *
+         * - subscriptions — A custom subscriber emote.
+ * @prop {string} emoteSetId An ID that identifies the emote set that the emote belongs to.
+ * @prop {"animated"|"static"[]} format The formats that the emote is available in. For example, if the emote is available only as a static PNG, the array contains only `static`. But if the emote is available as a static PNG and an animated GIF, the array contains `static` and `animated`. The possible formats are:
+         *
+         * - animated — An animated GIF is available for this emote.
+         *
+         * - static — A static PNG file is available for this emote.
+ * @prop {"1.0"|"2.0"|"3.0"[]} scale The sizes that the emote is available in. For example, if the emote is available in small and medium sizes, the array contains 1.0 and 2.0. Possible sizes are:
+         *
+         * - 1.0 — A small version (28px x 28px) is available.
+         *
+         * - 2.0 — A medium version (56px x 56px) is available.
+         *
+         * - 3.0 — A large version (112px x 112px) is available.
+ * @prop {"dark"|"light"[]} themeMode The background themes that the emote is available in. Possible themes are:
+         *
+         * - dark
+         *
+         * - light
+ */
+/**
+ * @typedef GetChannelEmotesResponse
+ * @prop {GetChannelEmotesResponse_Data[]} data The list of emotes that the specified broadcaster created. If the broadcaster hasn't created custom emotes, the list is empty.
+ * @prop {string} template A templated URL. Use the values from the `id`, `format`, `scale`, and `theme_mode` fields to replace the like-named placeholder strings in the templated URL to create a CDN (content delivery network) URL that you use to fetch the emote. For information about what the template looks like and how to use it to fetch emotes, see [Emote CDN URL format](https://dev.twitch.tv/docs/irc/emotes#cdn-template). You should use this template instead of using the URLs in the `images` object.
+ */
+/**
+ * @typedef GetEmoteSetsResponse_Data_Images
+ * @prop {string} url1x A URL to the small version (28px x 28px) of the emote.
+ * @prop {string} url2x A URL to the medium version (56px x 56px) of the emote.
+ * @prop {string} url4x A URL to the large version (112px x 112px) of the emote.
+ */
+/**
+ * @typedef GetEmoteSetsResponse_Data
+ * @prop {string} id An ID that uniquely identifies this emote.
+ * @prop {string} name The name of the emote. This is the name that viewers type in the chat window to get the emote to appear.
+ * @prop {GetEmoteSetsResponse_Data_Images} images The image URLs for the emote. These image URLs always provide a static, non-animated emote image with a light background.*NOTE:* You should use the templated URL in the `template` field to fetch the image instead of using these URLs.
+ * @prop {"bitstier"|"follower"|"subscriptions"} emoteType The type of emote. The possible values are: - bitstier — A Bits tier emote.
+         *
+         * - follower — A follower emote.
+         *
+         * - subscriptions — A subscriber emote.
+ * @prop {string} emoteSetId An ID that identifies the emote set that the emote belongs to.
+ * @prop {string} ownerId The ID of the broadcaster who owns the emote.
+ * @prop {"animated"|"static"[]} format The formats that the emote is available in. For example, if the emote is available only as a static PNG, the array contains only `static`. But if the emote is available as a static PNG and an animated GIF, the array contains `static` and `animated`. The possible formats are: - animated — An animated GIF is available for this emote.
+         *
+         * - static — A static PNG file is available for this emote.
+ * @prop {"1.0"|"2.0"|"3.0"[]} scale The sizes that the emote is available in. For example, if the emote is available in small and medium sizes, the array contains 1.0 and 2.0. Possible sizes are: - 1.0 — A small version (28px x 28px) is available.
+         *
+         * - 2.0 — A medium version (56px x 56px) is available.
+         *
+         * - 3.0 — A large version (112px x 112px) is available.
+ * @prop {"dark"|"light"[]} themeMode The background themes that the emote is available in. Possible themes are: - dark
+         *
+         * - light
+ */
+/**
+ * @typedef GetEmoteSetsResponse
+ * @prop {GetEmoteSetsResponse_Data[]} data The list of emotes found in the specified emote sets. The list is empty if none of the IDs were found. The list is in the same order as the set IDs specified in the request. Each set contains one or more emoticons.
+ * @prop {string} template A templated URL. Use the values from the `id`, `format`, `scale`, and `theme_mode` fields to replace the like-named placeholder strings in the templated URL to create a CDN (content delivery network) URL that you use to fetch the emote. For information about what the template looks like and how to use it to fetch emotes, see [Emote CDN URL format](https://dev.twitch.tv/docs/irc/emotes#cdn-template). You should use this template instead of using the URLs in the `images` object.
+ */
+/**
+ * @typedef GetChatSettingsResponse_Data
+ * @prop {string} broadcasterId The ID of the broadcaster specified in the request.
+ * @prop {boolean} emoteMode A Boolean value that determines whether chat messages must contain only emotes. Is *true* if chat messages may contain only emotes; otherwise, *false*.
+ * @prop {boolean} followerMode A Boolean value that determines whether the broadcaster restricts the chat room to followers only.Is *true* if the broadcaster restricts the chat room to followers only; otherwise, *false*.See the `follower_mode_duration` field for how long users must follow the broadcaster before being able to participate in the chat room.
+ * @prop {number} followerModeDuration The length of time, in minutes, that users must follow the broadcaster before being able to participate in the chat room. Is *null* if `follower_mode` is *false*.
+ * @prop {string} moderatorId The moderator’s ID. The response includes this field only if the request specifies a user access token that includes the *moderator:read:chat_settings* scope.
+ * @prop {boolean} nonModeratorChatDelay A Boolean value that determines whether the broadcaster adds a short delay before chat messages appear in the chat room. This gives chat moderators and bots a chance to remove them before viewers can see the message. See the `non_moderator_chat_delay_duration` field for the length of the delay. Is *true* if the broadcaster applies a delay; otherwise, *false*.The response includes this field only if the request specifies a user access token that includes the *moderator:read:chat_settings* scope and the user in the moderator_id query parameter is one of the broadcaster’s moderators.
+ * @prop {number} nonModeratorChatDelayDuration The amount of time, in seconds, that messages are delayed before appearing in chat. Is *null* if `non_moderator_chat_delay` is *false*.The response includes this field only if the request specifies a user access token that includes the *moderator:read:chat_settings* scope and the user in the moderator_id query parameter is one of the broadcaster’s moderators.
+ * @prop {boolean} slowMode A Boolean value that determines whether the broadcaster limits how often users in the chat room are allowed to send messages.Is *true* if the broadcaster applies a delay; otherwise, *false*.See the `slow_mode_wait_time` field for the delay.
+ * @prop {number} slowModeWaitTime The amount of time, in seconds, that users must wait between sending messages.Is *null* if slow_mode is *false*.
+ * @prop {boolean} subscriberMode A Boolean value that determines whether only users that subscribe to the broadcaster’s channel may talk in the chat room.Is *true* if the broadcaster restricts the chat room to subscribers only; otherwise, *false*.
+ * @prop {boolean} uniqueChatMode A Boolean value that determines whether the broadcaster requires users to post only unique messages in the chat room.Is *true* if the broadcaster requires unique messages only; otherwise, *false*.
+ */
+/**
+ * @typedef GetChatSettingsResponse
+ * @prop {GetChatSettingsResponse_Data[]} data The list of chat settings. The list contains a single object with all the settings.
+ */
+/**
+ * @typedef GetSharedChatSessionResponse_Data_Participants
+ * @prop {string} broadcasterId The User ID of the participant channel.
+ */
+/**
+ * @typedef GetSharedChatSessionResponse_Data
+ * @prop {string} sessionId The unique identifier for the shared chat session.
+ * @prop {string} hostBroadcasterId The User ID of the host channel.
+ * @prop {GetSharedChatSessionResponse_Data_Participants[]} participants The list of participants in the session.
+ * @prop {string} createdAt The UTC date and time (in RFC3339 format) for when the session was created.
+ * @prop {string} updatedAt The UTC date and time (in RFC3339 format) for when the session was last updated.
+ */
+/**
+ * @typedef GetSharedChatSessionResponse
+ * @prop {GetSharedChatSessionResponse_Data[]} data 
+ */
+/**
+ * @typedef GetUserEmotesResponse_Data
+ * @prop {string} id An ID that uniquely identifies this emote.
+ * @prop {string} name The User ID of broadcaster whose channel is receiving the unban request.
+ * @prop {"none"|"bitstier"|"follower"|"subscriptions"|"channelpoints"|"rewards"|"hypetrain"|"prime"|"turbo"|"smilies"|"globals"|"owl2019"|"twofactor"|"limitedtime"} emoteType The type of emote. The possible values are: - none — No emote type was assigned to this emote.
+         *
+         * - bitstier — A Bits tier emote.
+         *
+         * - follower — A follower emote.
+         *
+         * - subscriptions — A subscriber emote.
+         *
+         * - channelpoints — An emote granted by using channel points.
+         *
+         * - rewards — An emote granted to the user through a special event.
+         *
+         * - hypetrain — An emote granted for participation in a Hype Train.
+         *
+         * - prime — An emote granted for linking an Amazon Prime account.
+         *
+         * - turbo — An emote granted for having Twitch Turbo.
+         *
+         * - smilies — Emoticons supported by Twitch.
+         *
+         * - globals — An emote accessible by everyone.
+         *
+         * - owl2019 — Emotes related to Overwatch League 2019.
+         *
+         * - twofactor — Emotes granted by enabling two-factor authentication on an account.
+         *
+         * - limitedtime — Emotes that were granted for only a limited time.
+ * @prop {string} emoteSetId An ID that identifies the emote set that the emote belongs to.
+ * @prop {string} ownerId The ID of the broadcaster who owns the emote.
+ * @prop {string[][]} format The formats that the emote is available in. For example, if the emote is available only as a static PNG, the array contains only static. But if the emote is available as a static PNG and an animated GIF, the array contains static and animated. - animated — An animated GIF is available for this emote.
+         *
+         * - static — A static PNG file is available for this emote.
+ * @prop {string[][]} scale The sizes that the emote is available in. For example, if the emote is available in small and medium sizes, the array contains 1.0 and 2.0. - 1.0 — A small version (28px x 28px) is available.
+         *
+         * - 2.0 — A medium version (56px x 56px) is available.
+         *
+         * - 3.0 — A large version (112px x 112px) is available.
+ * @prop {string[][]} themeMode The background themes that the emote is available in. - dark
+         *
+         * - light
+ */
+/**
+ * @typedef GetUserEmotesResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetUserEmotesResponse
+ * @prop {GetUserEmotesResponse_Data[]} data 
+ * @prop {string} template A templated URL. Uses the values from the id, format, scale, and theme_mode fields to replace the like-named placeholder strings in the templated URL to create a CDN (content delivery network) URL that you use to fetch the emote. For information about what the template looks like and how to use it to fetch emotes, see [Emote CDN URL](https://dev.twitch.tv/docs/irc/emotes#cdn-template) format.
+ * @prop {GetUserEmotesResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. For more information about pagination support, see [Twitch API Guide - Pagination](https://dev.twitch.tv/docs/api/guide#pagination).
+ */
+/**
+ * @typedef UpdateChatSettingsResponse_Data
+ * @prop {string} broadcasterId The ID of the broadcaster specified in the request.
+ * @prop {boolean} emoteMode A Boolean value that determines whether chat messages must contain only emotes. Is *true* if chat messages may contain only emotes; otherwise, *false*.
+ * @prop {boolean} followerMode A Boolean value that determines whether the broadcaster restricts the chat room to followers only.Is *true* if the broadcaster restricts the chat room to followers only; otherwise, *false*.See the `follower_mode_duration` field for how long users must follow the broadcaster before being able to participate in the chat room.
+ * @prop {number} followerModeDuration The length of time, in minutes, that users must follow the broadcaster before being able to participate in the chat room. Is *null* if `follower_mode` is *false*.
+ * @prop {string} moderatorId The moderator’s ID. The response includes this field only if the request specifies a user access token that includes the *moderator:read:chat_settings* scope.
+ * @prop {boolean} nonModeratorChatDelay A Boolean value that determines whether the broadcaster adds a short delay before chat messages appear in the chat room. This gives chat moderators and bots a chance to remove them before viewers can see the message. See the `non_moderator_chat_delay_duration` field for the length of the delay. Is *true* if the broadcaster applies a delay; otherwise, *false*.
+ * @prop {number} nonModeratorChatDelayDuration The amount of time, in seconds, that messages are delayed before appearing in chat. Is *null* if `non_moderator_chat_delay` is *false*.
+ * @prop {boolean} slowMode A Boolean value that determines whether the broadcaster limits how often users in the chat room are allowed to send messages.Is *true* if the broadcaster applies a delay; otherwise, *false*.See the `slow_mode_wait_time` field for the delay.
+ * @prop {number} slowModeWaitTime The amount of time, in seconds, that users must wait between sending messages.Is *null* if slow_mode is *false*.
+ * @prop {boolean} subscriberMode A Boolean value that determines whether only users that subscribe to the broadcaster’s channel may talk in the chat room.Is *true* if the broadcaster restricts the chat room to subscribers only; otherwise, *false*.
+ * @prop {boolean} uniqueChatMode A Boolean value that determines whether the broadcaster requires users to post only unique messages in the chat room.Is *true* if the broadcaster requires unique messages only; otherwise, *false*.
+ */
+/**
+ * @typedef UpdateChatSettingsResponse
+ * @prop {UpdateChatSettingsResponse_Data[]} data The list of chat settings. The list contains a single object with all the settings.
+ */
+/**
+ * @typedef SendChatMessageResponse_Data_Drop_reason
+ * @prop {string} code Code for why the message was dropped.
+ * @prop {string} message Message for why the message was dropped.
+ */
+/**
+ * @typedef SendChatMessageResponse_Data
+ * @prop {string} messageId The message id for the message that was sent.
+ * @prop {boolean} isSent If the message passed all checks and was sent.
+ * @prop {SendChatMessageResponse_Data_Drop_reason} dropReason The reason the message was dropped, if any.
+ */
+/**
+ * @typedef SendChatMessageResponse
+ * @prop {SendChatMessageResponse_Data[]} data 
+ */
+/**
+ * @typedef GetUserChatColorResponse_Data
+ * @prop {string} userId An ID that uniquely identifies the user.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userName The user’s display name.
+ * @prop {string} color The Hex color code that the user uses in chat for their name. If the user hasn’t specified a color in their settings, the string is empty.
+ */
+/**
+ * @typedef GetUserChatColorResponse
+ * @prop {GetUserChatColorResponse_Data[]} data The list of users and the color code they use for their name.
+ */
+/**
+ * @typedef CreateClipResponse_Data
+ * @prop {string} id An ID that uniquely identifies the clip.
+ * @prop {string} editUrl A URL that you can use to edit the clip’s title, identify the part of the clip to publish, and publish the clip. [Learn More](https://help.twitch.tv/s/article/how-to-use-clips)The URL is valid for up to 24 hours or until the clip is published, whichever comes first.
+ */
+/**
+ * @typedef CreateClipResponse
+ * @prop {CreateClipResponse_Data[]} data A list containing the created clip.
+ */
+/**
+ * @typedef CreateClipFromVODResponse_Data
+ * @prop {string} id An ID that uniquely identifies the clip.
+ * @prop {string} editUrl A URL you can use to edit the clip’s title, feature the clip, create a portrait version of the clip, download the clip media, and share the clip directly to third-party platforms.
+ */
+/**
+ * @typedef CreateClipFromVODResponse
+ * @prop {CreateClipFromVODResponse_Data[]} data A list containing the created clip.
+ */
+/**
+ * @typedef GetClipsResponse_Data
+ * @prop {string} id An ID that uniquely identifies the clip.
+ * @prop {string} url A URL to the clip.
+ * @prop {string} embedUrl A URL that you can use in an iframe to embed the clip (see [Embedding Video and Clips](https://dev.twitch.tv/docs/embed/video-and-clips/)).
+ * @prop {string} broadcasterId An ID that identifies the broadcaster that the video was clipped from.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} creatorId An ID that identifies the user that created the clip.
+ * @prop {string} creatorName The user’s display name.
+ * @prop {string} videoId An ID that identifies the video that the clip came from. This field contains an empty string if the video is not available.
+ * @prop {string} gameId The ID of the game that was being played when the clip was created.
+ * @prop {string} language The ISO 639-1 two-letter language code that the broadcaster broadcasts in. For example, en for English. The value is other if the broadcaster uses a language that Twitch doesn’t support.
+ * @prop {string} title The title of the clip.
+ * @prop {number} viewCount The number of times the clip has been viewed.
+ * @prop {string} createdAt The date and time of when the clip was created. The date and time is in RFC3339 format.
+ * @prop {string} thumbnailUrl A URL to a thumbnail image of the clip.
+ * @prop {number} duration The length of the clip, in seconds. Precision is 0.1.
+ * @prop {number} vodOffset The zero-based offset, in seconds, to where the clip starts in the video (VOD). Is *null* if the video is not available or hasn’t been created yet from the live stream (see `video_id`).Note that there’s a delay between when a clip is created during a broadcast and when the offset is set. During the delay period, `vod_offset` is *null*. The delay is indeterminant but is typically minutes long.
+ * @prop {boolean} isFeatured A Boolean value that indicates if the clip is featured or not.
+ */
+/**
+ * @typedef GetClipsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after or before query parameter to this value depending on whether you’re paging forwards or backwards.
+ */
+/**
+ * @typedef GetClipsResponse
+ * @prop {GetClipsResponse_Data[]} data The list of video clips. For clips returned by game_id or broadcaster_id, the list is in descending order by view count. For lists returned by id, the list is in the same order as the input IDs.
+ * @prop {GetClipsResponse_Pagination} pagination The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetClipsDownloadResponse_Data
+ * @prop {string} clipId An ID that uniquely identifies the clip.
+ * @prop {string} landscapeDownloadUrl The landscape URL to download the clip. This field is `null` if the URL is not available.
+ * @prop {string} portraitDownloadUrl The portrait URL to download the clip. This field is `null` if the URL is not available.
+ */
+/**
+ * @typedef GetClipsDownloadResponse
+ * @prop {GetClipsDownloadResponse_Data[]} data List of clips and their download URLs.
+ */
+/**
+ * @typedef GetConduitsResponse_Data
+ * @prop {string} id Conduit ID.
+ * @prop {number} shardCount Number of shards associated with this conduit.
+ */
+/**
+ * @typedef GetConduitsResponse
+ * @prop {GetConduitsResponse_Data[]} data List of information about the client’s conduits.
+ */
+/**
+ * @typedef CreateConduitsResponse_Data
+ * @prop {string} id Conduit ID.
+ * @prop {number} shardCount Number of shards created for this conduit.
+ */
+/**
+ * @typedef CreateConduitsResponse
+ * @prop {CreateConduitsResponse_Data[]} data List of information about the client’s conduits.
+ */
+/**
+ * @typedef UpdateConduitsResponse_Data
+ * @prop {string} id Conduit ID.
+ * @prop {number} shardCount Number of shards associated with this conduit after the update.
+ */
+/**
+ * @typedef UpdateConduitsResponse
+ * @prop {UpdateConduitsResponse_Data[]} data List of information about the client’s conduits.
+ */
+/**
+ * @typedef GetConduitShardsResponse_Data_Transport
+ * @prop {"webhook"|"websocket"} method The transport method. Possible values are:
+         *
+         * - webhook
+         *
+         * - websocket
+ * @prop {string} callback The callback URL where the notifications are sent. Included only if method is set to webhook.
+ * @prop {string} sessionId An ID that identifies the WebSocket that notifications are sent to. Included only if method is set to websocket.
+ * @prop {string} connectedAt The UTC date and time that the WebSocket connection was established. Included only if method is set to websocket.
+ * @prop {string} disconnectedAt The UTC date and time that the WebSocket connection was lost. Included only if method is set to websocket.
+ */
+/**
+ * @typedef GetConduitShardsResponse_Data
+ * @prop {string} id Shard ID.
+ * @prop {"enabled"|"webhook_callback_verification_pending"|"webhook_callback_verification_failed"|"notification_failures_exceeded"|"websocket_disconnected"|"websocket_failed_ping_pong"|"websocket_received_inbound_traffic"|"websocket_internal_error"|"websocket_network_timeout"|"websocket_network_error"|"websocket_failed_to_reconnect"|"The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message."} status The shard status. The subscriber receives events only for enabled shards. Possible values are:
+         *
+         * - enabled — The shard is enabled.
+         *
+         * - webhook_callback_verification_pending — The shard is pending verification of the specified callback URL.
+         *
+         * - webhook_callback_verification_failed — The specified callback URL failed verification.
+         *
+         * - notification_failures_exceeded — The notification delivery failure rate was too high.
+         *
+         * - websocket_disconnected — The client closed the connection.
+         *
+         * - websocket_failed_ping_pong — The client failed to respond to a ping message.
+         *
+         * - websocket_received_inbound_traffic — The client sent a non-pong message. Clients may only send pong messages (and only in response to a ping message).
+         *
+         * - websocket_internal_error — The Twitch WebSocket server experienced an unexpected error.
+         *
+         * - websocket_network_timeout — The Twitch WebSocket server timed out writing the message to the client.
+         *
+         * - websocket_network_error — The Twitch WebSocket server experienced a network error writing the message to the client.
+         *
+         * - websocket_failed_to_reconnect - The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message.
+ * @prop {GetConduitShardsResponse_Data_Transport} transport The transport details used to send the notifications.
+ */
+/**
+ * @typedef GetConduitShardsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetConduitShardsResponse
+ * @prop {GetConduitShardsResponse_Data[]} data List of information about a conduit's shards.
+ * @prop {GetConduitShardsResponse_Pagination} pagination Contains information used to page through a list of results. The object is empty if there are no more pages left to page through.
+ */
+/**
+ * @typedef UpdateConduitShardsResponse_Data_Transport
+ * @prop {"webhook"|"websocket"} method The transport method. Possible values are:
+         *
+         * - webhook
+         *
+         * - websocket
+ * @prop {string} callback The callback URL where the notifications are sent. Included only if method is set to webhook.
+ * @prop {string} sessionId An ID that identifies the WebSocket that notifications are sent to. Included only if method is set to websocket.
+ * @prop {string} connectedAt The UTC date and time that the WebSocket connection was established. Included only if method is set to websocket.
+ * @prop {string} disconnectedAt The UTC date and time that the WebSocket connection was lost. Included only if method is set to websocket.
+ */
+/**
+ * @typedef UpdateConduitShardsResponse_Data
+ * @prop {string} id Shard ID.
+ * @prop {"enabled"|"webhook_callback_verification_pending"|"webhook_callback_verification_failed"|"notification_failures_exceeded"|"websocket_disconnected"|"websocket_failed_ping_pong"|"websocket_received_inbound_traffic"|"websocket_internal_error"|"websocket_network_timeout"|"websocket_network_error"|"websocket_failed_to_reconnect"|"The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message."} status The shard status. The subscriber receives events only for enabled shards. Possible values are:
+         *
+         * - enabled — The shard is enabled.
+         *
+         * - webhook_callback_verification_pending — The shard is pending verification of the specified callback URL.
+         *
+         * - webhook_callback_verification_failed — The specified callback URL failed verification.
+         *
+         * - notification_failures_exceeded — The notification delivery failure rate was too high.
+         *
+         * - websocket_disconnected — The client closed the connection.
+         *
+         * - websocket_failed_ping_pong — The client failed to respond to a ping message.
+         *
+         * - websocket_received_inbound_traffic — The client sent a non-pong message. Clients may only send pong messages (and only in response to a ping message).
+         *
+         * - websocket_internal_error — The Twitch WebSocket server experienced an unexpected error.
+         *
+         * - websocket_network_timeout — The Twitch WebSocket server timed out writing the message to the client.
+         *
+         * - websocket_network_error — The Twitch WebSocket server experienced a network error writing the message to the client.
+         *
+         * - websocket_failed_to_reconnect - The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message.
+ * @prop {UpdateConduitShardsResponse_Data_Transport} transport The transport details used to send the notifications.
+ */
+/**
+ * @typedef UpdateConduitShardsResponse_Errors
+ * @prop {string} id Shard ID.
+ * @prop {"The length of the string in the secret field is not valid."|"The URL in the transports callback field is not valid. The URL must use the HTTPS protocol and the 443 port number."|"The value specified in the method field is not valid."|"The callback field is required if you specify the webhook transport method."|"The session_id field is required if you specify the WebSocket transport method."|"The websocket session is not connected."|"The shard id is outside of the conduit’s range."} message The error that occurred while updating the shard. Possible errors:
+         *
+         * - The length of the string in the secret field is not valid.
+         *
+         * - The URL in the transport's callback field is not valid. The URL must use the HTTPS protocol and the 443 port number.
+         *
+         * - The value specified in the method field is not valid.
+         *
+         * - The callback field is required if you specify the webhook transport method.
+         *
+         * - The session_id field is required if you specify the WebSocket transport method.
+         *
+         * - The websocket session is not connected.
+         *
+         * - The shard id is outside of the conduit’s range.
+ * @prop {string} code Error codes used to represent a specific error condition while attempting to update shards.
+ */
+/**
+ * @typedef UpdateConduitShardsResponse
+ * @prop {UpdateConduitShardsResponse_Data[]} data List of successful shard updates.
+ * @prop {UpdateConduitShardsResponse_Errors[]} errors List of unsuccessful updates.
+ */
+/**
+ * @typedef UpdateConduitShardsRequest_Shards_Transport
+ * @prop {"webhook"|"websocket"} method The transport method. Possible values are:
+         *
+         * - webhook
+         *
+         * - websocket
+ * @prop {string} callback The callback URL where the notifications are sent. The URL must use the HTTPS protocol and port 443. See Processing an event.Specify this field only if method is set to webhook.NOTE: Redirects are not followed.
+ * @prop {string} secret The secret used to verify the signature. The secret must be an ASCII string that’s a minimum of 10 characters long and a maximum of 100 characters long. For information about how the secret is used, see Verifying the event message.Specify this field only if method is set to webhook.
+ * @prop {string} sessionId An ID that identifies the WebSocket to send notifications to. When you connect to EventSub using WebSockets, the server returns the ID in the Welcome message.Specify this field only if method is set to websocket.
+ */
+/**
+ * @typedef UpdateConduitShardsRequest_Shards
+ * @prop {string} id Shard ID.
+ * @prop {UpdateConduitShardsRequest_Shards_Transport} transport The transport details that you want Twitch to use when sending you notifications.
+ */
+/**
+ * @typedef GetContentClassificationLabelsResponse_Data_Content_classification_labels
+ * @prop {string} id Unique identifier for the CCL.
+ * @prop {string} description Localized description of the CCL.
+ * @prop {string} name Localized name of the CCL.
+ */
+/**
+ * @typedef GetContentClassificationLabelsResponse_Data
+ * @prop {GetContentClassificationLabelsResponse_Data_Content_classification_labels[]} contentClassificationLabels The list of CCLs available.
+ */
+/**
+ * @typedef GetContentClassificationLabelsResponse
+ * @prop {GetContentClassificationLabelsResponse_Data[]} data A list that contains information about the available content classification labels.
+ */
+/**
+ * @typedef GetDropsEntitlementsResponse_Data
+ * @prop {string} id An ID that identifies the entitlement.
+ * @prop {string} benefitId An ID that identifies the benefit (reward).
+ * @prop {string} timestamp The UTC date and time (in RFC3339 format) of when the entitlement was granted.
+ * @prop {string} userId An ID that identifies the user who was granted the entitlement.
+ * @prop {string} gameId An ID that identifies the game the user was playing when the reward was entitled.
+ * @prop {"CLAIMED"|"FULFILLED"} fulfillmentStatus The entitlement’s fulfillment status. Possible values are: - CLAIMED
+         *
+         * - FULFILLED
+ * @prop {string} lastUpdated The UTC date and time (in RFC3339 format) of when the entitlement was last updated.
+ */
+/**
+ * @typedef GetDropsEntitlementsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after query parameter to this value to page forward through the results.
+ */
+/**
+ * @typedef GetDropsEntitlementsResponse
+ * @prop {GetDropsEntitlementsResponse_Data[]} data The list of entitlements.
+ * @prop {GetDropsEntitlementsResponse_Pagination} pagination The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef UpdateDropsEntitlementsResponse_Data
+ * @prop {"INVALID_ID"|"NOT_FOUND"|"SUCCESS"|"UNAUTHORIZED"|"UPDATE_FAILED"} status A string that indicates whether the status of the entitlements in the `ids` field were successfully updated. Possible values are:
+         *
+         * - INVALID_ID — The entitlement IDs in the `ids` field are not valid.
+         *
+         * - NOT_FOUND — The entitlement IDs in the `ids` field were not found.
+         *
+         * - SUCCESS — The status of the entitlements in the `ids` field were successfully updated.
+         *
+         * - UNAUTHORIZED — The user or organization identified by the user access token is not authorized to update the entitlements.
+         *
+         * - UPDATE_FAILED — The update failed. These are considered transient errors and the request should be retried later.
+ * @prop {string[][]} ids The list of entitlements that the status in the `status` field applies to.
+ */
+/**
+ * @typedef UpdateDropsEntitlementsResponse
+ * @prop {UpdateDropsEntitlementsResponse_Data[]} data A list that indicates which entitlements were successfully updated and those that weren’t.
+ */
+/**
+ * @typedef GetExtensionConfigurationSegmentResponse_Data
+ * @prop {"broadcaster"|"developer"|"global"} segment The type of segment. Possible values are: - broadcaster
+         *
+         * - developer
+         *
+         * - global
+ * @prop {string} broadcasterId The ID of the broadcaster that installed the extension. The object includes this field only if the `segment` query parameter is set to developer or broadcaster.
+ * @prop {string} content The contents of the segment. This string may be a plain-text string or a string-encoded JSON object.
+ * @prop {string} version The version number that identifies this definition of the segment’s data.
+ */
+/**
+ * @typedef GetExtensionConfigurationSegmentResponse
+ * @prop {GetExtensionConfigurationSegmentResponse_Data[]} data The list of requested configuration segments. The list is returned in the same order that you specified the list of segments in the request.
+ */
+/**
+ * @typedef GetExtensionLiveChannelsResponse_Data
+ * @prop {string} broadcasterId The ID of the broadcaster that is streaming live and has installed or activated the extension.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} gameName The name of the category or game being streamed.
+ * @prop {string} gameId The ID of the category or game being streamed.
+ * @prop {string} title The title of the broadcaster’s stream. May be an empty string if not specified.
+ */
+/**
+ * @typedef GetExtensionLiveChannelsResponse
+ * @prop {GetExtensionLiveChannelsResponse_Data[]} data The list of broadcasters that are streaming live and that have installed or activated the extension.
+ * @prop {string} pagination This field contains the cursor used to page through the results. The field is empty if there are no more pages left to page through. Note that this field is a string compared to other endpoints that use a *Pagination* object. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef CreateExtensionSecretResponse_Data_Secrets
+ * @prop {string} content The raw secret that you use with JWT encoding.
+ * @prop {string} activeAt The UTC date and time (in RFC3339 format) that you may begin using this secret to sign a JWT.
+ * @prop {string} expiresAt The UTC date and time (in RFC3339 format) that you must stop using this secret to decode a JWT.
+ */
+/**
+ * @typedef CreateExtensionSecretResponse_Data
+ * @prop {number} formatVersion The version number that identifies this definition of the secret’s data.
+ * @prop {CreateExtensionSecretResponse_Data_Secrets[]} secrets The list of secrets.
+ */
+/**
+ * @typedef CreateExtensionSecretResponse
+ * @prop {CreateExtensionSecretResponse_Data[]} data A list that contains the newly added secrets.
+ */
+/**
+ * @typedef GetExtensionsResponse_Data_Views_Mobile
+ * @prop {string} viewerUrl The HTML file that is shown to viewers on mobile devices. This page is presented to viewers as a panel behind the chat area of the mobile app.
+ */
+/**
+ * @typedef GetExtensionsResponse_Data_Views_Panel
+ * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated in a Panel slot.
+ * @prop {number} height The height, in pixels, of the panel component that the extension is rendered in.
+ * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
+ */
+/**
+ * @typedef GetExtensionsResponse_Data_Views_Video_overlay
+ * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated on the Video - Overlay slot.
+ * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
+ */
+/**
+ * @typedef GetExtensionsResponse_Data_Views_Component
+ * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated in a Video - Component slot.
+ * @prop {number} aspectRatioX The width value of the ratio (width : height) which determines the extension’s width, and how the extension’s iframe will resize in different video player environments.
+ * @prop {number} aspectRatioY The height value of the ratio (width : height) which determines the extension’s height, and how the extension’s iframe will resize in different video player environments.
+ * @prop {boolean} autoscale A Boolean value that determines whether to apply CSS zoom. If *true*, a CSS zoom is applied such that the size of the extension is variable but the inner dimensions are fixed based on Scale Pixels. This allows your extension to render as if it is of fixed width and height. If *false*, the inner dimensions of the extension iframe are variable, meaning your extension must implement responsiveness.
+ * @prop {number} scalePixels The base width, in pixels, of the extension to use when scaling (see `autoscale`). This value is ignored if `autoscale` is *false*.
+ * @prop {number} targetHeight The height as a percent of the maximum height of a video component extension. Values are between 1% - 100%.
+ * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
+ */
+/**
+ * @typedef GetExtensionsResponse_Data_Views_Config
+ * @prop {string} viewerUrl The HTML file shown to broadcasters while they are configuring your extension within the Extension Manager.
+ * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
+ */
+/**
+ * @typedef GetExtensionsResponse_Data_Views
+ * @prop {GetExtensionsResponse_Data_Views_Mobile} mobile Describes how the extension is displayed on mobile devices.
+ * @prop {GetExtensionsResponse_Data_Views_Panel} panel Describes how the extension is rendered if the extension may be activated as a panel extension.
+ * @prop {GetExtensionsResponse_Data_Views_Video_overlay} videoOverlay Describes how the extension is rendered if the extension may be activated as a video-overlay extension.
+ * @prop {GetExtensionsResponse_Data_Views_Component} component Describes how the extension is rendered if the extension may be activated as a video-component extension.
+ * @prop {GetExtensionsResponse_Data_Views_Config} config Describes the view that is shown to broadcasters while they are configuring your extension within the Extension Manager.
+ */
+/**
+ * @typedef GetExtensionsResponse_Data
+ * @prop {string} authorName The name of the user or organization that owns the extension.
+ * @prop {boolean} bitsEnabled A Boolean value that determines whether the extension has features that use Bits. Is *true* if the extension has features that use Bits.
+ * @prop {boolean} canInstall A Boolean value that determines whether a user can install the extension on their channel. Is *true* if a user can install the extension.Typically, this is set to *false* if the extension is currently in testing mode and requires users to be allowlisted (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Access*).
+ * @prop {"hosted"|"custom"|"none"} configurationLocation The location of where the extension’s configuration is stored. Possible values are:
+         *
+         * - hosted — The Extensions Configuration Service hosts the configuration.
+         *
+         * - custom — The Extension Backend Service (EBS) hosts the configuration.
+         *
+         * - none — The extension doesn't require configuration.
+ * @prop {string} description A longer description of the extension. It appears on the details page.
+ * @prop {string} eulaTosUrl A URL to the extension’s Terms of Service.
+ * @prop {boolean} hasChatSupport A Boolean value that determines whether the extension can communicate with the installed channel’s chat. Is *true* if the extension can communicate with the channel’s chat room.
+ * @prop {string} iconUrl A URL to the default icon that’s displayed in the Extensions directory.
+ * @prop {Map<string,string>} iconUrls A dictionary that contains URLs to different sizes of the default icon. The dictionary’s key identifies the icon’s size (for example, 24x24), and the dictionary’s value contains the URL to the icon.
+ * @prop {string} id The extension’s ID.
+ * @prop {string} name The extension’s name.
+ * @prop {string} privacyPolicyUrl A URL to the extension’s privacy policy.
+ * @prop {boolean} requestIdentityLink A Boolean value that determines whether the extension wants to explicitly ask viewers to link their Twitch identity.
+ * @prop {string[][]} screenshotUrls A list of URLs to screenshots that are shown in the Extensions marketplace.
+ * @prop {"Approved"|"AssetsUploaded"|"Deleted"|"Deprecated"|"InReview"|"InTest"|"PendingAction"|"Rejected"|"Released"} state The extension’s state. Possible values are:
+         *
+         * - Approved
+         *
+         * - AssetsUploaded
+         *
+         * - Deleted
+         *
+         * - Deprecated
+         *
+         * - InReview
+         *
+         * - InTest
+         *
+         * - PendingAction
+         *
+         * - Rejected
+         *
+         * - Released
+ * @prop {"none"|"optional"} subscriptionsSupportLevel Indicates whether the extension can view the user’s subscription level on the channel that the extension is installed on. Possible values are:
+         *
+         * - none — The extension can't view the user’s subscription level.
+         *
+         * - optional — The extension can view the user’s subscription level.
+ * @prop {string} summary A short description of the extension that streamers see when hovering over the discovery splash screen in the Extensions manager.
+ * @prop {string} supportEmail The email address that users use to get support for the extension.
+ * @prop {string} version The extension’s version number.
+ * @prop {string} viewerSummary A brief description displayed on the channel to explain how the extension works.
+ * @prop {GetExtensionsResponse_Data_Views} views Describes all views-related information such as how the extension is displayed on mobile devices.
+ * @prop {string[][]} allowlistedConfigUrls Allowlisted configuration URLs for displaying the extension (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Capabilities*).
+ * @prop {string[][]} allowlistedPanelUrls Allowlisted panel URLs for displaying the extension (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Capabilities*).
+ */
+/**
+ * @typedef GetExtensionsResponse
+ * @prop {GetExtensionsResponse_Data[]} data A list that contains the specified extension.
+ */
+/**
+ * @typedef GetReleasedExtensionsResponse_Data_Views_Mobile
+ * @prop {string} viewerUrl The HTML file that is shown to viewers on mobile devices. This page is presented to viewers as a panel behind the chat area of the mobile app.
+ */
+/**
+ * @typedef GetReleasedExtensionsResponse_Data_Views_Panel
+ * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated in a Panel slot.
+ * @prop {number} height The height, in pixels, of the panel component that the extension is rendered in.
+ * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
+ */
+/**
+ * @typedef GetReleasedExtensionsResponse_Data_Views_Video_overlay
+ * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated on the Video - Overlay slot.
+ * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
+ */
+/**
+ * @typedef GetReleasedExtensionsResponse_Data_Views_Component
+ * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated in a Video - Component slot.
+ * @prop {number} aspectRatioX The width value of the ratio (width : height) which determines the extension’s width, and how the extension’s iframe will resize in different video player environments.
+ * @prop {number} aspectRatioY The height value of the ratio (width : height) which determines the extension’s height, and how the extension’s iframe will resize in different video player environments.
+ * @prop {boolean} autoscale A Boolean value that determines whether to apply CSS zoom. If *true*, a CSS zoom is applied such that the size of the extension is variable but the inner dimensions are fixed based on Scale Pixels. This allows your extension to render as if it is of fixed width and height. If *false*, the inner dimensions of the extension iframe are variable, meaning your extension must implement responsiveness.
+ * @prop {number} scalePixels The base width, in pixels, of the extension to use when scaling (see `autoscale`). This value is ignored if `autoscale` is *false*.
+ * @prop {number} targetHeight The height as a percent of the maximum height of a video component extension. Values are between 1% - 100%.
+ * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
+ */
+/**
+ * @typedef GetReleasedExtensionsResponse_Data_Views_Config
+ * @prop {string} viewerUrl The HTML file shown to broadcasters while they are configuring your extension within the Extension Manager.
+ * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
+ */
+/**
+ * @typedef GetReleasedExtensionsResponse_Data_Views
+ * @prop {GetReleasedExtensionsResponse_Data_Views_Mobile} mobile Describes how the extension is displayed on mobile devices.
+ * @prop {GetReleasedExtensionsResponse_Data_Views_Panel} panel Describes how the extension is rendered if the extension may be activated as a panel extension.
+ * @prop {GetReleasedExtensionsResponse_Data_Views_Video_overlay} videoOverlay Describes how the extension is rendered if the extension may be activated as a video-overlay extension.
+ * @prop {GetReleasedExtensionsResponse_Data_Views_Component} component Describes how the extension is rendered if the extension may be activated as a video-component extension.
+ * @prop {GetReleasedExtensionsResponse_Data_Views_Config} config Describes the view that is shown to broadcasters while they are configuring your extension within the Extension Manager.
+ */
+/**
+ * @typedef GetReleasedExtensionsResponse_Data
+ * @prop {string} authorName The name of the user or organization that owns the extension.
+ * @prop {boolean} bitsEnabled A Boolean value that determines whether the extension has features that use Bits. Is *true* if the extension has features that use Bits.
+ * @prop {boolean} canInstall A Boolean value that determines whether a user can install the extension on their channel. Is *true* if a user can install the extension.Typically, this is set to *false* if the extension is currently in testing mode and requires users to be allowlisted (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Access*).
+ * @prop {"hosted"|"custom"|"none"} configurationLocation The location of where the extension’s configuration is stored. Possible values are:
+         *
+         * - hosted — The Extensions Configuration Service hosts the configuration.
+         *
+         * - custom — The Extension Backend Service (EBS) hosts the configuration.
+         *
+         * - none — The extension doesn't require configuration.
+ * @prop {string} description A longer description of the extension. It appears on the details page.
+ * @prop {string} eulaTosUrl A URL to the extension’s Terms of Service.
+ * @prop {boolean} hasChatSupport A Boolean value that determines whether the extension can communicate with the installed channel’s chat. Is *true* if the extension can communicate with the channel’s chat room.
+ * @prop {string} iconUrl A URL to the default icon that’s displayed in the Extensions directory.
+ * @prop {Map<string,string>} iconUrls A dictionary that contains URLs to different sizes of the default icon. The dictionary’s key identifies the icon’s size (for example, 24x24), and the dictionary’s value contains the URL to the icon.
+ * @prop {string} id The extension’s ID.
+ * @prop {string} name The extension’s name.
+ * @prop {string} privacyPolicyUrl A URL to the extension’s privacy policy.
+ * @prop {boolean} requestIdentityLink A Boolean value that determines whether the extension wants to explicitly ask viewers to link their Twitch identity.
+ * @prop {string[][]} screenshotUrls A list of URLs to screenshots that are shown in the Extensions marketplace.
+ * @prop {"Approved"|"AssetsUploaded"|"Deleted"|"Deprecated"|"InReview"|"InTest"|"PendingAction"|"Rejected"|"Released"} state The extension’s state. Possible values are:
+         *
+         * - Approved
+         *
+         * - AssetsUploaded
+         *
+         * - Deleted
+         *
+         * - Deprecated
+         *
+         * - InReview
+         *
+         * - InTest
+         *
+         * - PendingAction
+         *
+         * - Rejected
+         *
+         * - Released
+ * @prop {"none"|"optional"} subscriptionsSupportLevel Indicates whether the extension can view the user’s subscription level on the channel that the extension is installed on. Possible values are:
+         *
+         * - none — The extension can't view the user’s subscription level.
+         *
+         * - optional — The extension can view the user’s subscription level.
+ * @prop {string} summary A short description of the extension that streamers see when hovering over the discovery splash screen in the Extensions manager.
+ * @prop {string} supportEmail The email address that users use to get support for the extension.
+ * @prop {string} version The extension’s version number.
+ * @prop {string} viewerSummary A brief description displayed on the channel to explain how the extension works.
+ * @prop {GetReleasedExtensionsResponse_Data_Views} views Describes all views-related information such as how the extension is displayed on mobile devices.
+ * @prop {string[][]} allowlistedConfigUrls Allowlisted configuration URLs for displaying the extension (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Capabilities*).
+ * @prop {string[][]} allowlistedPanelUrls Allowlisted panel URLs for displaying the extension (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Capabilities*).
+ */
+/**
+ * @typedef GetReleasedExtensionsResponse
+ * @prop {GetReleasedExtensionsResponse_Data[]} data A list that contains the specified extension.
+ */
+/**
+ * @typedef GetExtensionBitsProductsResponse_Data_Cost
+ * @prop {number} amount The product’s price.
+ * @prop {"bits"} type The type of currency. Possible values are:
+         *
+         * - bits
+ */
+/**
+ * @typedef GetExtensionBitsProductsResponse_Data
+ * @prop {string} sku The product’s SKU. The SKU is unique across an extension’s products.
+ * @prop {GetExtensionBitsProductsResponse_Data_Cost} cost An object that contains the product’s cost information.
+ * @prop {boolean} inDevelopment A Boolean value that indicates whether the product is in development. If *true*, the product is not available for public use.
+ * @prop {string} displayName The product’s name as displayed in the extension.
+ * @prop {string} expiration The date and time, in RFC3339 format, when the product expires.
+ * @prop {boolean} isBroadcast A Boolean value that determines whether Bits product purchase events are broadcast to all instances of an extension on a channel. The events are broadcast via the `onTransactionComplete` helper callback. Is *true* if the event is broadcast to all instances.
+ */
+/**
+ * @typedef GetExtensionBitsProductsResponse
+ * @prop {GetExtensionBitsProductsResponse_Data[]} data A list of Bits products that the extension created. The list is in ascending SKU order. The list is empty if the extension hasn’t created any products or they’re all expired or disabled.
+ */
+/**
+ * @typedef GetTopGamesResponse_Data
+ * @prop {string} id An ID that identifies the category or game.
+ * @prop {string} name The category’s or game’s name.
+ * @prop {string} boxArtUrl A URL to the category’s or game’s box art. You must replace the `{width}x{height}` placeholder with the size of image you want.
+ * @prop {string} igdbId The ID that [IGDB](https://www.igdb.com/) uses to identify this game. If the IGDB ID is not available to Twitch, this field is set to an empty string.
+ */
+/**
+ * @typedef GetTopGamesResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after or before query parameter to get the next or previous page of results.
+ */
+/**
+ * @typedef GetTopGamesResponse
+ * @prop {GetTopGamesResponse_Data[]} data The list of broadcasts. The broadcasts are sorted by the number of viewers, with the most popular first.
+ * @prop {GetTopGamesResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetGamesResponse_Data
+ * @prop {string} id An ID that identifies the category or game.
+ * @prop {string} name The category’s or game’s name.
+ * @prop {string} boxArtUrl A URL to the category’s or game’s box art. You must replace the `{width}x{height}` placeholder with the size of image you want.
+ * @prop {string} igdbId The ID that [IGDB](https://www.igdb.com/) uses to identify this game. If the IGDB ID is not available to Twitch, this field is set to an empty string.
+ */
+/**
+ * @typedef GetGamesResponse
+ * @prop {GetGamesResponse_Data[]} data The list of categories and games. The list is empty if the specified categories and games weren’t found.
+ */
+/**
+ * @typedef GetCreatorGoalsResponse_Data
+ * @prop {string} id An ID that identifies this goal.
+ * @prop {string} broadcasterId An ID that identifies the broadcaster that created the goal.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {"follower"|"subscription"|"subscription_count"|"new_subscription"|"new_subscription_count"} type The type of goal. Possible values are: - follower — The goal is to increase followers.
+         *
+         * - subscription — The goal is to increase subscriptions. This type shows the net increase or decrease in tier points associated with the subscriptions.
+         *
+         * - subscription_count — The goal is to increase subscriptions. This type shows the net increase or decrease in the number of subscriptions.
+         *
+         * - new_subscription — The goal is to increase subscriptions. This type shows only the net increase in tier points associated with the subscriptions (it does not account for users that unsubscribed since the goal started).
+         *
+         * - new_subscription_count — The goal is to increase subscriptions. This type shows only the net increase in the number of subscriptions (it does not account for users that unsubscribed since the goal started).
+ * @prop {string} description A description of the goal. Is an empty string if not specified.
+ * @prop {number} currentAmount The goal’s current value.The goal’s `type` determines how this value is increased or decreased. - If `type` is follower, this field is set to the broadcaster's current number of followers. This number increases with new followers and decreases when users unfollow the broadcaster.
+         *
+         * - If `type` is subscription, this field is increased and decreased by the points value associated with the subscription tier. For example, if a tier-two subscription is worth 2 points, this field is increased or decreased by 2, not 1.
+         *
+         * - If `type` is subscription_count, this field is increased by 1 for each new subscription and decreased by 1 for each user that unsubscribes.
+         *
+         * - If `type` is new_subscription, this field is increased by the points value associated with the subscription tier. For example, if a tier-two subscription is worth 2 points, this field is increased by 2, not 1.
+         *
+         * - If `type` is new_subscription_count, this field is increased by 1 for each new subscription.
+ * @prop {number} targetAmount The goal’s target value. For example, if the broadcaster has 200 followers before creating the goal, and their goal is to double that number, this field is set to 400.
+ * @prop {string} createdAt The UTC date and time (in RFC3339 format) that the broadcaster created the goal.
+ */
+/**
+ * @typedef GetCreatorGoalsResponse
+ * @prop {GetCreatorGoalsResponse_Data[]} data The list of goals. The list is empty if the broadcaster hasn’t created goals.
+ */
+/**
+ * @typedef GetChannelGuestStarSettingsResponse
+ * @prop {boolean} isModeratorSendLiveEnabled Flag determining if Guest Star moderators have access to control whether a guest is live once assigned to a slot.
+ * @prop {number} slotCount Number of slots the Guest Star call interface will allow the host to add to a call. Required to be between 1 and 6.
+ * @prop {boolean} isBrowserSourceAudioEnabled Flag determining if Browser Sources subscribed to sessions on this channel should output audio
+ * @prop {"TILED_LAYOUT"|"SCREENSHARE_LAYOUT"} groupLayout This setting determines how the guests within a session should be laid out within the browser source. Can be one of the following values: - `TILED_LAYOUT`: All live guests are tiled within the browser source with the same size.
+         *
+         * - `SCREENSHARE_LAYOUT`: All live guests are tiled within the browser source with the same size. If there is an active screen share, it is sized larger than the other guests.
+ * @prop {string} browserSourceToken View only token to generate browser source URLs
+ */
+/**
+ * @typedef GetGuestStarSessionResponse_Data_Guests_Audio_settings
+ * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s audio to be seen or heard within the session.
+ * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their audio to be transmitted to the session.
+ * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate audio device available to be transmitted to the session.
+ */
+/**
+ * @typedef GetGuestStarSessionResponse_Data_Guests_Video_settings
+ * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s video to be seen or heard within the session.
+ * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their video to be transmitted to the session.
+ * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate video device available to be transmitted to the session.
+ */
+/**
+ * @typedef GetGuestStarSessionResponse_Data_Guests
+ * @prop {string} slotId ID representing this guest’s slot assignment. - Host is always in slot "0"
+         *
+         * - Guests are assigned the following consecutive IDs (e.g, "1", "2", "3", etc)
+         *
+         * - Screen Share is represented as a special guest with the ID "SCREENSHARE"
+         *
+         * - The identifier here matches the ID referenced in browser source links used in broadcasting software.
+ * @prop {boolean} isLive Flag determining whether or not the guest is visible in the browser source in the host’s streaming software.
+ * @prop {string} userId User ID of the guest assigned to this slot.
+ * @prop {string} userDisplayName Display name of the guest assigned to this slot.
+ * @prop {string} userLogin Login of the guest assigned to this slot.
+ * @prop {number} volume Value from 0 to 100 representing the host’s volume setting for this guest.
+ * @prop {string} assignedAt Timestamp when this guest was assigned a slot in the session.
+ * @prop {GetGuestStarSessionResponse_Data_Guests_Audio_settings} audioSettings Information about the guest’s audio settings
+ * @prop {GetGuestStarSessionResponse_Data_Guests_Video_settings} videoSettings Information about the guest’s video settings
+ */
+/**
+ * @typedef GetGuestStarSessionResponse_Data
+ * @prop {string} id ID uniquely representing the Guest Star session.
+ * @prop {GetGuestStarSessionResponse_Data_Guests} guests List of guests currently interacting with the Guest Star session.
+ */
+/**
+ * @typedef GetGuestStarSessionResponse
+ * @prop {GetGuestStarSessionResponse_Data[]} data Summary of the session details
+ */
+/**
+ * @typedef CreateGuestStarSessionResponse_Data_Guests_Audio_settings
+ * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s audio to be seen or heard within the session.
+ * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their audio to be transmitted to the session.
+ * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate audio device available to be transmitted to the session.
+ */
+/**
+ * @typedef CreateGuestStarSessionResponse_Data_Guests_Video_settings
+ * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s video to be seen or heard within the session.
+ * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their video to be transmitted to the session.
+ * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate video device available to be transmitted to the session.
+ */
+/**
+ * @typedef CreateGuestStarSessionResponse_Data_Guests
+ * @prop {string} slotId ID representing this guest’s slot assignment. - Host is always in slot "0"
+         *
+         * - Guests are assigned the following consecutive IDs (e.g, "1", "2", "3", etc)
+         *
+         * - Screen Share is represented as a special guest with the ID "SCREENSHARE"
+         *
+         * - The identifier here matches the ID referenced in browser source links used in broadcasting software.
+ * @prop {boolean} isLive Flag determining whether or not the guest is visible in the browser source in the host’s streaming software.
+ * @prop {string} userId User ID of the guest assigned to this slot.
+ * @prop {string} userDisplayName Display name of the guest assigned to this slot.
+ * @prop {string} userLogin Login of the guest assigned to this slot.
+ * @prop {number} volume Value from 0 to 100 representing the host’s volume setting for this guest.
+ * @prop {string} assignedAt Timestamp when this guest was assigned a slot in the session.
+ * @prop {CreateGuestStarSessionResponse_Data_Guests_Audio_settings} audioSettings Information about the guest’s audio settings
+ * @prop {CreateGuestStarSessionResponse_Data_Guests_Video_settings} videoSettings Information about the guest’s video settings
+ */
+/**
+ * @typedef CreateGuestStarSessionResponse_Data
+ * @prop {string} id ID uniquely representing the Guest Star session.
+ * @prop {CreateGuestStarSessionResponse_Data_Guests} guests List of guests currently interacting with the Guest Star session. On creation, the session will contain the broadcaster as a solo guest.
+ */
+/**
+ * @typedef CreateGuestStarSessionResponse
+ * @prop {CreateGuestStarSessionResponse_Data[]} data Summary of the session details.
+ */
+/**
+ * @typedef EndGuestStarSessionResponse_Data_Guests_Audio_settings
+ * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s audio to be seen or heard within the session.
+ * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their audio to be transmitted to the session.
+ * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate audio device available to be transmitted to the session.
+ */
+/**
+ * @typedef EndGuestStarSessionResponse_Data_Guests_Video_settings
+ * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s video to be seen or heard within the session.
+ * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their video to be transmitted to the session.
+ * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate video device available to be transmitted to the session.
+ */
+/**
+ * @typedef EndGuestStarSessionResponse_Data_Guests
+ * @prop {string} slotId ID representing this guest’s slot assignment. - Host is always in slot "0"
+         *
+         * - Guests are assigned the following consecutive IDs (e.g, "1", "2", "3", etc)
+         *
+         * - Screen Share is represented as a special guest with the ID "SCREENSHARE"
+         *
+         * - The identifier here matches the ID referenced in browser source links used in broadcasting software.
+ * @prop {boolean} isLive Flag determining whether or not the guest is visible in the browser source in the host’s streaming software.
+ * @prop {string} userId User ID of the guest assigned to this slot.
+ * @prop {string} userDisplayName Display name of the guest assigned to this slot.
+ * @prop {string} userLogin Login of the guest assigned to this slot.
+ * @prop {number} volume Value from 0 to 100 representing the host’s volume setting for this guest.
+ * @prop {string} assignedAt Timestamp when this guest was assigned a slot in the session.
+ * @prop {EndGuestStarSessionResponse_Data_Guests_Audio_settings} audioSettings Information about the guest’s audio settings
+ * @prop {EndGuestStarSessionResponse_Data_Guests_Video_settings} videoSettings Information about the guest’s video settings
+ */
+/**
+ * @typedef EndGuestStarSessionResponse_Data
+ * @prop {string} id ID uniquely representing the Guest Star session.
+ * @prop {EndGuestStarSessionResponse_Data_Guests} guests List of guests currently interacting with the Guest Star session.
+ */
+/**
+ * @typedef EndGuestStarSessionResponse
+ * @prop {EndGuestStarSessionResponse_Data[]} data Summary of the session details when the session was ended.
+ */
+/**
+ * @typedef GetGuestStarInvitesResponse_Data
+ * @prop {string} userId Twitch User ID corresponding to the invited guest
+ * @prop {string} invitedAt Timestamp when this user was invited to the session.
+ * @prop {string} status Status representing the invited user’s join state. Can be one of the following: - `INVITED`: The user has been invited to the session but has not acknowledged it.
+         *
+         * - `ACCEPTED`: The invited user has acknowledged the invite and joined the waiting room, but may still be setting up their media devices or otherwise preparing to join the call.
+         *
+         * - `READY`: The invited user has signaled they are ready to join the call from the waiting room.
+ * @prop {boolean} isVideoEnabled Flag signaling that the invited user has chosen to disable their local video device. The user has hidden themselves, but they may choose to reveal their video feed upon joining the session.
+ * @prop {boolean} isAudioEnabled Flag signaling that the invited user has chosen to disable their local audio device. The user has muted themselves, but they may choose to unmute their audio feed upon joining the session.
+ * @prop {boolean} isVideoAvailable Flag signaling that the invited user has a video device available for sharing.
+ * @prop {boolean} isAudioAvailable Flag signaling that the invited user has an audio device available for sharing.
+ */
+/**
+ * @typedef GetGuestStarInvitesResponse
+ * @prop {GetGuestStarInvitesResponse_Data[]} data A list of invite objects describing the invited user as well as their ready status.
+ */
+/**
+ * @typedef GetHypeTrainStatusResponse_Data_Current_Top_contributions_Shared_train_participants
+ * @prop {string} broadcasterUserId The broadcaster ID.
+ * @prop {string} broadcasterUserLogin The broadcaster login.
+ * @prop {string} broadcasterUserName The broadcaster display name.
+ */
+/**
+ * @typedef GetHypeTrainStatusResponse_Data_Current_Top_contributions
+ * @prop {string} userId The ID of the user that made the contribution.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userName The user’s display name.
+ * @prop {"treasure"|"golden_kappa"|"regular"} type The type of the Hype Train. Possible values are: - treasure
+         *
+         * - golden_kappa
+         *
+         * - regular
+         *
+         * [Learn More](https://help.twitch.tv/s/article/hype-train-guide#special)
+ * @prop {number} total The total number of points contributed for the type.
+ * @prop {GetHypeTrainStatusResponse_Data_Current_Top_contributions_Shared_train_participants[]} sharedTrainParticipants A list containing the broadcasters participating in the shared Hype Train. Null if the Hype Train is not shared.
+ * @prop {string} startedAt The time when the Hype Train started.
+ * @prop {string} expiresAt The time when the Hype Train expires. The expiration is extended when the Hype Train reaches a new level.
+ * @prop {boolean} isSharedTrain Indicates if the Hype Train is shared. When true, shared_train_participants will contain the list of broadcasters the train is shared with.
+ */
+/**
+ * @typedef GetHypeTrainStatusResponse_Data_Current
+ * @prop {string} id The Hype Train ID.
+ * @prop {string} broadcasterUserId The broadcaster ID.
+ * @prop {string} broadcasterUserLogin The broadcaster login.
+ * @prop {string} broadcasterUserName The broadcaster display name.
+ * @prop {number} level The current level of the Hype Train.
+ * @prop {number} total Total points contributed to the Hype Train.
+ * @prop {number} progress The number of points contributed to the Hype Train at the current level.
+ * @prop {number} goal The number of points required to reach the next level.
+ * @prop {GetHypeTrainStatusResponse_Data_Current_Top_contributions[]} topContributions The contributors with the most points contributed.
+ */
+/**
+ * @typedef GetHypeTrainStatusResponse_Data
+ * @prop {GetHypeTrainStatusResponse_Data_Current} current An object describing the current Hype Train. Null if a Hype Train is not active.
+ */
+/**
+ * @typedef GetHypeTrainStatusResponse_All_time_high
+ * @prop {number} level The level of the record Hype Train.
+ * @prop {number} total Total points contributed to the record Hype Train.
+ * @prop {string} achievedAt The time when the record was achieved.
+ */
+/**
+ * @typedef GetHypeTrainStatusResponse_Shared_all_time_high
+ * @prop {number} level The level of the record Hype Train.
+ * @prop {number} total Total points contributed to the record Hype Train.
+ * @prop {string} achievedAt The time when the record was achieved.
+ */
+/**
+ * @typedef GetHypeTrainStatusResponse
+ * @prop {GetHypeTrainStatusResponse_Data[]} data A list that contains information related to the channel’s Hype Train.
+ * @prop {GetHypeTrainStatusResponse_All_time_high} allTimeHigh An object with information about the channel’s Hype Train records. Null if a Hype Train has not occurred.
+ * @prop {GetHypeTrainStatusResponse_Shared_all_time_high} sharedAllTimeHigh An object with information about the channel’s shared Hype Train records. Null if a Hype Train has not occurred.
+ */
+/**
+ * @typedef CheckAutoModStatusResponse_Data
+ * @prop {string} msgId The caller-defined ID passed in the request.
+ * @prop {boolean} isPermitted A Boolean value that indicates whether Twitch would approve the message for chat or hold it for moderator review or block it from chat. Is *true* if Twitch would approve the message; otherwise, *false* if Twitch would hold the message for moderator review or block it from chat.
+ */
+/**
+ * @typedef CheckAutoModStatusResponse
+ * @prop {CheckAutoModStatusResponse_Data[]} data The list of messages and whether Twitch would approve them for chat.
+ */
+/**
+ * @typedef CheckAutoModStatusRequest_Data
+ * @prop {string} msgId A caller-defined ID used to correlate this message with the same message in the response.
+ * @prop {string} msgText The message to check.
+ */
+/**
+ * @typedef GetAutoModSettingsResponse_Data
+ * @prop {string} broadcasterId The broadcaster’s ID.
+ * @prop {string} moderatorId The moderator’s ID.
+ * @prop {number} overallLevel The default AutoMod level for the broadcaster. This field is *null* if the broadcaster has set one or more of the individual settings.
+ * @prop {number} disability The Automod level for discrimination against disability.
+ * @prop {number} aggression The Automod level for hostility involving aggression.
+ * @prop {number} sexualitySexOrGender The AutoMod level for discrimination based on sexuality, sex, or gender.
+ * @prop {number} misogyny The Automod level for discrimination against women.
+ * @prop {number} bullying The Automod level for hostility involving name calling or insults.
+ * @prop {number} swearing The Automod level for profanity.
+ * @prop {number} raceEthnicityOrReligion The Automod level for racial discrimination.
+ * @prop {number} sexBasedTerms The Automod level for sexual content.
+ */
+/**
+ * @typedef GetAutoModSettingsResponse
+ * @prop {GetAutoModSettingsResponse_Data[]} data The list of AutoMod settings. The list contains a single object that contains all the AutoMod settings.
+ */
+/**
+ * @typedef UpdateAutoModSettingsResponse_Data
+ * @prop {string} broadcasterId The broadcaster’s ID.
+ * @prop {string} moderatorId The moderator’s ID.
+ * @prop {number} overallLevel The default AutoMod level for the broadcaster. This field is *null* if the broadcaster has set one or more of the individual settings.
+ * @prop {number} disability The Automod level for discrimination against disability.
+ * @prop {number} aggression The Automod level for hostility involving aggression.
+ * @prop {number} sexualitySexOrGender The AutoMod level for discrimination based on sexuality, sex, or gender.
+ * @prop {number} misogyny The Automod level for discrimination against women.
+ * @prop {number} bullying The Automod level for hostility involving name calling or insults.
+ * @prop {number} swearing The Automod level for profanity.
+ * @prop {number} raceEthnicityOrReligion The Automod level for racial discrimination.
+ * @prop {number} sexBasedTerms The Automod level for sexual content.
+ */
+/**
+ * @typedef UpdateAutoModSettingsResponse
+ * @prop {UpdateAutoModSettingsResponse_Data[]} data The list of AutoMod settings. The list contains a single object that contains all the AutoMod settings.
+ */
+/**
+ * @typedef GetBannedUsersResponse_Data
+ * @prop {string} userId The ID of the banned user.
+ * @prop {string} userLogin The banned user’s login name.
+ * @prop {string} userName The banned user’s display name.
+ * @prop {string} expiresAt The UTC date and time (in RFC3339 format) of when the timeout expires, or an empty string if the user is permanently banned.
+ * @prop {string} createdAt The UTC date and time (in RFC3339 format) of when the user was banned.
+ * @prop {string} reason The reason the user was banned or put in a timeout if the moderator provided one.
+ * @prop {string} moderatorId The ID of the moderator that banned the user or put them in a timeout.
+ * @prop {string} moderatorLogin The moderator’s login name.
+ * @prop {string} moderatorName The moderator’s display name.
+ */
+/**
+ * @typedef GetBannedUsersResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetBannedUsersResponse
+ * @prop {GetBannedUsersResponse_Data[]} data The list of users that were banned or put in a timeout.
+ * @prop {GetBannedUsersResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef BanUserResponse_Data
+ * @prop {string} broadcasterId The broadcaster whose chat room the user was banned from chatting in.
+ * @prop {string} moderatorId The moderator that banned or put the user in the timeout.
+ * @prop {string} userId The user that was banned or put in a timeout.
+ * @prop {string} createdAt The UTC date and time (in RFC3339 format) that the ban or timeout was placed.
+ * @prop {string} endTime The UTC date and time (in RFC3339 format) that the timeout will end. Is *null* if the user was banned instead of being put in a timeout.
+ */
+/**
+ * @typedef BanUserResponse
+ * @prop {BanUserResponse_Data[]} data A list that contains the user you successfully banned or put in a timeout.
+ */
+/**
+ * @typedef BanUserRequest_Data
+ * @prop {string} userId The ID of the user to ban or put in a timeout.
+ * @prop {number} duration To ban a user indefinitely, don’t include this field.To put a user in a timeout, include this field and specify the timeout period, in seconds. The minimum timeout is 1 second and the maximum is 1,209,600 seconds (2 weeks).To end a user’s timeout early, set this field to 1, or use the [Unban user](#unban-user) endpoint.
+ * @prop {string} reason The reason the you’re banning the user or putting them in a timeout. The text is user defined and is limited to a maximum of 500 characters.
+ */
+/**
+ * @typedef GetUnbanRequestsResponse_Data
+ * @prop {string} id Unban request ID.
+ * @prop {string} broadcasterId User ID of broadcaster whose channel is receiving the unban request.
+ * @prop {string} broadcasterName The broadcaster's display name.
+ * @prop {string} broadcasterLogin The broadcaster's login name.
+ * @prop {string} moderatorId User ID of moderator who approved/denied the request.
+ * @prop {string} moderatorLogin The moderator's login name.
+ * @prop {string} moderatorName The moderator's display name.
+ * @prop {string} userId User ID of the requestor who is asking for an unban.
+ * @prop {string} userLogin The user's login name.
+ * @prop {string} userName The user's display name.
+ * @prop {string} text Text of the request from the requesting user.
+ * @prop {string} status Status of the request. One of:
+         *
+         * - pending
+         *
+         * - approved
+         *
+         * - denied
+         *
+         * - acknowledged
+         *
+         * - canceled
+ * @prop {string} createdAt Timestamp of when the unban request was created.
+ * @prop {string} resolvedAt Timestamp of when moderator/broadcaster approved or denied the request.
+ * @prop {string} resolutionText Text input by the resolver (moderator) of the unban. request
+ */
+/**
+ * @typedef GetUnbanRequestsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetUnbanRequestsResponse
+ * @prop {GetUnbanRequestsResponse_Data[]} data A list that contains information about the channel's unban requests.
+ * @prop {GetUnbanRequestsResponse_Pagination} pagination Contains information used to page through a list of results. The object is empty if there are no more pages left to page through.
+ */
+/**
+ * @typedef ResolveUnbanRequestsResponse_Data
+ * @prop {string} id Unban request ID.
+ * @prop {string} broadcasterId User ID of broadcaster whose channel is receiving the unban request.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} moderatorId User ID of moderator who approved/denied the request.
+ * @prop {string} moderatorLogin The moderator’s login name.
+ * @prop {string} moderatorName The moderator’s display name.
+ * @prop {string} userId User ID of the requestor who is asking for an unban.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userName The user’s display name.
+ * @prop {string} text Text of the request from the requesting user.
+ * @prop {string} status Status of the request. One of: - approved
+         *
+         * - denied
+ * @prop {string} createdAt Timestamp of when the unban request was created.
+ * @prop {string} resolvedAt Timestamp of when moderator/broadcaster approved or denied the request.
+ * @prop {string} resolutionText Text input by the resolver (moderator) of the unban request.
+ */
+/**
+ * @typedef ResolveUnbanRequestsResponse
+ * @prop {ResolveUnbanRequestsResponse_Data[]} data 
+ */
+/**
+ * @typedef GetBlockedTermsResponse_Data
+ * @prop {string} broadcasterId The broadcaster that owns the list of blocked terms.
+ * @prop {string} moderatorId The moderator that blocked the word or phrase from being used in the broadcaster’s chat room.
+ * @prop {string} id An ID that identifies this blocked term.
+ * @prop {string} text The blocked word or phrase.
+ * @prop {string} createdAt The UTC date and time (in RFC3339 format) that the term was blocked.
+ * @prop {string} updatedAt The UTC date and time (in RFC3339 format) that the term was updated.When the term is added, this timestamp is the same as `created_at`. The timestamp changes as AutoMod continues to deny the term.
+ * @prop {string} expiresAt The UTC date and time (in RFC3339 format) that the blocked term is set to expire. After the block expires, users may use the term in the broadcaster’s chat room.This field is *null* if the term was added manually or was permanently blocked by AutoMod.
+ */
+/**
+ * @typedef GetBlockedTermsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetBlockedTermsResponse
+ * @prop {GetBlockedTermsResponse_Data[]} data The list of blocked terms. The list is in descending order of when they were created (see the `created_at` timestamp).
+ * @prop {GetBlockedTermsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef AddBlockedTermResponse_Data
+ * @prop {string} broadcasterId The broadcaster that owns the list of blocked terms.
+ * @prop {string} moderatorId The moderator that blocked the word or phrase from being used in the broadcaster’s chat room.
+ * @prop {string} id An ID that identifies this blocked term.
+ * @prop {string} text The blocked word or phrase.
+ * @prop {string} createdAt The UTC date and time (in RFC3339 format) that the term was blocked.
+ * @prop {string} updatedAt The UTC date and time (in RFC3339 format) that the term was updated.When the term is added, this timestamp is the same as `created_at`. The timestamp changes as AutoMod continues to deny the term.
+ * @prop {string} expiresAt The UTC date and time (in RFC3339 format) that the blocked term is set to expire. After the block expires, users may use the term in the broadcaster’s chat room.This field is *null* if the term was added manually or was permanently blocked by AutoMod.
+ */
+/**
+ * @typedef AddBlockedTermResponse
+ * @prop {AddBlockedTermResponse_Data[]} data A list that contains the single blocked term that the broadcaster added.
+ */
+/**
+ * @typedef GetModeratedChannelsResponse_Data
+ * @prop {string} broadcasterId An ID that uniquely identifies the channel this user can moderate.
+ * @prop {string} broadcasterLogin The channel’s login name.
+ * @prop {string} broadcasterName The channels’ display name.
+ */
+/**
+ * @typedef GetModeratedChannelsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetModeratedChannelsResponse
+ * @prop {GetModeratedChannelsResponse_Data[]} data The list of channels that the user has moderator privileges in.
+ * @prop {GetModeratedChannelsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through.
+ */
+/**
+ * @typedef GetModeratorsResponse_Data
+ * @prop {string} userId The ID of the user that has permission to moderate the broadcaster’s channel.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userName The user’s display name.
+ */
+/**
+ * @typedef GetModeratorsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetModeratorsResponse
+ * @prop {GetModeratorsResponse_Data[]} data The list of moderators.
+ * @prop {GetModeratorsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetVIPsResponse_Data
+ * @prop {string} userId An ID that uniquely identifies the VIP user.
+ * @prop {string} userName The user’s display name.
+ * @prop {string} userLogin The user’s login name.
+ */
+/**
+ * @typedef GetVIPsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetVIPsResponse
+ * @prop {GetVIPsResponse_Data[]} data The list of VIPs. The list is empty if the broadcaster doesn’t have VIP users.
+ * @prop {GetVIPsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef UpdateShieldModeStatusResponse_Data
+ * @prop {boolean} isActive A Boolean value that determines whether Shield Mode is active. Is *true* if Shield Mode is active; otherwise, *false*.
+ * @prop {string} moderatorId An ID that identifies the moderator that last activated Shield Mode.
+ * @prop {string} moderatorLogin The moderator’s login name.
+ * @prop {string} moderatorName The moderator’s display name.
+ * @prop {string} lastActivatedAt The UTC timestamp (in RFC3339 format) of when Shield Mode was last activated.
+ */
+/**
+ * @typedef UpdateShieldModeStatusResponse
+ * @prop {UpdateShieldModeStatusResponse_Data[]} data A list that contains a single object with the broadcaster’s updated Shield Mode status.
+ */
+/**
+ * @typedef GetShieldModeStatusResponse_Data
+ * @prop {boolean} isActive A Boolean value that determines whether Shield Mode is active. Is *true* if the broadcaster activated Shield Mode; otherwise, *false*.
+ * @prop {string} moderatorId An ID that identifies the moderator that last activated Shield Mode. Is an empty string if Shield Mode hasn’t been previously activated.
+ * @prop {string} moderatorLogin The moderator’s login name. Is an empty string if Shield Mode hasn’t been previously activated.
+ * @prop {string} moderatorName The moderator’s display name. Is an empty string if Shield Mode hasn’t been previously activated.
+ * @prop {string} lastActivatedAt The UTC timestamp (in RFC3339 format) of when Shield Mode was last activated. Is an empty string if Shield Mode hasn’t been previously activated.
+ */
+/**
+ * @typedef GetShieldModeStatusResponse
+ * @prop {GetShieldModeStatusResponse_Data[]} data A list that contains a single object with the broadcaster’s Shield Mode status.
+ */
+/**
+ * @typedef WarnChatUserResponse_Data
+ * @prop {string} broadcasterId The ID of the channel in which the warning will take effect.
+ * @prop {string} userId The ID of the warned user.
+ * @prop {string} moderatorId The ID of the user who applied the warning.
+ * @prop {string} reason The reason provided for warning.
+ */
+/**
+ * @typedef WarnChatUserResponse
+ * @prop {WarnChatUserResponse_Data[]} data A list that contains information about the warning.
+ */
+/**
+ * @typedef WarnChatUserRequest_Data
+ * @prop {string} userId The ID of the twitch user to be warned.
+ * @prop {string} reason A custom reason for the warning. *Max 500 chars.*
+ */
+/**
+ * @typedef RemoveSuspiciousStatusFromChatUserResponse_Data
+ * @prop {string} userId The ID of the user having the suspicious status removed.
+ * @prop {string} broadcasterId The user ID of the broadcaster indicating in which channel the status is being removed.
+ * @prop {string} moderatorId The user ID of the moderator who modified the last status.
+ * @prop {string} updatedAt The timestamp of the last time this user’s status was updated.
+ * @prop {string} status The type of suspicious status. Possible values are: NO_TREATMENT
+ * @prop {string[][]} types An array of strings representing the type(s) of suspicious user this is. Possible values are: MANUALLY_ADDED, DETECTED_BAN_EVADER, DETECTED_SUS_CHATTER, BANNED_IN_SHARED_CHANNEL
+ */
+/**
+ * @typedef RemoveSuspiciousStatusFromChatUserResponse
+ * @prop {RemoveSuspiciousStatusFromChatUserResponse_Data[]} data An array with one object containing information about the suspicious user action.
+ */
+/**
+ * @typedef GetPollsResponse_Data_Choices
+ * @prop {string} id An ID that identifies this choice.
+ * @prop {string} title The choice's title. The title may contain a maximum of 25 characters.
+ * @prop {number} votes The total number of votes cast for this choice.
+ * @prop {number} channelPointsVotes The number of votes cast using Channel Points.
+ * @prop {number} bitsVotes Not used; will be set to 0.
+ */
+/**
+ * @typedef GetPollsResponse_Data
+ * @prop {string} id An ID that identifies the poll.
+ * @prop {string} broadcasterId An ID that identifies the broadcaster that created the poll.
+ * @prop {string} broadcasterName The broadcaster's display name.
+ * @prop {string} broadcasterLogin The broadcaster's login name.
+ * @prop {string} title The question that viewers are voting on. For example, What game should I play next? The title may contain a maximum of 60 characters.
+ * @prop {GetPollsResponse_Data_Choices[]} choices A list of choices that viewers can choose from. The list will contain a minimum of two choices and up to a maximum of five choices.
+ * @prop {boolean} bitsVotingEnabled Not used; will be set to *false*.
+ * @prop {number} bitsPerVote Not used; will be set to 0.
+ * @prop {boolean} channelPointsVotingEnabled A Boolean value that indicates whether viewers may cast additional votes using Channel Points. For information about Channel Points, see [Channel Points Guide](https://help.twitch.tv/s/article/channel-points-guide).
+ * @prop {number} channelPointsPerVote The number of points the viewer must spend to cast one additional vote.
+ * @prop {string} status The poll's status. Valid values are:
+         *
+         * - ACTIVE — The poll is running.
+         *
+         * - COMPLETED — The poll ended on schedule (see the `duration` field).
+         *
+         * - TERMINATED — The poll was terminated before its scheduled end.
+         *
+         * - ARCHIVED — The poll has been archived and is no longer visible on the channel.
+         *
+         * - MODERATED — The poll was deleted.
+         *
+         * - INVALID — Something went wrong while determining the state.
+ * @prop {number} duration The length of time (in seconds) that the poll will run for.
+ * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the poll began.
+ * @prop {string} endedAt The UTC date and time (in RFC3339 format) of when the poll ended. If `status` is ACTIVE, this field is set to *null*.
+ */
+/**
+ * @typedef GetPollsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request's after query parameter.
+ */
+/**
+ * @typedef GetPollsResponse
+ * @prop {GetPollsResponse_Data[]} data A list of polls. The polls are returned in descending order of start time unless you specify IDs in the request, in which case they're returned in the same order as you passed them in the request. The list is empty if the broadcaster hasn't created polls.
+ * @prop {GetPollsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef CreatePollResponse_Data_Choices
+ * @prop {string} id An ID that identifies this choice.
+ * @prop {string} title The choice’s title. The title may contain a maximum of 25 characters.
+ * @prop {number} votes The total number of votes cast for this choice.
+ * @prop {number} channelPointsVotes The number of votes cast using Channel Points.
+ * @prop {number} bitsVotes Not used; will be set to 0.
+ */
+/**
+ * @typedef CreatePollResponse_Data
+ * @prop {string} id An ID that identifies the poll.
+ * @prop {string} broadcasterId An ID that identifies the broadcaster that created the poll.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} title The question that viewers are voting on. For example, What game should I play next? The title may contain a maximum of 60 characters.
+ * @prop {CreatePollResponse_Data_Choices[]} choices A list of choices that viewers can choose from. The list will contain a minimum of two choices and up to a maximum of five choices.
+ * @prop {boolean} bitsVotingEnabled Not used; will be set to *false*.
+ * @prop {number} bitsPerVote Not used; will be set to 0.
+ * @prop {boolean} channelPointsVotingEnabled A Boolean value that indicates whether viewers may cast additional votes using Channel Points. For information about Channel Points, see [Channel Points Guide](https://help.twitch.tv/s/article/channel-points-guide).
+ * @prop {number} channelPointsPerVote The number of points the viewer must spend to cast one additional vote.
+ * @prop {string} status The poll’s status. Valid values are:
+         *
+         * - ACTIVE — The poll is running.
+         *
+         * - COMPLETED — The poll ended on schedule (see the `duration` field).
+         *
+         * - TERMINATED — The poll was terminated before its scheduled end.
+         *
+         * - ARCHIVED — The poll has been archived and is no longer visible on the channel.
+         *
+         * - MODERATED — The poll was deleted.
+         *
+         * - INVALID — Something went wrong while determining the state.
+ * @prop {number} duration The length of time (in seconds) that the poll will run for.
+ * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the poll began.
+ * @prop {string} endedAt The UTC date and time (in RFC3339 format) of when the poll ended. If `status` is ACTIVE, this field is set to *null*.
+ */
+/**
+ * @typedef CreatePollResponse
+ * @prop {CreatePollResponse_Data[]} data A list that contains the single poll that you created.
+ */
+/**
+ * @typedef CreatePollRequest_Choices
+ * @prop {string} title One of the choices the viewer may select. The choice may contain a maximum of 25 characters.
+ */
+/**
+ * @typedef EndPollResponse_Data_Choices
+ * @prop {string} id An ID that identifies this choice.
+ * @prop {string} title The choice’s title. The title may contain a maximum of 25 characters.
+ * @prop {number} votes The total number of votes cast for this choice.
+ * @prop {number} channelPointsVotes The number of votes cast using Channel Points.
+ * @prop {number} bitsVotes Not used; will be set to 0.
+ */
+/**
+ * @typedef EndPollResponse_Data
+ * @prop {string} id An ID that identifies the poll.
+ * @prop {string} broadcasterId An ID that identifies the broadcaster that created the poll.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} title The question that viewers are voting on. For example, What game should I play next? The title may contain a maximum of 60 characters.
+ * @prop {EndPollResponse_Data_Choices[]} choices A list of choices that viewers can choose from. The list will contain a minimum of two choices and up to a maximum of five choices.
+ * @prop {boolean} bitsVotingEnabled Not used; will be set to *false*.
+ * @prop {number} bitsPerVote Not used; will be set to 0.
+ * @prop {boolean} channelPointsVotingEnabled A Boolean value that indicates whether viewers may cast additional votes using Channel Points. For information about Channel Points, see [Channel Points Guide](https://help.twitch.tv/s/article/channel-points-guide).
+ * @prop {number} channelPointsPerVote The number of points the viewer must spend to cast one additional vote.
+ * @prop {string} status The poll’s status. Valid values are:
+         *
+         * - ACTIVE — The poll is running.
+         *
+         * - COMPLETED — The poll ended on schedule (see the `duration` field).
+         *
+         * - TERMINATED — The poll was terminated before its scheduled end.
+         *
+         * - ARCHIVED — The poll has been archived and is no longer visible on the channel.
+         *
+         * - MODERATED — The poll was deleted.
+         *
+         * - INVALID — Something went wrong while determining the state.
+ * @prop {number} duration The length of time (in seconds) that the poll will run for.
+ * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the poll began.
+ * @prop {string} endedAt The UTC date and time (in RFC3339 format) of when the poll ended. If `status` is ACTIVE, this field is set to *null*.
+ */
+/**
+ * @typedef EndPollResponse
+ * @prop {EndPollResponse_Data[]} data A list that contains the poll that you ended.
+ */
+/**
+ * @typedef GetPredictionsResponse_Data_Outcomes_Top_predictors
+ * @prop {string} userId An ID that identifies the viewer.
+ * @prop {string} userName The viewer’s display name.
+ * @prop {string} userLogin The viewer’s login name.
+ * @prop {number} channelPointsUsed The number of Channel Points the viewer spent.
+ * @prop {number} channelPointsWon The number of Channel Points distributed to the viewer.
+ */
+/**
+ * @typedef GetPredictionsResponse_Data_Outcomes
+ * @prop {string} id An ID that identifies this outcome.
+ * @prop {string} title The outcome’s text.
+ * @prop {number} users The number of unique viewers that chose this outcome.
+ * @prop {number} channelPoints The number of Channel Points spent by viewers on this outcome.
+ * @prop {GetPredictionsResponse_Data_Outcomes_Top_predictors[]} topPredictors A list of viewers who were the top predictors; otherwise, *null* if none.
+ * @prop {"BLUE"|"PINK"} color The color that visually identifies this outcome in the UX. Possible values are:
+         *
+         * - BLUE
+         *
+         * - PINK
+         *
+         * If the number of outcomes is two, the color is BLUE for the first outcome and PINK for the second outcome. If there are more than two outcomes, the color is BLUE for all outcomes.
+ */
+/**
+ * @typedef GetPredictionsResponse_Data
+ * @prop {string} id An ID that identifies this prediction.
+ * @prop {string} broadcasterId An ID that identifies the broadcaster that created the prediction.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} title The question that the prediction asks. For example, Will I finish this entire pizza?
+ * @prop {string} winningOutcomeId The ID of the winning outcome. Is *null* unless `status` is RESOLVED.
+ * @prop {GetPredictionsResponse_Data_Outcomes[]} outcomes The list of possible outcomes for the prediction.
+ * @prop {number} predictionWindow The length of time (in seconds) that the prediction will run for.
+ * @prop {string} status The prediction’s status. Valid values are:
+         *
+         * - ACTIVE — The Prediction is running and viewers can make predictions.
+         *
+         * - CANCELED — The broadcaster canceled the Prediction and refunded the Channel Points to the participants.
+         *
+         * - LOCKED — The broadcaster locked the Prediction, which means viewers can no longer make predictions.
+         *
+         * - RESOLVED — The winning outcome was determined and the Channel Points were distributed to the viewers who predicted the correct outcome.
+ * @prop {string} createdAt The UTC date and time of when the Prediction began.
+ * @prop {string} endedAt The UTC date and time of when the Prediction ended. If `status` is ACTIVE, this is set to *null*.
+ * @prop {string} lockedAt The UTC date and time of when the Prediction was locked. If `status` is not LOCKED, this is set to *null*.
+ */
+/**
+ * @typedef GetPredictionsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetPredictionsResponse
+ * @prop {GetPredictionsResponse_Data[]} data The broadcaster’s list of Channel Points Predictions. The list is sorted in descending ordered by when the prediction began (the most recent prediction is first). The list is empty if the broadcaster hasn’t created predictions.
+ * @prop {GetPredictionsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef CreatePredictionResponse_Data_Outcomes_Top_predictors
+ * @prop {string} userId An ID that identifies the viewer.
+ * @prop {string} userName The viewer’s display name.
+ * @prop {string} userLogin The viewer’s login name.
+ * @prop {number} channelPointsUsed The number of Channel Points the viewer spent.
+ * @prop {number} channelPointsWon The number of Channel Points distributed to the viewer.
+ */
+/**
+ * @typedef CreatePredictionResponse_Data_Outcomes
+ * @prop {string} id An ID that identifies this outcome.
+ * @prop {string} title The outcome’s text.
+ * @prop {number} users The number of unique viewers that chose this outcome.
+ * @prop {number} channelPoints The number of Channel Points spent by viewers on this outcome.
+ * @prop {CreatePredictionResponse_Data_Outcomes_Top_predictors[]} topPredictors A list of viewers who were the top predictors; otherwise, *null* if none.
+ * @prop {"BLUE"|"PINK"} color The color that visually identifies this outcome in the UX. Possible values are:
+         *
+         * - BLUE
+         *
+         * - PINK
+         *
+         * If the number of outcomes is two, the color is BLUE for the first outcome and PINK for the second outcome. If there are more than two outcomes, the color is BLUE for all outcomes.
+ */
+/**
+ * @typedef CreatePredictionResponse_Data
+ * @prop {string} id An ID that identifies this prediction.
+ * @prop {string} broadcasterId An ID that identifies the broadcaster that created the prediction.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} title The question that the prediction asks. For example, Will I finish this entire pizza?
+ * @prop {string} winningOutcomeId The ID of the winning outcome. Is *null* unless `status` is RESOLVED.
+ * @prop {CreatePredictionResponse_Data_Outcomes[]} outcomes The list of possible outcomes for the prediction.
+ * @prop {number} predictionWindow The length of time (in seconds) that the prediction will run for.
+ * @prop {string} status The prediction’s status. Valid values are:
+         *
+         * - ACTIVE — The Prediction is running and viewers can make predictions.
+         *
+         * - CANCELED — The broadcaster canceled the Prediction and refunded the Channel Points to the participants.
+         *
+         * - LOCKED — The broadcaster locked the Prediction, which means viewers can no longer make predictions.
+         *
+         * - RESOLVED — The winning outcome was determined and the Channel Points were distributed to the viewers who predicted the correct outcome.
+ * @prop {string} createdAt The UTC date and time of when the Prediction began.
+ * @prop {string} endedAt The UTC date and time of when the Prediction ended. If `status` is ACTIVE, this is set to *null*.
+ * @prop {string} lockedAt The UTC date and time of when the Prediction was locked. If `status` is not LOCKED, this is set to *null*.
+ */
+/**
+ * @typedef CreatePredictionResponse
+ * @prop {CreatePredictionResponse_Data[]} data A list that contains the single prediction that you created.
+ */
+/**
+ * @typedef CreatePredictionRequest_Outcomes
+ * @prop {string} title The text of one of the outcomes that the viewer may select. The title is limited to a maximum of 25 characters.
+ */
+/**
+ * @typedef EndPredictionResponse_Data_Outcomes_Top_predictors
+ * @prop {string} userId An ID that identifies the viewer.
+ * @prop {string} userName The viewer’s display name.
+ * @prop {string} userLogin The viewer’s login name.
+ * @prop {number} channelPointsUsed The number of Channel Points the viewer spent.
+ * @prop {number} channelPointsWon The number of Channel Points distributed to the viewer.
+ */
+/**
+ * @typedef EndPredictionResponse_Data_Outcomes
+ * @prop {string} id An ID that identifies this outcome.
+ * @prop {string} title The outcome’s text.
+ * @prop {number} users The number of unique viewers that chose this outcome.
+ * @prop {number} channelPoints The number of Channel Points spent by viewers on this outcome.
+ * @prop {EndPredictionResponse_Data_Outcomes_Top_predictors[]} topPredictors A list of viewers who were the top predictors; otherwise, *null* if none.
+ * @prop {"BLUE"|"PINK"} color The color that visually identifies this outcome in the UX. Possible values are:
+         *
+         * - BLUE
+         *
+         * - PINK
+         *
+         * If the number of outcomes is two, the color is BLUE for the first outcome and PINK for the second outcome. If there are more than two outcomes, the color is BLUE for all outcomes.
+ */
+/**
+ * @typedef EndPredictionResponse_Data
+ * @prop {string} id An ID that identifies this prediction.
+ * @prop {string} broadcasterId An ID that identifies the broadcaster that created the prediction.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} title The question that the prediction asks. For example, Will I finish this entire pizza?
+ * @prop {string} winningOutcomeId The ID of the winning outcome. Is *null* unless `status` is RESOLVED.
+ * @prop {EndPredictionResponse_Data_Outcomes[]} outcomes The list of possible outcomes for the prediction.
+ * @prop {number} predictionWindow The length of time (in seconds) that the prediction will run for.
+ * @prop {string} status The prediction’s status. Valid values are:
+         *
+         * - ACTIVE — The Prediction is running and viewers can make predictions.
+         *
+         * - CANCELED — The broadcaster canceled the Prediction and refunded the Channel Points to the participants.
+         *
+         * - LOCKED — The broadcaster locked the Prediction, which means viewers can no longer make predictions.
+         *
+         * - RESOLVED — The winning outcome was determined and the Channel Points were distributed to the viewers who predicted the correct outcome.
+ * @prop {string} createdAt The UTC date and time of when the Prediction began.
+ * @prop {string} endedAt The UTC date and time of when the Prediction ended. If `status` is ACTIVE, this is set to *null*.
+ * @prop {string} lockedAt The UTC date and time of when the Prediction was locked. If `status` is not LOCKED, this is set to *null*.
+ */
+/**
+ * @typedef EndPredictionResponse
+ * @prop {EndPredictionResponse_Data[]} data A list that contains the single prediction that you updated.
+ */
+/**
+ * @typedef StartARaidResponse_Data
+ * @prop {string} createdAt The UTC date and time, in RFC3339 format, of when the raid was requested.
+ * @prop {boolean} isMature *IMPORTANT* This field is deprecated and returns only `false`.A Boolean value that indicates whether the channel being raided contains mature content.
+ */
+/**
+ * @typedef StartARaidResponse
+ * @prop {StartARaidResponse_Data[]} data A list that contains a single object with information about the pending raid.
+ */
+/**
+ * @typedef GetChannelStreamScheduleResponse_Data_Segments_Category
+ * @prop {string} id An ID that identifies the category that best represents the content that the broadcaster plans to stream. For example, the game’s ID if the broadcaster will play a game or the Just Chatting ID if the broadcaster will host a talk show.
+ * @prop {string} name The name of the category. For example, the game’s title if the broadcaster will playing a game or Just Chatting if the broadcaster will host a talk show.
+ */
+/**
+ * @typedef GetChannelStreamScheduleResponse_Data_Segments
+ * @prop {string} id An ID that identifies this broadcast segment.
+ * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcast starts.
+ * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcast ends.
+ * @prop {string} title The broadcast segment’s title.
+ * @prop {string} canceledUntil Indicates whether the broadcaster canceled this segment of a recurring broadcast. If the broadcaster canceled this segment, this field is set to the same value that’s in the `end_time` field; otherwise, it’s set to *null*.
+ * @prop {GetChannelStreamScheduleResponse_Data_Segments_Category} category The type of content that the broadcaster plans to stream or *null* if not specified.
+ * @prop {boolean} isRecurring A Boolean value that determines whether the broadcast is part of a recurring series that streams at the same time each week or is a one-time broadcast. Is *true* if the broadcast is part of a recurring series.
+ */
+/**
+ * @typedef GetChannelStreamScheduleResponse_Data_Vacation
+ * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation starts.
+ * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation ends.
+ */
+/**
+ * @typedef GetChannelStreamScheduleResponse_Data_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after query parameter to this value.
+ */
+/**
+ * @typedef GetChannelStreamScheduleResponse_Data
+ * @prop {GetChannelStreamScheduleResponse_Data_Segments[]} segments The list of broadcasts in the broadcaster’s streaming schedule.
+ * @prop {string} broadcasterId The ID of the broadcaster that owns the broadcast schedule.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {GetChannelStreamScheduleResponse_Data_Vacation} vacation The dates when the broadcaster is on vacation and not streaming. Is set to *null* if vacation mode is not enabled.
+ * @prop {GetChannelStreamScheduleResponse_Data_Pagination} pagination The information used to page through a list of results. The object is empty if there are no more pages left to page through. [Read more](https://dev.twitch.tv/docs/api/guide#pagination).
+ */
+/**
+ * @typedef GetChannelStreamScheduleResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetChannelStreamScheduleResponse
+ * @prop {GetChannelStreamScheduleResponse_Data} data The broadcaster’s streaming schedule.
+ * @prop {GetChannelStreamScheduleResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef CreateChannelStreamScheduleSegmentResponse_Data_Segments_Category
+ * @prop {string} id An ID that identifies the category that best represents the content that the broadcaster plans to stream. For example, the game’s ID if the broadcaster will play a game or the Just Chatting ID if the broadcaster will host a talk show.
+ * @prop {string} name The name of the category. For example, the game’s title if the broadcaster will play a game or Just Chatting if the broadcaster will host a talk show.
+ */
+/**
+ * @typedef CreateChannelStreamScheduleSegmentResponse_Data_Segments
+ * @prop {string} id An ID that identifies this broadcast segment.
+ * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcast starts.
+ * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcast ends.
+ * @prop {string} title The broadcast segment’s title.
+ * @prop {string} canceledUntil Indicates whether the broadcaster canceled this segment of a recurring broadcast. If the broadcaster canceled this segment, this field is set to the same value that’s in the `end_time` field; otherwise, it’s set to *null*.
+ * @prop {CreateChannelStreamScheduleSegmentResponse_Data_Segments_Category} category The type of content that the broadcaster plans to stream or *null* if not specified.
+ * @prop {boolean} isRecurring A Boolean value that determines whether the broadcast is part of a recurring series that streams at the same time each week or is a one-time broadcast. Is *true* if the broadcast is part of a recurring series.
+ */
+/**
+ * @typedef CreateChannelStreamScheduleSegmentResponse_Data_Vacation
+ * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation starts.
+ * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation ends.
+ */
+/**
+ * @typedef CreateChannelStreamScheduleSegmentResponse_Data
+ * @prop {CreateChannelStreamScheduleSegmentResponse_Data_Segments[]} segments A list that contains the single broadcast segment that you added.
+ * @prop {string} broadcasterId The ID of the broadcaster that owns the broadcast schedule.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {CreateChannelStreamScheduleSegmentResponse_Data_Vacation} vacation The dates when the broadcaster is on vacation and not streaming. Is set to *null* if vacation mode is not enabled.
+ */
+/**
+ * @typedef CreateChannelStreamScheduleSegmentResponse
+ * @prop {CreateChannelStreamScheduleSegmentResponse_Data} data The broadcaster’s streaming scheduled.
+ */
+/**
+ * @typedef UpdateChannelStreamScheduleSegmentResponse_Data_Segments_Category
+ * @prop {string} id An ID that identifies the category that best represents the content that the broadcaster plans to stream. For example, the game’s ID if the broadcaster will play a game or the Just Chatting ID if the broadcaster will host a talk show.
+ * @prop {string} name The name of the category. For example, the game’s title if the broadcaster will play a game or Just Chatting if the broadcaster will host a talk show.
+ */
+/**
+ * @typedef UpdateChannelStreamScheduleSegmentResponse_Data_Segments
+ * @prop {string} id An ID that identifies this broadcast segment.
+ * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcast starts.
+ * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcast ends.
+ * @prop {string} title The broadcast segment’s title.
+ * @prop {string} canceledUntil Indicates whether the broadcaster canceled this segment of a recurring broadcast. If the broadcaster canceled this segment, this field is set to the same value that’s in the `end_time` field; otherwise, it’s set to *null*.
+ * @prop {UpdateChannelStreamScheduleSegmentResponse_Data_Segments_Category} category The type of content that the broadcaster plans to stream or *null* if not specified.
+ * @prop {boolean} isRecurring A Boolean value that determines whether the broadcast is part of a recurring series that streams at the same time each week or is a one-time broadcast. Is *true* if the broadcast is part of a recurring series.
+ */
+/**
+ * @typedef UpdateChannelStreamScheduleSegmentResponse_Data_Vacation
+ * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation starts.
+ * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation ends.
+ */
+/**
+ * @typedef UpdateChannelStreamScheduleSegmentResponse_Data
+ * @prop {UpdateChannelStreamScheduleSegmentResponse_Data_Segments[]} segments A list that contains the single broadcast segment that you updated.
+ * @prop {string} broadcasterId The ID of the broadcaster that owns the broadcast schedule.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {UpdateChannelStreamScheduleSegmentResponse_Data_Vacation} vacation The dates when the broadcaster is on vacation and not streaming. Is set to *null* if vacation mode is not enabled.
+ */
+/**
+ * @typedef UpdateChannelStreamScheduleSegmentResponse
+ * @prop {UpdateChannelStreamScheduleSegmentResponse_Data} data The broadcaster’s streaming scheduled.
+ */
+/**
+ * @typedef SearchCategoriesResponse_Data
+ * @prop {string} boxArtUrl A URL to an image of the game’s box art or streaming category.
+ * @prop {string} name The name of the game or category.
+ * @prop {string} id An ID that uniquely identifies the game or category.
+ */
+/**
+ * @typedef SearchCategoriesResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef SearchCategoriesResponse
+ * @prop {SearchCategoriesResponse_Data[]} data The list of games or categories that match the query. The list is empty if there are no matches.
+ * @prop {SearchCategoriesResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef SearchChannelsResponse_Data
+ * @prop {string} broadcasterLanguage The ISO 639-1 two-letter language code of the language used by the broadcaster. For example, en for English. If the broadcaster uses a language not in the list of [supported stream languages](https://help.twitch.tv/s/article/languages-on-twitch#streamlang), the value is other.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} displayName The broadcaster’s display name.
+ * @prop {string} gameId The ID of the game that the broadcaster is playing or last played.
+ * @prop {string} gameName The name of the game that the broadcaster is playing or last played.
+ * @prop {string} id An ID that uniquely identifies the channel (this is the broadcaster’s ID).
+ * @prop {boolean} isLive A Boolean value that determines whether the broadcaster is streaming live. Is *true* if the broadcaster is streaming live; otherwise, *false*.
+ * @prop {string[][]} tagIds *IMPORTANT* As of February 28, 2023, this field is deprecated and returns only an empty array. If you use this field, please update your code to use the `tags` field.The list of tags that apply to the stream. The list contains IDs only when the channel is steaming live. For a list of possible tags, see [List of All Tags](https://www.twitch.tv/directory/all/tags). The list doesn’t include Category Tags.
+ * @prop {string[][]} tags The tags applied to the channel.
+ * @prop {string} thumbnailUrl A URL to a thumbnail of the broadcaster’s profile image.
+ * @prop {string} title The stream’s title. Is an empty string if the broadcaster didn’t set it.
+ * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the broadcaster started streaming. The string is empty if the broadcaster is not streaming live.
+ */
+/**
+ * @typedef SearchChannelsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef SearchChannelsResponse
+ * @prop {SearchChannelsResponse_Data[]} data The list of channels that match the query. The list is empty if there are no matches.
+ * @prop {SearchChannelsResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetStreamKeyResponse_Data
+ * @prop {string} streamKey The channel’s stream key.
+ */
+/**
+ * @typedef GetStreamKeyResponse
+ * @prop {GetStreamKeyResponse_Data[]} data A list that contains the channel’s stream key.
+ */
+/**
+ * @typedef GetStreamsResponse_Data
+ * @prop {string} id An ID that identifies the stream. You can use this ID later to look up the video on demand (VOD).
+ * @prop {string} userId The ID of the user that’s broadcasting the stream.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userName The user’s display name.
+ * @prop {string} gameId The ID of the category or game being played.
+ * @prop {string} gameName The name of the category or game being played.
+ * @prop {"live"} type The type of stream. Possible values are:
+         *
+         * - live
+         *
+         * If an error occurs, this field is set to an empty string.
+ * @prop {string} title The stream’s title. Is an empty string if not set.
+ * @prop {string[][]} tags The tags applied to the stream.
+ * @prop {number} viewerCount The number of users watching the stream.
+ * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the broadcast began.
+ * @prop {string} language The language that the stream uses. This is an ISO 639-1 two-letter language code or other if the stream uses a language not in the list of [supported stream languages](https://help.twitch.tv/s/article/languages-on-twitch#streamlang).
+ * @prop {string} thumbnailUrl A URL to an image of a frame from the last 5 minutes of the stream. Replace the width and height placeholders in the URL (`{width}x{height}`) with the size of the image you want, in pixels.
+ * @prop {string[][]} tagIds *IMPORTANT* As of February 28, 2023, this field is deprecated and returns only an empty array. If you use this field, please update your code to use the `tags` field.The list of tags that apply to the stream. The list contains IDs only when the channel is steaming live. For a list of possible tags, see [List of All Tags](https://www.twitch.tv/directory/all/tags). The list doesn’t include Category Tags.
+ * @prop {boolean} isMature *IMPORTANT* This field is deprecated and returns only `false`.A Boolean value that indicates whether the stream is meant for mature audiences.
+ */
+/**
+ * @typedef GetStreamsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after or before query parameter to this value depending on whether you’re paging forwards or backwards.
+ */
+/**
+ * @typedef GetStreamsResponse
+ * @prop {GetStreamsResponse_Data[]} data The list of streams.
+ * @prop {GetStreamsResponse_Pagination} pagination The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetFollowedStreamsResponse_Data
+ * @prop {string} id An ID that identifies the stream. You can use this ID later to look up the video on demand (VOD).
+ * @prop {string} userId The ID of the user that’s broadcasting the stream.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string} userName The user’s display name.
+ * @prop {string} gameId The ID of the category or game being played.
+ * @prop {string} gameName The ID of the category or game being played.
+ * @prop {"live"} type The type of stream. Possible values are:
+         *
+         * - live
+         *
+         * If an error occurs, this field is set to an empty string.
+ * @prop {string} title The stream’s title. Is an empty string if not set.
+ * @prop {number} viewerCount The number of users watching the stream.
+ * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the broadcast began.
+ * @prop {string} language The language that the stream uses. This is an ISO 639-1 two-letter language code or other if the stream uses a language not in the list of [supported stream languages](https://help.twitch.tv/s/article/languages-on-twitch#streamlang).
+ * @prop {string} thumbnailUrl A URL to an image of a frame from the last 5 minutes of the stream. Replace the width and height placeholders in the URL (`{width}x{height}`) with the size of the image you want, in pixels.
+ * @prop {string[][]} tagIds *IMPORTANT* As of February 28, 2023, this field is deprecated and returns only an empty array. If you use this field, please update your code to use the `tags` field.The list of tags that apply to the stream. The list contains IDs only when the channel is steaming live. For a list of possible tags, see [List of All Tags](https://www.twitch.tv/directory/all/tags). The list doesn’t include Category Tags.
+ * @prop {string[][]} tags The tags applied to the stream.
+ * @prop {boolean} isMature *IMPORTANT* This field is deprecated and returns only `false`.A Boolean value that indicates whether the stream is meant for mature audiences.
+ */
+/**
+ * @typedef GetFollowedStreamsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after query parameter to this value.
+ */
+/**
+ * @typedef GetFollowedStreamsResponse
+ * @prop {GetFollowedStreamsResponse_Data[]} data The list of live streams of broadcasters that the specified user follows. The list is in descending order by the number of viewers watching the stream. Because viewers come and go during a stream, it’s possible to find duplicate or missing streams in the list as you page through the results. The list is empty if none of the followed broadcasters are streaming live.
+ * @prop {GetFollowedStreamsResponse_Pagination} pagination The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef CreateStreamMarkerResponse_Data
+ * @prop {string} id An ID that identifies this marker.
+ * @prop {string} createdAt The UTC date and time (in RFC3339 format) of when the user created the marker.
+ * @prop {number} positionSeconds The relative offset (in seconds) of the marker from the beginning of the stream.
+ * @prop {string} description A description that the user gave the marker to help them remember why they marked the location.
+ */
+/**
+ * @typedef CreateStreamMarkerResponse
+ * @prop {CreateStreamMarkerResponse_Data[]} data A list that contains the single marker that you added.
+ */
+/**
+ * @typedef GetAllStreamTagsResponse_Data
+ * @prop {string} tagId An ID that identifies this tag.
+ * @prop {boolean} isAuto A Boolean value that determines whether the tag is an automatic tag. An automatic tag is one that Twitch adds to the stream. Broadcasters may not add automatic tags to their channel. The value is *true* if the tag is an automatic tag; otherwise, *false*.
+ * @prop {Map<string,string>} localizationNames A dictionary that contains the localized names of the tag. The key is in the form, <locale>-<country/region>. For example, en-us. The value is the localized name.
+ * @prop {Map<string,string>} localizationDescriptions A dictionary that contains the localized descriptions of the tag. The key is in the form, <locale>-<country/region>. For example, en-us. The value is the localized description.
+ */
+/**
+ * @typedef GetAllStreamTagsResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Set the request’s after query parameter to this value to page forwards through the results.
+ */
+/**
+ * @typedef GetAllStreamTagsResponse
+ * @prop {GetAllStreamTagsResponse_Data[]} data The list of stream tags that the broadcaster can apply to their channel.
+ * @prop {GetAllStreamTagsResponse_Pagination} pagination The information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetStreamTagsResponse_Data
+ * @prop {string} tagId An ID that identifies this tag.
+ * @prop {boolean} isAuto A Boolean value that determines whether the tag is an automatic tag. An automatic tag is one that Twitch adds to the stream. Broadcasters may not add automatic tags to their channel. The value is *true* if the tag is an automatic tag; otherwise, *false*.
+ * @prop {Map<string,string>} localizationNames A dictionary that contains the localized names of the tag. The key is in the form, <locale>-<coutry/region>. For example, en-us. The value is the localized name.
+ * @prop {Map<string,string>} localizationDescriptions A dictionary that contains the localized descriptions of the tag. The key is in the form, <locale>-<coutry/region>. For example, en-us. The value is the localized description.
+ */
+/**
+ * @typedef GetStreamTagsResponse
+ * @prop {GetStreamTagsResponse_Data[]} data The list of stream tags. The list is empty if the broadcaster or Twitch hasn’t added tags to the broadcaster’s channel.
+ */
+/**
+ * @typedef GetChannelTeamsResponse_Data
+ * @prop {string} broadcasterId An ID that identifies the broadcaster.
+ * @prop {string} broadcasterLogin The broadcaster’s login name.
+ * @prop {string} broadcasterName The broadcaster’s display name.
+ * @prop {string} backgroundImageUrl A URL to the team’s background image.
+ * @prop {string} banner A URL to the team’s banner.
+ * @prop {string} createdAt The UTC date and time (in RFC3339 format) of when the team was created.
+ * @prop {string} updatedAt The UTC date and time (in RFC3339 format) of the last time the team was updated.
+ * @prop {string} info The team’s description. The description may contain formatting such as Markdown, HTML, newline (\n) characters, etc.
+ * @prop {string} thumbnailUrl A URL to a thumbnail image of the team’s logo.
+ * @prop {string} teamName The team’s name.
+ * @prop {string} teamDisplayName The team’s display name.
+ * @prop {string} id An ID that identifies the team.
+ */
+/**
+ * @typedef GetChannelTeamsResponse
+ * @prop {GetChannelTeamsResponse_Data[]} data The list of teams that the broadcaster is a member of. Returns an empty array if the broadcaster is not a member of a team.
+ */
+/**
+ * @typedef GetTeamsResponse_Data_Users
+ * @prop {string} userId An ID that identifies the team member.
+ * @prop {string} userLogin The team member’s login name.
+ * @prop {string} userName The team member’s display name.
+ */
+/**
+ * @typedef GetTeamsResponse_Data
+ * @prop {GetTeamsResponse_Data_Users[]} users The list of team members.
+ * @prop {string} backgroundImageUrl A URL to the team’s background image.
+ * @prop {string} banner A URL to the team’s banner.
+ * @prop {string} createdAt The UTC date and time (in RFC3339 format) of when the team was created.
+ * @prop {string} updatedAt The UTC date and time (in RFC3339 format) of the last time the team was updated.
+ * @prop {string} info The team’s description. The description may contain formatting such as Markdown, HTML, newline (\n) characters, etc.
+ * @prop {string} thumbnailUrl A URL to a thumbnail image of the team’s logo.
+ * @prop {string} teamName The team’s name.
+ * @prop {string} teamDisplayName The team’s display name.
+ * @prop {string} id An ID that identifies the team.
+ */
+/**
+ * @typedef GetTeamsResponse
+ * @prop {GetTeamsResponse_Data[]} data A list that contains the single team that you requested.
+ */
+/**
+ * @typedef GetUsersResponse_Data
+ * @prop {string} id An ID that identifies the user.
+ * @prop {string} login The user’s login name.
+ * @prop {string} displayName The user’s display name.
+ * @prop {"admin"|"global_mod"|"staff"|""} type The type of user. Possible values are: - admin — Twitch administrator
+         *
+         * - global_mod
+         *
+         * - staff — Twitch staff
+         *
+         * - "" — Normal user
+ * @prop {"affiliate"|"partner"|""} broadcasterType The type of broadcaster. Possible values are: - affiliate — An affiliate broadcaster [affiliate broadcaster](https://help.twitch.tv/s/article/joining-the-affiliate-program target=)
+         *
+         * - partner — A partner broadcaster [partner broadcaster](https://help.twitch.tv/s/article/partner-program-overview)
+         *
+         * - "" — A normal broadcaster
+ * @prop {string} description The user’s description of their channel.
+ * @prop {string} profileImageUrl A URL to the user’s profile image.
+ * @prop {string} offlineImageUrl A URL to the user’s offline image.
+ * @prop {number} viewCount The number of times the user’s channel has been viewed. *NOTE*: This field has been deprecated (see [Get Users API endpoint – “view_count” deprecation](https://discuss.dev.twitch.tv/t/get-users-api-endpoint-view-count-deprecation/37777)). Any data in this field is not valid and should not be used.
+ * @prop {string} email The user’s verified email address. The object includes this field only if the user access token includes the *user:read:email* scope. If the request contains more than one user, only the user associated with the access token that provided consent will include an email address — the email address for all other users will be empty.
+ * @prop {string} createdAt The UTC date and time that the user’s account was created. The timestamp is in RFC3339 format.
+ */
+/**
+ * @typedef GetUsersResponse
+ * @prop {GetUsersResponse_Data[]} data The list of users.
+ */
+/**
+ * @typedef UpdateUserResponse_Data
+ * @prop {string} id An ID that identifies the user.
+ * @prop {string} login The user's login name.
+ * @prop {string} displayName The user's display name.
+ * @prop {"admin"|"global_mod"|"staff"|""} type The type of user. Possible values are:
+         *
+         * - admin — Twitch administrator
+         *
+         * - global_mod
+         *
+         * - staff — Twitch staff
+         *
+         * - "" — Normal user
+ * @prop {"affiliate"|"partner"|""} broadcasterType The type of broadcaster. Possible values are:
+         *
+         * - affiliate — An [affiliate broadcaster](https://help.twitch.tv/s/article/joining-the-affiliate-program target=)
+         *
+         * - partner — A [partner broadcaster](https://help.twitch.tv/s/article/partner-program-overview)
+         *
+         * - "" — A normal broadcaster
+ * @prop {string} description The user's description of their channel.
+ * @prop {string} profileImageUrl A URL to the user's profile image.
+ * @prop {string} offlineImageUrl A URL to the user's offline image.
+ * @prop {number} viewCount The number of times the user's channel has been viewed.*NOTE*: This field has been deprecated (see [Get Users API endpoint – "view_count" deprecation](https://discuss.dev.twitch.tv/t/get-users-api-endpoint-view-count-deprecation/37777)). Any data in this field is not valid and should not be used.
+ * @prop {string} email The user's verified email address. The object includes this field only if the user access token includes the *user:read:email* scope.If the request contains more than one user, only the user associated with the access token that provided consent will include an email address — the email address for all other users will be empty.
+ * @prop {string} createdAt The UTC date and time that the user's account was created. The timestamp is in RFC3339 format.
+ */
+/**
+ * @typedef UpdateUserResponse
+ * @prop {UpdateUserResponse_Data[]} data A list contains the single user that you updated.
+ */
+/**
+ * @typedef GetAuthorizationByUserResponse_Data
+ * @prop {string} userId The user’s ID.
+ * @prop {string} userName The user’s display name.
+ * @prop {string} userLogin The user’s login name.
+ * @prop {string[][]} scopes An array of all the scopes the user has granted to the client ID.
+ */
+/**
+ * @typedef GetAuthorizationByUserResponse
+ * @prop {GetAuthorizationByUserResponse_Data[]} data List of users and their authorized scopes.
+ */
+/**
+ * @typedef GetUserBlockListResponse_Data
+ * @prop {string} userId An ID that identifies the blocked user.
+ * @prop {string} userLogin The blocked user’s login name.
+ * @prop {string} displayName The blocked user’s display name.
+ */
+/**
+ * @typedef GetUserBlockListResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request’s after query parameter.
+ */
+/**
+ * @typedef GetUserBlockListResponse
+ * @prop {GetUserBlockListResponse_Data[]} data The list of blocked users. The list is in descending order by when the user was blocked.
+ * @prop {GetUserBlockListResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef GetUserExtensionsResponse_Data
+ * @prop {string} id An ID that identifies the extension.
+ * @prop {string} version The extension's version.
+ * @prop {string} name The extension's name.
+ * @prop {boolean} canActivate A Boolean value that determines whether the extension is configured and can be activated. Is *true* if the extension is configured and can be activated.
+ * @prop {"component"|"mobile"|"overlay"|"panel"[]} type The extension types that you can activate for this extension. Possible values are:
+         *
+         * - component
+         *
+         * - mobile
+         *
+         * - overlay
+         *
+         * - panel
+ */
+/**
+ * @typedef GetUserExtensionsResponse
+ * @prop {GetUserExtensionsResponse_Data[]} data The list of extensions that the user has installed.
+ */
+/**
+ * @typedef GetUserActiveExtensionsResponse_Data_Panel
+ * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured this panel extension.
+ * @prop {string} id An ID that identifies the extension.
+ * @prop {string} version The extension’s version.
+ * @prop {string} name The extension’s name.
+ */
+/**
+ * @typedef GetUserActiveExtensionsResponse_Data_Overlay
+ * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured this overlay extension.
+ * @prop {string} id An ID that identifies the extension.
+ * @prop {string} version The extension’s version.
+ * @prop {string} name The extension’s name.
+ */
+/**
+ * @typedef GetUserActiveExtensionsResponse_Data_Component
+ * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured this component extension.
+ * @prop {string} id An ID that identifies the extension.
+ * @prop {string} version The extension’s version.
+ * @prop {string} name The extension’s name.
+ * @prop {number} x The x-coordinate where the extension is placed.
+ * @prop {number} y The y-coordinate where the extension is placed.
+ */
+/**
+ * @typedef GetUserActiveExtensionsResponse_Data
+ * @prop {GetUserActiveExtensionsResponse_Data_Panel} panel A dictionary that contains the data for a panel extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the panel’s data for each key.
+ * @prop {GetUserActiveExtensionsResponse_Data_Overlay} overlay A dictionary that contains the data for a video-overlay extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the overlay’s data for each key.
+ * @prop {GetUserActiveExtensionsResponse_Data_Component} component A dictionary that contains the data for a video-component extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the component’s data for each key.
+ */
+/**
+ * @typedef GetUserActiveExtensionsResponse
+ * @prop {GetUserActiveExtensionsResponse_Data} data The active extensions that the broadcaster has installed.
+ */
+/**
+ * @typedef UpdateUserExtensionsResponse_Data_Panel
+ * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured a panel extension.
+ * @prop {string} id An ID that identifies the extension.
+ * @prop {string} version The extension’s version.
+ * @prop {string} name The extension’s name.
+ */
+/**
+ * @typedef UpdateUserExtensionsResponse_Data_Overlay
+ * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured an overlay extension.
+ * @prop {string} id An ID that identifies the extension.
+ * @prop {string} version The extension’s version.
+ * @prop {string} name The extension’s name.
+ */
+/**
+ * @typedef UpdateUserExtensionsResponse_Data_Component
+ * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured a component extension.
+ * @prop {string} id An ID that identifies the extension.
+ * @prop {string} version The extension’s version.
+ * @prop {string} name The extension’s name.
+ * @prop {number} x The x-coordinate where the extension is placed.
+ * @prop {number} y The y-coordinate where the extension is placed.
+ */
+/**
+ * @typedef UpdateUserExtensionsResponse_Data
+ * @prop {UpdateUserExtensionsResponse_Data_Panel} panel A dictionary that contains the data for a panel extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the panel’s data for each key.
+ * @prop {UpdateUserExtensionsResponse_Data_Overlay} overlay A dictionary that contains the data for a video-overlay extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the overlay’s data for each key.
+ * @prop {UpdateUserExtensionsResponse_Data_Component} component A dictionary that contains the data for a video-component extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the component’s data for each key.
+ */
+/**
+ * @typedef UpdateUserExtensionsResponse
+ * @prop {UpdateUserExtensionsResponse_Data} data The extensions that the broadcaster updated.
+ */
+/**
+ * @typedef GetVideosResponse_Data_Muted_segments
+ * @prop {number} duration The duration of the muted segment, in seconds.
+ * @prop {number} offset The offset, in seconds, from the beginning of the video to where the muted segment begins.
+ */
+/**
+ * @typedef GetVideosResponse_Data
+ * @prop {string} id An ID that identifies the video.
+ * @prop {string} streamId The ID of the stream that the video originated from if the video's type is "archive;" otherwise, *null*.
+ * @prop {string} userId The ID of the broadcaster that owns the video.
+ * @prop {string} userLogin The broadcaster's login name.
+ * @prop {string} userName The broadcaster's display name.
+ * @prop {string} title The video's title.
+ * @prop {string} description The video's description.
+ * @prop {string} createdAt The date and time, in UTC, of when the video was created. The timestamp is in RFC3339 format.
+ * @prop {string} publishedAt The date and time, in UTC, of when the video was published. The timestamp is in RFC3339 format.
+ * @prop {string} url The video's URL.
+ * @prop {string} thumbnailUrl A URL to a thumbnail image of the video. Before using the URL, you must replace the `%{width}` and `%{height}` placeholders with the width and height of the thumbnail you want returned. Due to current limitations, `${width}` must be 320 and `${height}` must be 180.
+ * @prop {string} viewable The video's viewable state. Always set to *public*.
+ * @prop {number} viewCount The number of times that users have watched the video.
+ * @prop {string} language The ISO 639-1 two-letter language code that the video was broadcast in. For example, the language code is DE if the video was broadcast in German. For a list of supported languages, see [Supported Stream Language](https://help.twitch.tv/s/article/languages-on-twitch#streamlang). The language value is "other" if the video was broadcast in a language not in the list of supported languages.
+ * @prop {"archive"|"highlight"|"upload"} type The video's type. Possible values are:
+         *
+         * - archive — An on-demand video (VOD) of one of the broadcaster's past streams.
+         *
+         * - highlight — A highlight reel of one of the broadcaster's past streams. See [Creating Highlights](https://help.twitch.tv/s/article/creating-highlights-and-stream-markers).
+         *
+         * - upload — A video that the broadcaster uploaded to their video library. See Upload under [Video Producer](https://help.twitch.tv/s/article/video-on-demand?language=en_US#videoproducer).
+ * @prop {string} duration The video's length in ISO 8601 duration format. For example, 3m21s represents 3 minutes, 21 seconds.
+ * @prop {GetVideosResponse_Data_Muted_segments[]} mutedSegments The segments that Twitch Audio Recognition muted; otherwise, *null*.
+ */
+/**
+ * @typedef GetVideosResponse_Pagination
+ * @prop {string} cursor The cursor used to get the next page of results. Use the cursor to set the request's after or before query parameter depending on whether you're paging forwards or backwards through the results.
+ */
+/**
+ * @typedef GetVideosResponse
+ * @prop {GetVideosResponse_Data[]} data The list of published videos that match the filter criteria.
+ * @prop {GetVideosResponse_Pagination} pagination Contains the information used to page through the list of results. The object is empty if there are no more pages left to page through. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+ */
+/**
+ * @typedef DeleteVideosResponse
+ * @prop {string[][]} data The list of IDs of the videos that were deleted.
+ */
+
+/**
+ * @typedef {Array<T> & {nextPage(): Promise<twitchArray<T>?>}} twitchArray
+ * @template T
+ */
+/**
  * @param {(method: string, url: string, scopes: string[], token: string[], params: {}, body: {}, errorCodes: {}) => Promise<any>} reqFunc
  */
 module.exports = (reqFunc) => ({
     Ads: {
-        /**
-         * @typedef StartCommercialResponse_Data
-         * @prop {number} length The length of the commercial you requested. If you request a commercial that’s longer than 180 seconds, the API uses 180 seconds.
-         * @prop {string} message A message that indicates whether Twitch was able to serve an ad.
-         * @prop {number} retryAfter The number of seconds you must wait before running another commercial.
-         */
-        /**
-         * @typedef StartCommercialResponse
-         * @prop {StartCommercialResponse_Data[]} data An array that contains a single object with the status of your start commercial request.
-         */
         /**
          * Starts a commercial on the specified channel.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#start-commercial)
@@ -75,19 +2714,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetAdScheduleResponse_Data
-         * @prop {number} snoozeCount The number of snoozes available for the broadcaster.
-         * @prop {string} snoozeRefreshAt The UTC timestamp when the broadcaster will gain an additional snooze, in RFC3339 format.
-         * @prop {string} nextAdAt The UTC timestamp of the broadcaster’s next scheduled ad, in RFC3339 format. Empty if the channel has no ad scheduled or is not live.
-         * @prop {number} duration The length in seconds of the scheduled upcoming ad break.
-         * @prop {string} lastAdAt The UTC timestamp of the broadcaster’s last ad-break, in RFC3339 format. Empty if the channel has not run an ad or is not live.
-         * @prop {number} prerollFreeTime The amount of pre-roll free time remaining for the channel in seconds. Returns 0 if they are currently not pre-roll free.
-         */
-        /**
-         * @typedef GetAdScheduleResponse
-         * @prop {GetAdScheduleResponse_Data[]} data A list that contains information related to the channel’s ad schedule.
-         */
-        /**
          * Returns ad schedule related information.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-ad-schedule)
          *
@@ -141,16 +2767,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef SnoozeNextAdResponse_Data
-         * @prop {number} snoozeCount The number of snoozes available for the broadcaster.
-         * @prop {string} snoozeRefreshAt The UTC timestamp when the broadcaster will gain an additional snooze, in RFC3339 format.
-         * @prop {string} nextAdAt The UTC timestamp of the broadcaster’s next scheduled ad, in RFC3339 format.
-         */
-        /**
-         * @typedef SnoozeNextAdResponse
-         * @prop {SnoozeNextAdResponse_Data[]} data A list that contains information about the channel’s snoozes and next upcoming ad after successfully snoozing.
-         */
-        /**
          * Pushes back the timestamp of the upcoming automatic mid-roll ad by 5 minutes.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#snooze-next-ad)
          *
@@ -202,23 +2818,6 @@ module.exports = (reqFunc) => ({
         },
     },
     Analytics: {
-        /**
-         * @typedef GetExtensionAnalyticsResponse_Data_Date_range
-         * @prop {string} startedAt The reporting window’s start date.
-         * @prop {string} endedAt The reporting window’s end date.
-         */
-        /**
-         * @typedef GetExtensionAnalyticsResponse_Data
-         * @prop {string} extensionId An ID that identifies the extension that the report was generated for.
-         * @prop {string} uRL The URL that you use to download the report. The URL is valid for 5 minutes.
-         * @prop {string} type The type of report.
-         * @prop {GetExtensionAnalyticsResponse_Data_Date_range} dateRange The reporting window’s start and end dates, in RFC3339 format.
-         */
-        /**
-         * @typedef GetExtensionAnalyticsResponse
-         * @prop {GetExtensionAnalyticsResponse_Data[]} data A list of reports. The reports are returned in no particular order; however, the data within each report is in ascending order by date (newest first). The report contains one row of data per day of the reporting window; the report contains rows for only those days that the extension was used. The array is empty if there are no reports.
-         * @prop {(() => Promise<GetExtensionAnalyticsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets an analytics report for one or more extensions.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-extension-analytics)
@@ -282,23 +2881,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the broadcaster's analytics reports.", 400: "- The start and end dates are optional but if you specify one, you must specify the other.\n- The end date must be equal to or later than the start date.\n- The cursor specified in the after query parameter is not valid.\n- The resource supports only forward pagination (use the after query parameter).\n- The first query parameter is outside the allowed range of values.", 401: "- The Authorization header is required and must contain a user access token.\n- The user access token must include the analytics:read:extensions scope.\n- The OAuth token is not valid.\n- The Client-Id header is required.\n- The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token.", 404: "- The extension specified in the extension_id query parameter was not found."}
             );
         },
-        /**
-         * @typedef GetGameAnalyticsResponse_Data_Date_range
-         * @prop {string} startedAt The reporting window’s start date.
-         * @prop {string} endedAt The reporting window’s end date.
-         */
-        /**
-         * @typedef GetGameAnalyticsResponse_Data
-         * @prop {string} gameId An ID that identifies the game that the report was generated for.
-         * @prop {string} uRL The URL that you use to download the report. The URL is valid for 5 minutes.
-         * @prop {string} type The type of report.
-         * @prop {GetGameAnalyticsResponse_Data_Date_range} dateRange The reporting window’s start and end dates, in RFC3339 format.
-         */
-        /**
-         * @typedef GetGameAnalyticsResponse
-         * @prop {GetGameAnalyticsResponse_Data[]} data A list of reports. The reports are returned in no particular order; however, the data within each report is in ascending order by date (newest first). The report contains one row of data per day of the reporting window; the report contains rows for only those days that the game was used. A report is available only if the game was broadcast for at least 5 hours over the reporting period. The array is empty if there are no reports.
-         * @prop {(() => Promise<GetGameAnalyticsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets an analytics report for one or more games.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-game-analytics)
@@ -392,25 +2974,6 @@ module.exports = (reqFunc) => ({
     },
     Bits: {
         /**
-         * @typedef GetBitsLeaderboardResponse_Data
-         * @prop {string} userId An ID that identifies a user on the leaderboard.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userName The user’s display name.
-         * @prop {number} rank The user’s position on the leaderboard.
-         * @prop {number} score The number of Bits the user has cheered.
-         */
-        /**
-         * @typedef GetBitsLeaderboardResponse_Date_range
-         * @prop {string} startedAt The reporting window’s start date.
-         * @prop {string} endedAt The reporting window’s end date.
-         */
-        /**
-         * @typedef GetBitsLeaderboardResponse
-         * @prop {GetBitsLeaderboardResponse_Data[]} data A list of leaderboard leaders. The leaders are returned in rank order by how much they’ve cheered. The array is empty if nobody has cheered bits.
-         * @prop {GetBitsLeaderboardResponse_Date_range} dateRange The reporting window’s start and end dates, in RFC3339 format. The dates are calculated by using the started_at and period query parameters. If you don’t specify the started_at query parameter, the fields contain empty strings.
-         * @prop {number} total The number of ranked users in `data`. This is the value in the count query parameter or the total number of entries on the leaderboard, whichever is less.
-         */
-        /**
          * Gets the Bits leaderboard for the authenticated broadcaster.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-bits-leaderboard)
          *
@@ -484,67 +3047,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the broadcaster’s Bits leaderboard.", 400: "- The time period specified in the period query parameter is not valid.\n- The started_at query parameter is required if period is not set to all.\n- The value in the count query parameter is outside the range of allowed values.", 401: "- The Authorization header is required and must specify a user access token.\n- The user access token must include the the bits:read scope.\n- The access token is not valid.\n- The ID in the Client-Id header must match the client ID in the access token.", 403: ""}
             );
         },
-        /**
-         * @typedef GetCheermotesResponse_Data_Tiers_Images_Dark
-         * @prop {Map<string,string>} animated Each format of sizes: 1, 1.5, 2, 3, and 4. The value of each size contains the URL to the image.
-         * @prop {Map<string,string>} static Each format of sizes: 1, 1.5, 2, 3, and 4. The value of each size contains the URL to the image.
-         */
-        /**
-         * @typedef GetCheermotesResponse_Data_Tiers_Images_Light
-         * @prop {Map<string,string>} animated Each format of sizes: 1, 1.5, 2, 3, and 4. The value of each size contains the URL to the image.
-         * @prop {Map<string,string>} static Each format of sizes: 1, 1.5, 2, 3, and 4. The value of each size contains the URL to the image.
-         */
-        /**
-         * @typedef GetCheermotesResponse_Data_Tiers_Images
-         * @prop {GetCheermotesResponse_Data_Tiers_Images_Dark} dark The dark theme variants of the cheermote
-         * @prop {GetCheermotesResponse_Data_Tiers_Images_Light} light The light theme variants of the cheermote
-         */
-        /**
-         * @typedef GetCheermotesResponse_Data_Tiers
-         * @prop {number} minBits The minimum number of Bits that you must cheer at this tier level. The maximum number of Bits that you can cheer at this level is determined by the required minimum Bits of the next tier level minus 1. For example, if `min_bits` is 1 and `min_bits` for the next tier is 100, the Bits range for this tier level is 1 through 99. The minimum Bits value of the last tier is the maximum number of Bits you can cheer using this Cheermote. For example, 10000.
-         * @prop {"1"|"100"|"500"|"1000"|"5000"|"10000"|"100000"} id The tier level. Possible tiers are:
-         *
-         * - 1
-         *
-         * - 100
-         *
-         * - 500
-         *
-         * - 1000
-         *
-         * - 5000
-         *
-         * - 10000
-         *
-         * - 100000
-         * @prop {string} color The hex code of the color associated with this tier level (for example, #979797).
-         * @prop {GetCheermotesResponse_Data_Tiers_Images} images The animated and static image sets for the Cheermote. The dictionary of images is organized by theme, format, and size. The theme keys are dark and light. Each theme is a dictionary of formats: animated and static. Each format is a dictionary of sizes: 1, 1.5, 2, 3, and 4. The value of each size contains the URL to the image.
-         * @prop {boolean} canCheer A Boolean value that determines whether users can cheer at this tier level.
-         * @prop {boolean} showInBitsCard A Boolean value that determines whether this tier level is shown in the Bits card. Is *true* if this tier level is shown in the Bits card.
-         */
-        /**
-         * @typedef GetCheermotesResponse_Data
-         * @prop {string} prefix The name portion of the Cheermote string that you use in chat to cheer Bits. The full Cheermote string is the concatenation of {prefix} + {number of Bits}. For example, if the prefix is “Cheer” and you want to cheer 100 Bits, the full Cheermote string is Cheer100. When the Cheermote string is entered in chat, Twitch converts it to the image associated with the Bits tier that was cheered.
-         * @prop {GetCheermotesResponse_Data_Tiers[]} tiers A list of tier levels that the Cheermote supports. Each tier identifies the range of Bits that you can cheer at that tier level and an image that graphically identifies the tier level.
-         * @prop {"global_first_party"|"global_third_party"|"channel_custom"|"display_only"|"sponsored"} type The type of Cheermote. Possible values are:
-         *
-         * - global_first_party — A Twitch-defined Cheermote that is shown in the Bits card.
-         *
-         * - global_third_party — A Twitch-defined Cheermote that is not shown in the Bits card.
-         *
-         * - channel_custom — A broadcaster-defined Cheermote.
-         *
-         * - display_only — Do not use; for internal use only.
-         *
-         * - sponsored — A sponsor-defined Cheermote. When used, the sponsor adds additional Bits to the amount that the user cheered. For example, if the user cheered Terminator100, the broadcaster might receive 110 Bits, which includes the sponsor's 10 Bits contribution.
-         * @prop {number} order The order that the Cheermotes are shown in the Bits card. The numbers may not be consecutive. For example, the numbers may jump from 1 to 7 to 13. The order numbers are unique within a Cheermote type (for example, global_first_party) but may not be unique amongst all Cheermotes in the response.
-         * @prop {string} lastUpdated The date and time, in RFC3339 format, when this Cheermote was last updated.
-         * @prop {boolean} isCharitable A Boolean value that indicates whether this Cheermote provides a charitable contribution match during charity campaigns.
-         */
-        /**
-         * @typedef GetCheermotesResponse
-         * @prop {GetCheermotesResponse_Data[]} data The list of Cheermotes. The list is in ascending order by the `order` field’s value.
-         */
         /**
          * Gets a list of Cheermotes that users can use to cheer Bits.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-cheermotes)
@@ -642,43 +3144,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the Cheermotes.", 401: "- The Authorization header is required and must specify an app access token or user access token.\n- The ID in the Client-Id header must match the Client ID in the OAuth token."}
             );
         },
-        /**
-         * @typedef GetExtensionTransactionsResponse_Data_Product_data_Cost
-         * @prop {number} amount The amount exchanged for the digital product.
-         * @prop {"bits"} type The type of currency exchanged. Possible values are:
-         *
-         * - bits
-         */
-        /**
-         * @typedef GetExtensionTransactionsResponse_Data_Product_data
-         * @prop {string} sku An ID that identifies the digital product.
-         * @prop {string} domain Set to `twitch.ext.` + `<the extension's ID>`.
-         * @prop {GetExtensionTransactionsResponse_Data_Product_data_Cost} cost Contains details about the digital product’s cost.
-         * @prop {boolean} inDevelopment A Boolean value that determines whether the product is in development. Is *true* if the digital product is in development and cannot be exchanged.
-         * @prop {string} displayName The name of the digital product.
-         * @prop {string} expiration This field is always empty since you may purchase only unexpired products.
-         * @prop {boolean} broadcast A Boolean value that determines whether the data was broadcast to all instances of the extension. Is *true* if the data was broadcast to all instances.
-         */
-        /**
-         * @typedef GetExtensionTransactionsResponse_Data
-         * @prop {string} id An ID that identifies the transaction.
-         * @prop {string} timestamp The UTC date and time (in RFC3339 format) of the transaction.
-         * @prop {string} broadcasterId The ID of the broadcaster that owns the channel where the transaction occurred.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} userId The ID of the user that purchased the digital product.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userName The user’s display name.
-         * @prop {"BITS_IN_EXTENSION"} productType The type of transaction. Possible values are:
-         *
-         * - BITS_IN_EXTENSION
-         * @prop {GetExtensionTransactionsResponse_Data_Product_data} productData Contains details about the digital product.
-         */
-        /**
-         * @typedef GetExtensionTransactionsResponse
-         * @prop {GetExtensionTransactionsResponse_Data[]} data The list of transactions.
-         * @prop {(() => Promise<GetExtensionTransactionsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets an extension’s list of transactions.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-extension-transactions)
@@ -781,24 +3246,6 @@ module.exports = (reqFunc) => ({
     },
     Channels: {
         /**
-         * @typedef GetChannelInformationResponse_Data
-         * @prop {string} broadcasterId An ID that uniquely identifies the broadcaster.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} broadcasterLanguage The broadcaster’s preferred language. The value is an ISO 639-1 two-letter language code (for example, en for English). The value is set to “other” if the language is not a Twitch supported language.
-         * @prop {string} gameName The name of the game that the broadcaster is playing or last played. The value is an empty string if the broadcaster has never played a game.
-         * @prop {string} gameId An ID that uniquely identifies the game that the broadcaster is playing or last played. The value is an empty string if the broadcaster has never played a game.
-         * @prop {string} title The title of the stream that the broadcaster is currently streaming or last streamed. The value is an empty string if the broadcaster has never streamed.
-         * @prop {number} delay The value of the broadcaster’s stream delay setting, in seconds. This field’s value defaults to zero unless 1) the request specifies a user access token, 2) the ID in the broadcaster_id query parameter matches the user ID in the access token, and 3) the broadcaster has partner status and they set a non-zero stream delay value.
-         * @prop {string[]} tags The tags applied to the channel.
-         * @prop {string[]} contentClassificationLabels The CCLs applied to the channel.
-         * @prop {boolean} isBrandedContent Boolean flag indicating if the channel has branded content.
-         */
-        /**
-         * @typedef GetChannelInformationResponse
-         * @prop {GetChannelInformationResponse_Data[]} data A list that contains information about the specified channels. The list is empty if the specified channels weren’t found.
-         */
-        /**
          * Gets information about one or more channels.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-channel-information)
          *
@@ -854,23 +3301,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef ModifyChannelInformationRequest_Content_classification_labels
-         * @prop {"DebatedSocialIssuesAndPolitics"|"DrugsIntoxication"|"SexualThemes"|"ViolentGraphic"|"Gambling"|"ProfanityVulgarity"} id ID of the [Content Classification Labels](https://help.twitch.tv/s/article/content-classification-labels) that must be added/removed from the channel. Can be one of the following values:
-         *
-         * - DebatedSocialIssuesAndPolitics
-         *
-         * - DrugsIntoxication
-         *
-         * - SexualThemes
-         *
-         * - ViolentGraphic
-         *
-         * - Gambling
-         *
-         * - ProfanityVulgarity
-         * @prop {boolean} isEnabled Boolean flag indicating whether the label should be enabled (true) or disabled for the channel.
-         */
-        /**
          * Updates a channel’s properties.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#modify-channel-information)
          *
@@ -911,7 +3341,7 @@ module.exports = (reqFunc) => ({
          * @param {string?} title The title of the user’s stream. You may not set this field to an empty string.
          * @param {number?} delay The number of seconds you want your broadcast buffered before streaming it live. The delay helps ensure fairness during competitive play. Only users with Partner status may set this field. The maximum delay is 900 seconds (15 minutes).
          * @param {string[]?} tags A list of channel-defined tags to apply to the channel. To remove all tags from the channel, set tags to an empty array. Tags help identify the content that the channel streams. [Learn More](https://help.twitch.tv/s/article/guide-to-tags)A channel may specify a maximum of 10 tags. Each tag is limited to a maximum of 25 characters and may not be an empty string or contain spaces or special characters. Tags are case insensitive. For readability, consider using camelCasing or PascalCasing.
-         * @param {ModifyChannelInformationRequest_Content_classification_labels[]?} contentClassificationLabels List of labels that should be set as the Channel’s CCLs.
+         * @param {ModifyChannelInformationRequest_Content_classification_labels?} contentClassificationLabels List of labels that should be set as the Channel’s CCLs.
          * @param {boolean?} isBrandedContent Boolean flag indicating if the channel has branded content.
          * @returns {Promise<void>} 
          */
@@ -924,16 +3354,6 @@ module.exports = (reqFunc) => ({
                 {204: "Successfully updated the channel’s properties.", 400: "- The broadcaster_id query parameter is required.\n- The request must update at least one property.\n- The `title` field may not contain an empty string.\n- The ID in `game_id` is not valid.\n- To update the `delay` field, the broadcaster must have partner status.\n- The list in the `tags` field exceeds the maximum number of tags allowed.\n- A tag in the `tags` field exceeds the maximum length allowed.\n- A tag in the `tags` field is empty.\n- A tag in the `tags` field contains special characters or spaces.\n- One or more tags in the `tags` field failed AutoMod review.\n- Game restricted for user's age and region", 401: "- User requests CCL for a channel they don’t own\n- The ID in broadcaster_id must match the user ID found in the OAuth token.\n- The Authorization header is required and must specify a user access token.\n- The OAuth token must include the channel:manage:broadcast scope.\n- The OAuth token is not valid.\n- The ID in the Client-Id header must match the Client ID in the OAuth token.", 403: "- User requested gaming CCLs to be added to their channel\n- Unallowed CCLs declared for underaged authorized user in a restricted country", 409: "User set the Branded Content flag too frequently", 500: ""}
             );
         },
-        /**
-         * @typedef GetChannelEditorsResponse_Data
-         * @prop {string} userId An ID that uniquely identifies a user with editor permissions.
-         * @prop {string} userName The user’s display name.
-         * @prop {string} createdAt The date and time, in RFC3339 format, when the user became one of the broadcaster’s editors.
-         */
-        /**
-         * @typedef GetChannelEditorsResponse
-         * @prop {GetChannelEditorsResponse_Data[]} data A list of users that are editors for the specified broadcaster. The list is empty if the broadcaster doesn’t have editors.
-         */
         /**
          * Gets the broadcaster’s list editors.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-channel-editors)
@@ -986,19 +3406,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the broadcaster's list of editors.", 400: "- The broadcaster_id query parameter is required.", 401: "- The ID in the broadcaster_id query parameter must match the user ID found in the OAuth token.\n- The Authorization header is required and must specify a user access token.\n- The OAuth token must include the channel:read:editors scope.\n- The OAuth token is not valid.\n- The ID in the Client-Id header must match the Client ID in the OAuth token."}
             );
         },
-        /**
-         * @typedef GetFollowedChannelsResponse_Data
-         * @prop {string} broadcasterId An ID that uniquely identifies the broadcaster that this user is following.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} followedAt The UTC timestamp when the user started following the broadcaster.
-         */
-        /**
-         * @typedef GetFollowedChannelsResponse
-         * @prop {GetFollowedChannelsResponse_Data[]} data The list of broadcasters that the user follows. The list is in descending order by `followed_at` (with the most recently followed broadcaster first). The list is empty if the user doesn’t follow anyone.
-         * @prop {(() => Promise<GetFollowedChannelsResponse>)?} nextPage Retrieves the next page of data
-         * @prop {number} total The total number of broadcasters that the user follows. As someone pages through the list, the number may change as the user follows or unfollows broadcasters.
-         */
         /**
          * Gets a list of broadcasters that the specified user follows. You can also use this endpoint to see whether a user follows a specific broadcaster.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-followed-channels)
@@ -1157,60 +3564,6 @@ module.exports = (reqFunc) => ({
     },
     ChannelPoints: {
         /**
-         * @typedef CreateCustomRewardsResponse_Data_Image
-         * @prop {string} url1x The URL to a small version of the image.
-         * @prop {string} url2x The URL to a medium version of the image.
-         * @prop {string} url4x The URL to a large version of the image.
-         */
-        /**
-         * @typedef CreateCustomRewardsResponse_Data_Default_image
-         * @prop {string} url1x The URL to a small version of the image.
-         * @prop {string} url2x The URL to a medium version of the image.
-         * @prop {string} url4x The URL to a large version of the image.
-         */
-        /**
-         * @typedef CreateCustomRewardsResponse_Data_Max_per_stream_setting
-         * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is *true* if the reward applies a limit.
-         * @prop {number} maxPerStream The maximum number of redemptions allowed per live stream.
-         */
-        /**
-         * @typedef CreateCustomRewardsResponse_Data_Max_per_user_per_stream_setting
-         * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is *true* if the reward applies a limit.
-         * @prop {number} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
-         */
-        /**
-         * @typedef CreateCustomRewardsResponse_Data_Global_cooldown_setting
-         * @prop {boolean} isEnabled A Boolean value that determines whether to apply a cooldown period. Is *true* if a cooldown period is enabled.
-         * @prop {number} globalCooldownSeconds The cooldown period, in seconds.
-         */
-        /**
-         * @typedef CreateCustomRewardsResponse_Data
-         * @prop {string} broadcasterId The ID that uniquely identifies the broadcaster.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} id The ID that uniquely identifies this custom reward.
-         * @prop {string} title The title of the reward.
-         * @prop {string} prompt The prompt shown to the viewer when they redeem the reward if user input is required (see the `is_user_input_required` field).
-         * @prop {number} cost The cost of the reward in Channel Points.
-         * @prop {CreateCustomRewardsResponse_Data_Image} image A set of custom images for the reward. This field is set to *null* if the broadcaster didn’t upload images.
-         * @prop {CreateCustomRewardsResponse_Data_Default_image} defaultImage A set of default images for the reward.
-         * @prop {string} backgroundColor The background color to use for the reward. The color is in Hex format (for example, #00E5CB).
-         * @prop {boolean} isEnabled A Boolean value that determines whether the reward is enabled. Is *true* if enabled; otherwise, *false*. Disabled rewards aren’t shown to the user.
-         * @prop {boolean} isUserInputRequired A Boolean value that determines whether the user must enter information when redeeming the reward. Is *true* if the reward requires user input.
-         * @prop {CreateCustomRewardsResponse_Data_Max_per_stream_setting} maxPerStreamSetting The settings used to determine whether to apply a maximum to the number to the redemptions allowed per live stream.
-         * @prop {CreateCustomRewardsResponse_Data_Max_per_user_per_stream_setting} maxPerUserPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per user per live stream.
-         * @prop {CreateCustomRewardsResponse_Data_Global_cooldown_setting} globalCooldownSetting The settings used to determine whether to apply a cooldown period between redemptions and the length of the cooldown.
-         * @prop {boolean} isPaused A Boolean value that determines whether the reward is currently paused. Is *true* if the reward is paused. Viewers can’t redeem paused rewards.
-         * @prop {boolean} isInStock A Boolean value that determines whether the reward is currently in stock. Is *true* if the reward is in stock. Viewers can’t redeem out of stock rewards.
-         * @prop {boolean} shouldRedemptionsSkipRequestQueue A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If *false*, status is UNFULFILLED and follows the normal request queue process.
-         * @prop {number} redemptionsRedeemedCurrentStream The number of redemptions redeemed during the current live stream. The number counts against the `max_per_stream_setting` limit. This field is *null* if the broadcaster’s stream isn’t live or max_per_stream_setting isn’t enabled.
-         * @prop {string} cooldownExpiresAt The timestamp of when the cooldown period expires. Is *null* if the reward isn’t in a cooldown state (see the `global_cooldown_setting` field).
-         */
-        /**
-         * @typedef CreateCustomRewardsResponse
-         * @prop {CreateCustomRewardsResponse_Data[]} data A list that contains the single custom reward you created.
-         */
-        /**
          * Creates a Custom Reward in the broadcaster’s channel.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#create-custom-rewards)
          *
@@ -1346,60 +3699,6 @@ module.exports = (reqFunc) => ({
                 {204: "Successfully deleted the custom reward.", 400: "- The broadcaster_id query parameter is required.\n- The id query parameter is required.", 401: "- The Authorization header is required and must specify a user access token.\n- The user access token must include the channel:manage:redemptions scope.\n- The OAuth token is not valid.\n- The ID in the Client-Id header must match the Client ID in the OAuth token.", 403: "- The ID in the Client-Id header must match the client ID used to create the custom reward.\n- The broadcaster is not a partner or affiliate.", 404: "- The custom reward specified in the id query parameter was not found.", 500: ""}
             );
         },
-        /**
-         * @typedef GetCustomRewardResponse_Data_Image
-         * @prop {string} url1x The URL to a small version of the image.
-         * @prop {string} url2x The URL to a medium version of the image.
-         * @prop {string} url4x The URL to a large version of the image.
-         */
-        /**
-         * @typedef GetCustomRewardResponse_Data_Default_image
-         * @prop {string} url1x The URL to a small version of the image.
-         * @prop {string} url2x The URL to a medium version of the image.
-         * @prop {string} url4x The URL to a large version of the image.
-         */
-        /**
-         * @typedef GetCustomRewardResponse_Data_Max_per_stream_setting
-         * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is *true* if the reward applies a limit.
-         * @prop {number} maxPerStream The maximum number of redemptions allowed per live stream.
-         */
-        /**
-         * @typedef GetCustomRewardResponse_Data_Max_per_user_per_stream_setting
-         * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is *true* if the reward applies a limit.
-         * @prop {number} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
-         */
-        /**
-         * @typedef GetCustomRewardResponse_Data_Global_cooldown_setting
-         * @prop {boolean} isEnabled A Boolean value that determines whether to apply a cooldown period. Is *true* if a cooldown period is enabled.
-         * @prop {number} globalCooldownSeconds The cooldown period, in seconds.
-         */
-        /**
-         * @typedef GetCustomRewardResponse_Data
-         * @prop {string} broadcasterId The ID that uniquely identifies the broadcaster.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} id The ID that uniquely identifies this custom reward.
-         * @prop {string} title The title of the reward.
-         * @prop {string} prompt The prompt shown to the viewer when they redeem the reward if user input is required (see the `is_user_input_required` field).
-         * @prop {number} cost The cost of the reward in Channel Points.
-         * @prop {GetCustomRewardResponse_Data_Image} image A set of custom images for the reward. This field is *null* if the broadcaster didn’t upload images.
-         * @prop {GetCustomRewardResponse_Data_Default_image} defaultImage A set of default images for the reward.
-         * @prop {string} backgroundColor The background color to use for the reward. The color is in Hex format (for example, #00E5CB).
-         * @prop {boolean} isEnabled A Boolean value that determines whether the reward is enabled. Is *true* if enabled; otherwise, *false*. Disabled rewards aren’t shown to the user.
-         * @prop {boolean} isUserInputRequired A Boolean value that determines whether the user must enter information when redeeming the reward. Is *true* if the user is prompted.
-         * @prop {GetCustomRewardResponse_Data_Max_per_stream_setting} maxPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per live stream.
-         * @prop {GetCustomRewardResponse_Data_Max_per_user_per_stream_setting} maxPerUserPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per user per live stream.
-         * @prop {GetCustomRewardResponse_Data_Global_cooldown_setting} globalCooldownSetting The settings used to determine whether to apply a cooldown period between redemptions and the length of the cooldown.
-         * @prop {boolean} isPaused A Boolean value that determines whether the reward is currently paused. Is *true* if the reward is paused. Viewers can’t redeem paused rewards.
-         * @prop {boolean} isInStock A Boolean value that determines whether the reward is currently in stock. Is *true* if the reward is in stock. Viewers can’t redeem out of stock rewards.
-         * @prop {boolean} shouldRedemptionsSkipRequestQueue A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If *false*, status is set to UNFULFILLED and follows the normal request queue process.
-         * @prop {number} redemptionsRedeemedCurrentStream The number of redemptions redeemed during the current live stream. The number counts against the `max_per_stream_setting` limit. This field is *null* if the broadcaster’s stream isn’t live or max_per_stream_setting isn’t enabled.
-         * @prop {string} cooldownExpiresAt The timestamp of when the cooldown period expires. Is *null* if the reward isn’t in a cooldown state. See the `global_cooldown_setting` field.
-         */
-        /**
-         * @typedef GetCustomRewardResponse
-         * @prop {GetCustomRewardResponse_Data[]} data A list of custom rewards. The list is in ascending order by `id`. If the broadcaster hasn’t created custom rewards, the list is empty.
-         */
         /**
          * Gets a list of custom rewards that the specified broadcaster created.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-custom-reward)
@@ -1589,38 +3888,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetCustomRewardRedemptionResponse_Data_Reward
-         * @prop {string} id The ID that uniquely identifies the redeemed reward.
-         * @prop {string} title The reward’s title.
-         * @prop {string} prompt The prompt displayed to the viewer if user input is required.
-         * @prop {number} cost The reward’s cost, in Channel Points.
-         */
-        /**
-         * @typedef GetCustomRewardRedemptionResponse_Data
-         * @prop {string} broadcasterId The ID that uniquely identifies the broadcaster.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} id The ID that uniquely identifies this redemption.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userId The ID that uniquely identifies the user that redeemed the reward.
-         * @prop {string} userName The user’s display name.
-         * @prop {string} userInput The text the user entered at the prompt when they redeemed the reward; otherwise, an empty string if user input was not required.
-         * @prop {"CANCELED"|"FULFILLED"|"UNFULFILLED"} status The state of the redemption. Possible values are:
-         *
-         * - CANCELED
-         *
-         * - FULFILLED
-         *
-         * - UNFULFILLED
-         * @prop {string} redeemedAt The date and time of when the reward was redeemed, in RFC3339 format.
-         * @prop {GetCustomRewardRedemptionResponse_Data_Reward} reward The reward that the user redeemed.
-         */
-        /**
-         * @typedef GetCustomRewardRedemptionResponse
-         * @prop {GetCustomRewardRedemptionResponse_Data[]} data The list of redemptions for the specified reward. The list is empty if there are no redemptions that match the redemption criteria.
-         * @prop {(() => Promise<GetCustomRewardRedemptionResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets a list of redemptions for a custom reward.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-custom-reward-redemption)
          *
@@ -1741,60 +4008,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the list of redeemed custom rewards.", 400: "- The broadcaster_id query parameter is required.\n- The reward_id query parameter is required.\n- The status query parameter is required if you didn't specify the id query parameter.\n- The value in the status query parameter is not valid.\n- The value in the sort query parameter is not valid.", 401: "- The Authorization header is required and must specify a user access token.\n- The user access token must include the channel:read:redemptions scope.\n- The OAuth token is not valid.\n- The ID in the Client-Id header must match the Client ID in the OAuth token.", 403: "- The ID in the Client-Id header must match the client ID used to create the custom reward.\n- The broadcaster is not a partner or affiliate.", 404: "- All of the redemptions specified using the id query parameter were not found.", 500: ""}
             );
         },
-        /**
-         * @typedef UpdateCustomRewardResponse_Data_Image
-         * @prop {string} url1x The URL to a small version of the image.
-         * @prop {string} url2x The URL to a medium version of the image.
-         * @prop {string} url4x The URL to a large version of the image.
-         */
-        /**
-         * @typedef UpdateCustomRewardResponse_Data_Default_image
-         * @prop {string} url1x The URL to a small version of the image.
-         * @prop {string} url2x The URL to a medium version of the image.
-         * @prop {string} url4x The URL to a large version of the image.
-         */
-        /**
-         * @typedef UpdateCustomRewardResponse_Data_Max_per_stream_setting
-         * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per live stream. Is *true* if the reward applies a limit.
-         * @prop {number} maxPerStream The maximum number of redemptions allowed per live stream.
-         */
-        /**
-         * @typedef UpdateCustomRewardResponse_Data_Max_per_user_per_stream_setting
-         * @prop {boolean} isEnabled A Boolean value that determines whether the reward applies a limit on the number of redemptions allowed per user per live stream. Is *true* if the reward applies a limit.
-         * @prop {number} maxPerUserPerStream The maximum number of redemptions allowed per user per live stream.
-         */
-        /**
-         * @typedef UpdateCustomRewardResponse_Data_Global_cooldown_setting
-         * @prop {boolean} isEnabled A Boolean value that determines whether to apply a cooldown period. Is *true* if a cooldown period is enabled.
-         */
-        /**
-         * @typedef UpdateCustomRewardResponse_Data
-         * @prop {string} broadcasterId The ID that uniquely identifies the broadcaster.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} id The ID that uniquely identifies this custom reward.
-         * @prop {string} title The title of the reward.
-         * @prop {string} prompt The prompt shown to the viewer when they redeem the reward if user input is required. See the `is_user_input_required` field.
-         * @prop {number} cost The cost of the reward in Channel Points.
-         * @prop {UpdateCustomRewardResponse_Data_Image} image A set of custom images for the reward. This field is *null* if the broadcaster didn’t upload images.
-         * @prop {UpdateCustomRewardResponse_Data_Default_image} defaultImage A set of default images for the reward.
-         * @prop {string} backgroundColor The background color to use for the reward. The color is in Hex format (for example, #00E5CB).
-         * @prop {boolean} isEnabled A Boolean value that determines whether the reward is enabled. Is *true* if enabled; otherwise, *false*. Disabled rewards aren’t shown to the user.
-         * @prop {boolean} isUserInputRequired A Boolean value that determines whether the user must enter information when they redeem the reward. Is *true* if the user is prompted.
-         * @prop {UpdateCustomRewardResponse_Data_Max_per_stream_setting} maxPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per live stream.
-         * @prop {UpdateCustomRewardResponse_Data_Max_per_user_per_stream_setting} maxPerUserPerStreamSetting The settings used to determine whether to apply a maximum to the number of redemptions allowed per user per live stream.
-         * @prop {UpdateCustomRewardResponse_Data_Global_cooldown_setting} globalCooldownSetting The settings used to determine whether to apply a cooldown period between redemptions and the length of the cooldown.
-         * @prop {number} globalCooldownSeconds The cooldown period, in seconds.
-         * @prop {boolean} isPaused A Boolean value that determines whether the reward is currently paused. Is *true* if the reward is paused. Viewers can’t redeem paused rewards.
-         * @prop {boolean} isInStock A Boolean value that determines whether the reward is currently in stock. Is *true* if the reward is in stock. Viewers can’t redeem out of stock rewards.
-         * @prop {boolean} shouldRedemptionsSkipRequestQueue A Boolean value that determines whether redemptions should be set to FULFILLED status immediately when a reward is redeemed. If *false*, status is set to UNFULFILLED and follows the normal request queue process.
-         * @prop {number} redemptionsRedeemedCurrentStream The number of redemptions redeemed during the current live stream. The number counts against the `max_per_stream_setting` limit. This field is *null* if the broadcaster’s stream isn’t live or max_per_stream_setting isn’t enabled.
-         * @prop {string} cooldownExpiresAt The timestamp of when the cooldown period expires. Is *null* if the reward isn’t in a cooldown state. See the `global_cooldown_setting` field.
-         */
-        /**
-         * @typedef UpdateCustomRewardResponse
-         * @prop {UpdateCustomRewardResponse_Data[]} data The list contains the single reward that you updated.
-         */
         /**
          * Updates a custom reward.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-custom-reward)
@@ -1957,37 +4170,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef UpdateRedemptionStatusResponse_Data_Reward
-         * @prop {string} id The ID that uniquely identifies the reward.
-         * @prop {string} title The reward’s title.
-         * @prop {string} prompt The prompt displayed to the viewer if user input is required.
-         * @prop {number} cost The reward’s cost, in Channel Points.
-         */
-        /**
-         * @typedef UpdateRedemptionStatusResponse_Data
-         * @prop {string} broadcasterId The ID that uniquely identifies the broadcaster.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} id The ID that uniquely identifies this redemption..
-         * @prop {string} userId The ID of the user that redeemed the reward.
-         * @prop {string} userName The user’s display name.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {UpdateRedemptionStatusResponse_Data_Reward} reward An object that describes the reward that the user redeemed.
-         * @prop {string} userInput The text that the user entered at the prompt when they redeemed the reward; otherwise, an empty string if user input was not required.
-         * @prop {"CANCELED"|"FULFILLED"|"UNFULFILLED"} status The state of the redemption. Possible values are:
-         *
-         * - CANCELED
-         *
-         * - FULFILLED
-         *
-         * - UNFULFILLED
-         * @prop {string} redeemedAt The date and time of when the reward was redeemed, in RFC3339 format.
-         */
-        /**
-         * @typedef UpdateRedemptionStatusResponse
-         * @prop {UpdateRedemptionStatusResponse_Data[]} data The list contains the single redemption that you updated.
-         */
-        /**
          * Updates a redemption’s status.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-redemption-status)
          *
@@ -2066,35 +4248,6 @@ module.exports = (reqFunc) => ({
     },
     Charity: {
         /**
-         * @typedef GetCharityCampaignResponse_Data_Current_amount
-         * @prop {number} value The monetary amount. The amount is specified in the currency’s minor unit. For example, the minor units for USD is cents, so if the amount is $5.50 USD, `value` is set to 550.
-         * @prop {number} decimalPlaces The number of decimal places used by the currency. For example, USD uses two decimal places. Use this number to translate `value` from minor units to major units by using the formula:`value / 10^decimal_places`
-         * @prop {string} currency The ISO-4217 three-letter currency code that identifies the type of currency in `value`.
-         */
-        /**
-         * @typedef GetCharityCampaignResponse_Data_Target_amount
-         * @prop {number} value The monetary amount. The amount is specified in the currency’s minor unit. For example, the minor units for USD is cents, so if the amount is $5.50 USD, `value` is set to 550.
-         * @prop {number} decimalPlaces The number of decimal places used by the currency. For example, USD uses two decimal places. Use this number to translate `value` from minor units to major units by using the formula:`value / 10^decimal_places`
-         * @prop {string} currency The ISO-4217 three-letter currency code that identifies the type of currency in `value`.
-         */
-        /**
-         * @typedef GetCharityCampaignResponse_Data
-         * @prop {string} id An ID that identifies the charity campaign.
-         * @prop {string} broadcasterId An ID that identifies the broadcaster that’s running the campaign.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} charityName The charity’s name.
-         * @prop {string} charityDescription A description of the charity.
-         * @prop {string} charityLogo A URL to an image of the charity’s logo. The image’s type is PNG and its size is 100px X 100px.
-         * @prop {string} charityWebsite A URL to the charity’s website.
-         * @prop {GetCharityCampaignResponse_Data_Current_amount} currentAmount The current amount of donations that the campaign has received.
-         * @prop {GetCharityCampaignResponse_Data_Target_amount} targetAmount The campaign’s fundraising goal. This field is *null* if the broadcaster has not defined a fundraising goal.
-         */
-        /**
-         * @typedef GetCharityCampaignResponse
-         * @prop {GetCharityCampaignResponse_Data[]} data A list that contains the charity campaign that the broadcaster is currently running. The list is empty if the broadcaster is not running a charity campaign; the campaign information is not available after the campaign ends.
-         */
-        /**
          * Gets information about the broadcaster’s active charity campaign.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-charity-campaign)
          *
@@ -2161,26 +4314,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved information about the broadcaster’s active charity campaign.", 400: "- The broadcaster_id query parameter is required.\n- The broadcaster_id query parameter is not valid.", 401: "- The ID in the broadcaster_id query parameter must match the user ID in the access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the channel:read:charity scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header must match the client ID specified in the access token.", 403: "- The broadcaster is not a partner or affiliate."}
             );
         },
-        /**
-         * @typedef GetCharityCampaignDonationsResponse_Data_Amount
-         * @prop {number} value The monetary amount. The amount is specified in the currency’s minor unit. For example, the minor units for USD is cents, so if the amount is $5.50 USD, `value` is set to 550.
-         * @prop {number} decimalPlaces The number of decimal places used by the currency. For example, USD uses two decimal places. Use this number to translate `value` from minor units to major units by using the formula:`value / 10^decimal_places`
-         * @prop {string} currency The ISO-4217 three-letter currency code that identifies the type of currency in `value`.
-         */
-        /**
-         * @typedef GetCharityCampaignDonationsResponse_Data
-         * @prop {string} id An ID that identifies the donation. The ID is unique across campaigns.
-         * @prop {string} campaignId An ID that identifies the charity campaign that the donation applies to.
-         * @prop {string} userId An ID that identifies a user that donated money to the campaign.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userName The user’s display name.
-         * @prop {GetCharityCampaignDonationsResponse_Data_Amount} amount An object that contains the amount of money that the user donated.
-         */
-        /**
-         * @typedef GetCharityCampaignDonationsResponse
-         * @prop {GetCharityCampaignDonationsResponse_Data[]} data A list that contains the donations that users have made to the broadcaster’s charity campaign. The list is empty if the broadcaster is not currently running a charity campaign; the donation information is not available after the campaign ends.
-         * @prop {(() => Promise<GetCharityCampaignDonationsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets the list of donations that users have made to the broadcaster’s active charity campaign.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-charity-campaign-donations)
@@ -2261,18 +4394,6 @@ module.exports = (reqFunc) => ({
     },
     Chat: {
         /**
-         * @typedef GetChattersResponse_Data
-         * @prop {string} userId The ID of a user that’s connected to the broadcaster’s chat room.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userName The user’s display name.
-         */
-        /**
-         * @typedef GetChattersResponse
-         * @prop {GetChattersResponse_Data[]} data The list of users that are connected to the broadcaster’s chat room. The list is empty if no users are connected to the chat room.
-         * @prop {(() => Promise<GetChattersResponse>)?} nextPage Retrieves the next page of data
-         * @prop {number} total The total number of users that are connected to the broadcaster’s chat room. As you page through the list, the number of users may change as users join and leave the chat room.
-         */
-        /**
          * Gets the list of users that are connected to the broadcaster’s chat session.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-chatters)
          *
@@ -2334,49 +4455,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the broadcaster’s list of chatters.", 400: "- The broadcaster_id query parameter is required.\n- The ID in the broadcaster_id query parameter is not valid.\n- The moderator_id query parameter is required.\n- The ID in the moderator_id query parameter is not valid.", 401: "- The ID in the moderator_id query parameter must match the user ID in the access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the moderator:read:chatters scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token.", 403: "- The user in the moderator_id query parameter is not one of the broadcaster's moderators."}
             );
         },
-        /**
-         * @typedef GetChannelEmotesResponse_Data_Images
-         * @prop {string} url1x A URL to the small version (28px x 28px) of the emote.
-         * @prop {string} url2x A URL to the medium version (56px x 56px) of the emote.
-         * @prop {string} url4x A URL to the large version (112px x 112px) of the emote.
-         */
-        /**
-         * @typedef GetChannelEmotesResponse_Data
-         * @prop {string} id An ID that identifies this emote.
-         * @prop {string} name The name of the emote. This is the name that viewers type in the chat window to get the emote to appear.
-         * @prop {GetChannelEmotesResponse_Data_Images} images The image URLs for the emote. These image URLs always provide a static, non-animated emote image with a light background.*NOTE:* You should use the templated URL in the `template` field to fetch the image instead of using these URLs.
-         * @prop {string} tier The subscriber tier at which the emote is unlocked. This field contains the tier information only if `emote_type` is set to `subscriptions`, otherwise, it's an empty string.
-         * @prop {"bitstier"|"follower"|"subscriptions"} emoteType The type of emote. The possible values are:
-         *
-         * - bitstier — A custom Bits tier emote.
-         *
-         * - follower — A custom follower emote.
-         *
-         * - subscriptions — A custom subscriber emote.
-         * @prop {string} emoteSetId An ID that identifies the emote set that the emote belongs to.
-         * @prop {"animated"|"static"} format The formats that the emote is available in. For example, if the emote is available only as a static PNG, the array contains only `static`. But if the emote is available as a static PNG and an animated GIF, the array contains `static` and `animated`. The possible formats are:
-         *
-         * - animated — An animated GIF is available for this emote.
-         *
-         * - static — A static PNG file is available for this emote.
-         * @prop {"1.0"|"2.0"|"3.0"} scale The sizes that the emote is available in. For example, if the emote is available in small and medium sizes, the array contains 1.0 and 2.0. Possible sizes are:
-         *
-         * - 1.0 — A small version (28px x 28px) is available.
-         *
-         * - 2.0 — A medium version (56px x 56px) is available.
-         *
-         * - 3.0 — A large version (112px x 112px) is available.
-         * @prop {"dark"|"light"} themeMode The background themes that the emote is available in. Possible themes are:
-         *
-         * - dark
-         *
-         * - light
-         */
-        /**
-         * @typedef GetChannelEmotesResponse
-         * @prop {GetChannelEmotesResponse_Data[]} data The list of emotes that the specified broadcaster created. If the broadcaster hasn't created custom emotes, the list is empty.
-         * @prop {string} template A templated URL. Use the values from the `id`, `format`, `scale`, and `theme_mode` fields to replace the like-named placeholder strings in the templated URL to create a CDN (content delivery network) URL that you use to fetch the emote. For information about what the template looks like and how to use it to fetch emotes, see [Emote CDN URL format](https://dev.twitch.tv/docs/irc/emotes#cdn-template). You should use this template instead of using the URLs in the `images` object.
-         */
         /**
          * Gets the broadcaster’s list of custom emotes.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-channel-emotes)
@@ -2546,41 +4624,6 @@ module.exports = (reqFunc) => ({
                 {}
             );
         },
-        /**
-         * @typedef GetEmoteSetsResponse_Data_Images
-         * @prop {string} url1x A URL to the small version (28px x 28px) of the emote.
-         * @prop {string} url2x A URL to the medium version (56px x 56px) of the emote.
-         * @prop {string} url4x A URL to the large version (112px x 112px) of the emote.
-         */
-        /**
-         * @typedef GetEmoteSetsResponse_Data
-         * @prop {string} id An ID that uniquely identifies this emote.
-         * @prop {string} name The name of the emote. This is the name that viewers type in the chat window to get the emote to appear.
-         * @prop {GetEmoteSetsResponse_Data_Images} images The image URLs for the emote. These image URLs always provide a static, non-animated emote image with a light background.*NOTE:* You should use the templated URL in the `template` field to fetch the image instead of using these URLs.
-         * @prop {"bitstier"|"follower"|"subscriptions"} emoteType The type of emote. The possible values are: - bitstier — A Bits tier emote.
-         *
-         * - follower — A follower emote.
-         *
-         * - subscriptions — A subscriber emote.
-         * @prop {string} emoteSetId An ID that identifies the emote set that the emote belongs to.
-         * @prop {string} ownerId The ID of the broadcaster who owns the emote.
-         * @prop {"animated"|"static"} format The formats that the emote is available in. For example, if the emote is available only as a static PNG, the array contains only `static`. But if the emote is available as a static PNG and an animated GIF, the array contains `static` and `animated`. The possible formats are: - animated — An animated GIF is available for this emote.
-         *
-         * - static — A static PNG file is available for this emote.
-         * @prop {"1.0"|"2.0"|"3.0"} scale The sizes that the emote is available in. For example, if the emote is available in small and medium sizes, the array contains 1.0 and 2.0. Possible sizes are: - 1.0 — A small version (28px x 28px) is available.
-         *
-         * - 2.0 — A medium version (56px x 56px) is available.
-         *
-         * - 3.0 — A large version (112px x 112px) is available.
-         * @prop {"dark"|"light"} themeMode The background themes that the emote is available in. Possible themes are: - dark
-         *
-         * - light
-         */
-        /**
-         * @typedef GetEmoteSetsResponse
-         * @prop {GetEmoteSetsResponse_Data[]} data The list of emotes found in the specified emote sets. The list is empty if none of the IDs were found. The list is in the same order as the set IDs specified in the request. Each set contains one or more emoticons.
-         * @prop {string} template A templated URL. Use the values from the `id`, `format`, `scale`, and `theme_mode` fields to replace the like-named placeholder strings in the templated URL to create a CDN (content delivery network) URL that you use to fetch the emote. For information about what the template looks like and how to use it to fetch emotes, see [Emote CDN URL format](https://dev.twitch.tv/docs/irc/emotes#cdn-template). You should use this template instead of using the URLs in the `images` object.
-         */
         /**
          * Gets emotes for one or more specified emote sets.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-emote-sets)
@@ -2792,24 +4835,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetChatSettingsResponse_Data
-         * @prop {string} broadcasterId The ID of the broadcaster specified in the request.
-         * @prop {boolean} emoteMode A Boolean value that determines whether chat messages must contain only emotes. Is *true* if chat messages may contain only emotes; otherwise, *false*.
-         * @prop {boolean} followerMode A Boolean value that determines whether the broadcaster restricts the chat room to followers only.Is *true* if the broadcaster restricts the chat room to followers only; otherwise, *false*.See the `follower_mode_duration` field for how long users must follow the broadcaster before being able to participate in the chat room.
-         * @prop {number} followerModeDuration The length of time, in minutes, that users must follow the broadcaster before being able to participate in the chat room. Is *null* if `follower_mode` is *false*.
-         * @prop {string} moderatorId The moderator’s ID. The response includes this field only if the request specifies a user access token that includes the *moderator:read:chat_settings* scope.
-         * @prop {boolean} nonModeratorChatDelay A Boolean value that determines whether the broadcaster adds a short delay before chat messages appear in the chat room. This gives chat moderators and bots a chance to remove them before viewers can see the message. See the `non_moderator_chat_delay_duration` field for the length of the delay. Is *true* if the broadcaster applies a delay; otherwise, *false*.The response includes this field only if the request specifies a user access token that includes the *moderator:read:chat_settings* scope and the user in the moderator_id query parameter is one of the broadcaster’s moderators.
-         * @prop {number} nonModeratorChatDelayDuration The amount of time, in seconds, that messages are delayed before appearing in chat. Is *null* if `non_moderator_chat_delay` is *false*.The response includes this field only if the request specifies a user access token that includes the *moderator:read:chat_settings* scope and the user in the moderator_id query parameter is one of the broadcaster’s moderators.
-         * @prop {boolean} slowMode A Boolean value that determines whether the broadcaster limits how often users in the chat room are allowed to send messages.Is *true* if the broadcaster applies a delay; otherwise, *false*.See the `slow_mode_wait_time` field for the delay.
-         * @prop {number} slowModeWaitTime The amount of time, in seconds, that users must wait between sending messages.Is *null* if slow_mode is *false*.
-         * @prop {boolean} subscriberMode A Boolean value that determines whether only users that subscribe to the broadcaster’s channel may talk in the chat room.Is *true* if the broadcaster restricts the chat room to subscribers only; otherwise, *false*.
-         * @prop {boolean} uniqueChatMode A Boolean value that determines whether the broadcaster requires users to post only unique messages in the chat room.Is *true* if the broadcaster requires unique messages only; otherwise, *false*.
-         */
-        /**
-         * @typedef GetChatSettingsResponse
-         * @prop {GetChatSettingsResponse_Data[]} data The list of chat settings. The list contains a single object with all the settings.
-         */
-        /**
          * Gets the broadcaster’s chat settings.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-chat-settings)
          *
@@ -2870,22 +4895,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetSharedChatSessionResponse_Data_Participants
-         * @prop {string} broadcasterId The User ID of the participant channel.
-         */
-        /**
-         * @typedef GetSharedChatSessionResponse_Data
-         * @prop {string} sessionId The unique identifier for the shared chat session.
-         * @prop {string} hostBroadcasterId The User ID of the host channel.
-         * @prop {GetSharedChatSessionResponse_Data_Participants[]} participants The list of participants in the session.
-         * @prop {string} createdAt The UTC date and time (in RFC3339 format) for when the session was created.
-         * @prop {string} updatedAt The UTC date and time (in RFC3339 format) for when the session was last updated.
-         */
-        /**
-         * @typedef GetSharedChatSessionResponse
-         * @prop {GetSharedChatSessionResponse_Data[]} data 
-         */
-        /**
          * NEW Retrieves the active shared chat session for a channel.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-shared-chat-session)
          *
@@ -2938,57 +4947,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the shared chat session. Returns an empty array if the broadcaster_id in the request isn’t in a shared chat session.", 400: "The ID in the `broadcaster_id` query parameter is not valid.", 401: "- The OAuth token is not valid.\n- The Authorization header is required and must contain a user access token.", 500: "Internal Server Error."}
             );
         },
-        /**
-         * @typedef GetUserEmotesResponse_Data
-         * @prop {string} id An ID that uniquely identifies this emote.
-         * @prop {string} name The User ID of broadcaster whose channel is receiving the unban request.
-         * @prop {"none"|"bitstier"|"follower"|"subscriptions"|"channelpoints"|"rewards"|"hypetrain"|"prime"|"turbo"|"smilies"|"globals"|"owl2019"|"twofactor"|"limitedtime"} emoteType The type of emote. The possible values are: - none — No emote type was assigned to this emote.
-         *
-         * - bitstier — A Bits tier emote.
-         *
-         * - follower — A follower emote.
-         *
-         * - subscriptions — A subscriber emote.
-         *
-         * - channelpoints — An emote granted by using channel points.
-         *
-         * - rewards — An emote granted to the user through a special event.
-         *
-         * - hypetrain — An emote granted for participation in a Hype Train.
-         *
-         * - prime — An emote granted for linking an Amazon Prime account.
-         *
-         * - turbo — An emote granted for having Twitch Turbo.
-         *
-         * - smilies — Emoticons supported by Twitch.
-         *
-         * - globals — An emote accessible by everyone.
-         *
-         * - owl2019 — Emotes related to Overwatch League 2019.
-         *
-         * - twofactor — Emotes granted by enabling two-factor authentication on an account.
-         *
-         * - limitedtime — Emotes that were granted for only a limited time.
-         * @prop {string} emoteSetId An ID that identifies the emote set that the emote belongs to.
-         * @prop {string} ownerId The ID of the broadcaster who owns the emote.
-         * @prop {string[]} format The formats that the emote is available in. For example, if the emote is available only as a static PNG, the array contains only static. But if the emote is available as a static PNG and an animated GIF, the array contains static and animated. - animated — An animated GIF is available for this emote.
-         *
-         * - static — A static PNG file is available for this emote.
-         * @prop {string[]} scale The sizes that the emote is available in. For example, if the emote is available in small and medium sizes, the array contains 1.0 and 2.0. - 1.0 — A small version (28px x 28px) is available.
-         *
-         * - 2.0 — A medium version (56px x 56px) is available.
-         *
-         * - 3.0 — A large version (112px x 112px) is available.
-         * @prop {string[]} themeMode The background themes that the emote is available in. - dark
-         *
-         * - light
-         */
-        /**
-         * @typedef GetUserEmotesResponse
-         * @prop {GetUserEmotesResponse_Data[]} data 
-         * @prop {string} template A templated URL. Uses the values from the id, format, scale, and theme_mode fields to replace the like-named placeholder strings in the templated URL to create a CDN (content delivery network) URL that you use to fetch the emote. For information about what the template looks like and how to use it to fetch emotes, see [Emote CDN URL](https://dev.twitch.tv/docs/irc/emotes#cdn-template) format.
-         * @prop {(() => Promise<GetUserEmotesResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Retrieves emotes available to the user across all channels.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-user-emotes)
@@ -3056,24 +5014,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the emotes.", 400: "- The user_id query parameter is required.\n- The ID in the user_id query parameter is not valid.", 401: "- The ID in user_id must match the user ID in the user access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the user:read:emotes scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token."}
             );
         },
-        /**
-         * @typedef UpdateChatSettingsResponse_Data
-         * @prop {string} broadcasterId The ID of the broadcaster specified in the request.
-         * @prop {boolean} emoteMode A Boolean value that determines whether chat messages must contain only emotes. Is *true* if chat messages may contain only emotes; otherwise, *false*.
-         * @prop {boolean} followerMode A Boolean value that determines whether the broadcaster restricts the chat room to followers only.Is *true* if the broadcaster restricts the chat room to followers only; otherwise, *false*.See the `follower_mode_duration` field for how long users must follow the broadcaster before being able to participate in the chat room.
-         * @prop {number} followerModeDuration The length of time, in minutes, that users must follow the broadcaster before being able to participate in the chat room. Is *null* if `follower_mode` is *false*.
-         * @prop {string} moderatorId The moderator’s ID. The response includes this field only if the request specifies a user access token that includes the *moderator:read:chat_settings* scope.
-         * @prop {boolean} nonModeratorChatDelay A Boolean value that determines whether the broadcaster adds a short delay before chat messages appear in the chat room. This gives chat moderators and bots a chance to remove them before viewers can see the message. See the `non_moderator_chat_delay_duration` field for the length of the delay. Is *true* if the broadcaster applies a delay; otherwise, *false*.
-         * @prop {number} nonModeratorChatDelayDuration The amount of time, in seconds, that messages are delayed before appearing in chat. Is *null* if `non_moderator_chat_delay` is *false*.
-         * @prop {boolean} slowMode A Boolean value that determines whether the broadcaster limits how often users in the chat room are allowed to send messages.Is *true* if the broadcaster applies a delay; otherwise, *false*.See the `slow_mode_wait_time` field for the delay.
-         * @prop {number} slowModeWaitTime The amount of time, in seconds, that users must wait between sending messages.Is *null* if slow_mode is *false*.
-         * @prop {boolean} subscriberMode A Boolean value that determines whether only users that subscribe to the broadcaster’s channel may talk in the chat room.Is *true* if the broadcaster restricts the chat room to subscribers only; otherwise, *false*.
-         * @prop {boolean} uniqueChatMode A Boolean value that determines whether the broadcaster requires users to post only unique messages in the chat room.Is *true* if the broadcaster requires unique messages only; otherwise, *false*.
-         */
-        /**
-         * @typedef UpdateChatSettingsResponse
-         * @prop {UpdateChatSettingsResponse_Data[]} data The list of chat settings. The list contains a single object with all the settings.
-         */
         /**
          * Updates the broadcaster’s chat settings.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-chat-settings)
@@ -3256,21 +5196,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef SendChatMessageResponse_Data_Drop_reason
-         * @prop {string} code Code for why the message was dropped.
-         * @prop {string} message Message for why the message was dropped.
-         */
-        /**
-         * @typedef SendChatMessageResponse_Data
-         * @prop {string} messageId The message id for the message that was sent.
-         * @prop {boolean} isSent If the message passed all checks and was sent.
-         * @prop {SendChatMessageResponse_Data_Drop_reason} dropReason The reason the message was dropped, if any.
-         */
-        /**
-         * @typedef SendChatMessageResponse
-         * @prop {SendChatMessageResponse_Data[]} data 
-         */
-        /**
          * Sends a message to the broadcaster’s chat room.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#send-chat-message)
          *
@@ -3336,17 +5261,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully sent the specified broadcaster a message.", 400: "- The broadcaster_id query parameter is required.\n- The ID in the broadcaster_id query parameter is not valid.\n- The sender_id query parameter is required.\n- The ID in the sender_id query parameter is not valid.\n- The text query parameter is required.\n- The ID in the reply_parent_message_id query parameter is not valid.\n- Cannot set *for_source_only* if User Access Token is used.", 401: "- The ID in the user_id query parameter must match the user ID in the access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the user:write:chat scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token.", 403: "The sender is not permitted to send chat messages to the broadcaster’s chat room.", 422: "The message is too large."}
             );
         },
-        /**
-         * @typedef GetUserChatColorResponse_Data
-         * @prop {string} userId An ID that uniquely identifies the user.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userName The user’s display name.
-         * @prop {string} color The Hex color code that the user uses in chat for their name. If the user hasn’t specified a color in their settings, the string is empty.
-         */
-        /**
-         * @typedef GetUserChatColorResponse
-         * @prop {GetUserChatColorResponse_Data[]} data The list of users and the color code they use for their name.
-         */
         /**
          * Gets the color used for the user’s name in chat.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-user-chat-color)
@@ -3469,15 +5383,6 @@ module.exports = (reqFunc) => ({
     },
     Clips: {
         /**
-         * @typedef CreateClipResponse_Data
-         * @prop {string} id An ID that uniquely identifies the clip.
-         * @prop {string} editUrl A URL that you can use to edit the clip’s title, identify the part of the clip to publish, and publish the clip. [Learn More](https://help.twitch.tv/s/article/how-to-use-clips)The URL is valid for up to 24 hours or until the clip is published, whichever comes first.
-         */
-        /**
-         * @typedef CreateClipResponse
-         * @prop {CreateClipResponse_Data[]} data A list containing the created clip.
-         */
-        /**
          * Creates a clip from the broadcaster’s stream.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#create-clip)
          *
@@ -3533,15 +5438,6 @@ module.exports = (reqFunc) => ({
                 {202: "Successfully started the clip process.", 400: "- The broadcaster_id query parameter is required.\n- The ID in the broadcaster_id query parameter was not found.\n- The category is not clippable.\n- The title did not pass AutoMod checks.", 401: "- The Authorization header is required and must specify user access token.\n- The user access token must include the clips:edit scope.\n- The OAuth token is not valid.\n- The ID in the Client-Id header must match the Client ID in the OAuth token.", 403: "- The broadcaster has restricted the ability to capture clips to followers and/or subscribers only.\n- The specified broadcaster has not enabled clips on their channel.\n- The user is banned or timed out from the broadcaster’s channel.", 404: "- The broadcaster in the broadcaster_id query parameter must be broadcasting live."}
             );
         },
-        /**
-         * @typedef CreateClipFromVODResponse_Data
-         * @prop {string} id An ID that uniquely identifies the clip.
-         * @prop {string} editUrl A URL you can use to edit the clip’s title, feature the clip, create a portrait version of the clip, download the clip media, and share the clip directly to third-party platforms.
-         */
-        /**
-         * @typedef CreateClipFromVODResponse
-         * @prop {CreateClipFromVODResponse_Data[]} data A list containing the created clip.
-         */
         /**
          * NEW Creates a clip from the broadcaster’s VOD.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#create-clip-from-vod)
@@ -3601,31 +5497,6 @@ module.exports = (reqFunc) => ({
                 {202: "Successfully started the clip process.", 400: "- Validation errors: Invalid source type, missing required fields.\n- The broadcaster_id query parameter is required.\n- The ID in the broadcaster_id query parameter was not found.\n- The category is not clippable.\n- The title did not pass AutoMod checks.\n- Broadcaster is banned.", 401: "- The Authorization header is required and must specify user access token.\n- The user access token must include the editor:manage:clips or channel:manage:clips scope.\n- The OAuth token is not valid.\n- The ID in the Client-Id header must match the Client ID in the OAuth token.", 403: "- The broadcaster has restricted the ability to capture clips to followers and/or subscribers only.\n- The specified broadcaster has not enabled clips on their channel.\n- The user defined by the editor_id is not authorized to create Clips.\n- The user is banned or timed out from the broadcaster's channel.", 404: "- The broadcaster in the broadcaster_id query parameter must be broadcasting live.\n- The VOD is not found..\n- The broadcaster_id or the editor_id does not exist."}
             );
         },
-        /**
-         * @typedef GetClipsResponse_Data
-         * @prop {string} id An ID that uniquely identifies the clip.
-         * @prop {string} url A URL to the clip.
-         * @prop {string} embedUrl A URL that you can use in an iframe to embed the clip (see [Embedding Video and Clips](https://dev.twitch.tv/docs/embed/video-and-clips/)).
-         * @prop {string} broadcasterId An ID that identifies the broadcaster that the video was clipped from.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} creatorId An ID that identifies the user that created the clip.
-         * @prop {string} creatorName The user’s display name.
-         * @prop {string} videoId An ID that identifies the video that the clip came from. This field contains an empty string if the video is not available.
-         * @prop {string} gameId The ID of the game that was being played when the clip was created.
-         * @prop {string} language The ISO 639-1 two-letter language code that the broadcaster broadcasts in. For example, en for English. The value is other if the broadcaster uses a language that Twitch doesn’t support.
-         * @prop {string} title The title of the clip.
-         * @prop {number} viewCount The number of times the clip has been viewed.
-         * @prop {string} createdAt The date and time of when the clip was created. The date and time is in RFC3339 format.
-         * @prop {string} thumbnailUrl A URL to a thumbnail image of the clip.
-         * @prop {number} duration The length of the clip, in seconds. Precision is 0.1.
-         * @prop {number} vodOffset The zero-based offset, in seconds, to where the clip starts in the video (VOD). Is *null* if the video is not available or hasn’t been created yet from the live stream (see `video_id`).Note that there’s a delay between when a clip is created during a broadcast and when the offset is set. During the delay period, `vod_offset` is *null*. The delay is indeterminant but is typically minutes long.
-         * @prop {boolean} isFeatured A Boolean value that indicates if the clip is featured or not.
-         */
-        /**
-         * @typedef GetClipsResponse
-         * @prop {GetClipsResponse_Data[]} data The list of video clips. For clips returned by game_id or broadcaster_id, the list is in descending order by view count. For lists returned by id, the list is in the same order as the input IDs.
-         * @prop {(() => Promise<GetClipsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets one or more video clips.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-clips)
@@ -3747,16 +5618,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetClipsDownloadResponse_Data
-         * @prop {string} clipId An ID that uniquely identifies the clip.
-         * @prop {string} landscapeDownloadUrl The landscape URL to download the clip. This field is `null` if the URL is not available.
-         * @prop {string} portraitDownloadUrl The portrait URL to download the clip. This field is `null` if the URL is not available.
-         */
-        /**
-         * @typedef GetClipsDownloadResponse
-         * @prop {GetClipsDownloadResponse_Data[]} data List of clips and their download URLs.
-         */
-        /**
          * NEW Provides URLs to download the video file(s) for the specified clips.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-clips-download)
          *
@@ -3818,15 +5679,6 @@ module.exports = (reqFunc) => ({
     },
     Conduits: {
         /**
-         * @typedef GetConduitsResponse_Data
-         * @prop {string} id Conduit ID.
-         * @prop {number} shardCount Number of shards associated with this conduit.
-         */
-        /**
-         * @typedef GetConduitsResponse
-         * @prop {GetConduitsResponse_Data[]} data List of information about the client’s conduits.
-         */
-        /**
          * Gets the conduits for a client ID.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-conduits)
          *
@@ -3879,15 +5731,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef CreateConduitsResponse_Data
-         * @prop {string} id Conduit ID.
-         * @prop {number} shardCount Number of shards created for this conduit.
-         */
-        /**
-         * @typedef CreateConduitsResponse
-         * @prop {CreateConduitsResponse_Data[]} data List of information about the client’s conduits.
-         */
-        /**
          * Creates a new conduit.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#create-conduits)
          *
@@ -3938,15 +5781,6 @@ module.exports = (reqFunc) => ({
                 {200: "Conduit created.", 400: "Invalid shard count.", 401: "Authorization header required with an app access token.", 429: "Conduit limit reached."}
             );
         },
-        /**
-         * @typedef UpdateConduitsResponse_Data
-         * @prop {string} id Conduit ID.
-         * @prop {number} shardCount Number of shards associated with this conduit after the update.
-         */
-        /**
-         * @typedef UpdateConduitsResponse
-         * @prop {UpdateConduitsResponse_Data[]} data List of information about the client’s conduits.
-         */
         /**
          * Updates a conduit’s shard count.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-conduits)
@@ -4023,51 +5857,6 @@ module.exports = (reqFunc) => ({
                 {204: "Successfully deleted the conduit.", 400: "The id query parameter is required.", 401: "Authorization header required with an app access token.", 404: "- Conduit not found.\n- Conduit’s owner must match the client ID in the access token."}
             );
         },
-        /**
-         * @typedef GetConduitShardsResponse_Data_Transport
-         * @prop {"webhook"|"websocket"} method The transport method. Possible values are:
-         *
-         * - webhook
-         *
-         * - websocket
-         * @prop {string} callback The callback URL where the notifications are sent. Included only if method is set to webhook.
-         * @prop {string} sessionId An ID that identifies the WebSocket that notifications are sent to. Included only if method is set to websocket.
-         * @prop {string} connectedAt The UTC date and time that the WebSocket connection was established. Included only if method is set to websocket.
-         * @prop {string} disconnectedAt The UTC date and time that the WebSocket connection was lost. Included only if method is set to websocket.
-         */
-        /**
-         * @typedef GetConduitShardsResponse_Data
-         * @prop {string} id Shard ID.
-         * @prop {"enabled"|"webhook_callback_verification_pending"|"webhook_callback_verification_failed"|"notification_failures_exceeded"|"websocket_disconnected"|"websocket_failed_ping_pong"|"websocket_received_inbound_traffic"|"websocket_internal_error"|"websocket_network_timeout"|"websocket_network_error"|"websocket_failed_to_reconnect"|"The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message."} status The shard status. The subscriber receives events only for enabled shards. Possible values are:
-         *
-         * - enabled — The shard is enabled.
-         *
-         * - webhook_callback_verification_pending — The shard is pending verification of the specified callback URL.
-         *
-         * - webhook_callback_verification_failed — The specified callback URL failed verification.
-         *
-         * - notification_failures_exceeded — The notification delivery failure rate was too high.
-         *
-         * - websocket_disconnected — The client closed the connection.
-         *
-         * - websocket_failed_ping_pong — The client failed to respond to a ping message.
-         *
-         * - websocket_received_inbound_traffic — The client sent a non-pong message. Clients may only send pong messages (and only in response to a ping message).
-         *
-         * - websocket_internal_error — The Twitch WebSocket server experienced an unexpected error.
-         *
-         * - websocket_network_timeout — The Twitch WebSocket server timed out writing the message to the client.
-         *
-         * - websocket_network_error — The Twitch WebSocket server experienced a network error writing the message to the client.
-         *
-         * - websocket_failed_to_reconnect - The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message.
-         * @prop {GetConduitShardsResponse_Data_Transport} transport The transport details used to send the notifications.
-         */
-        /**
-         * @typedef GetConduitShardsResponse
-         * @prop {GetConduitShardsResponse_Data[]} data List of information about a conduit's shards.
-         * @prop {(() => Promise<GetConduitShardsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets a lists of all shards for a conduit.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-conduit-shards)
@@ -4161,87 +5950,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef UpdateConduitShardsResponse_Data_Transport
-         * @prop {"webhook"|"websocket"} method The transport method. Possible values are:
-         *
-         * - webhook
-         *
-         * - websocket
-         * @prop {string} callback The callback URL where the notifications are sent. Included only if method is set to webhook.
-         * @prop {string} sessionId An ID that identifies the WebSocket that notifications are sent to. Included only if method is set to websocket.
-         * @prop {string} connectedAt The UTC date and time that the WebSocket connection was established. Included only if method is set to websocket.
-         * @prop {string} disconnectedAt The UTC date and time that the WebSocket connection was lost. Included only if method is set to websocket.
-         */
-        /**
-         * @typedef UpdateConduitShardsResponse_Data
-         * @prop {string} id Shard ID.
-         * @prop {"enabled"|"webhook_callback_verification_pending"|"webhook_callback_verification_failed"|"notification_failures_exceeded"|"websocket_disconnected"|"websocket_failed_ping_pong"|"websocket_received_inbound_traffic"|"websocket_internal_error"|"websocket_network_timeout"|"websocket_network_error"|"websocket_failed_to_reconnect"|"The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message."} status The shard status. The subscriber receives events only for enabled shards. Possible values are:
-         *
-         * - enabled — The shard is enabled.
-         *
-         * - webhook_callback_verification_pending — The shard is pending verification of the specified callback URL.
-         *
-         * - webhook_callback_verification_failed — The specified callback URL failed verification.
-         *
-         * - notification_failures_exceeded — The notification delivery failure rate was too high.
-         *
-         * - websocket_disconnected — The client closed the connection.
-         *
-         * - websocket_failed_ping_pong — The client failed to respond to a ping message.
-         *
-         * - websocket_received_inbound_traffic — The client sent a non-pong message. Clients may only send pong messages (and only in response to a ping message).
-         *
-         * - websocket_internal_error — The Twitch WebSocket server experienced an unexpected error.
-         *
-         * - websocket_network_timeout — The Twitch WebSocket server timed out writing the message to the client.
-         *
-         * - websocket_network_error — The Twitch WebSocket server experienced a network error writing the message to the client.
-         *
-         * - websocket_failed_to_reconnect - The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message.
-         * @prop {UpdateConduitShardsResponse_Data_Transport} transport The transport details used to send the notifications.
-         */
-        /**
-         * @typedef UpdateConduitShardsResponse_Errors
-         * @prop {string} id Shard ID.
-         * @prop {"The length of the string in the secret field is not valid."|"The URL in the transports callback field is not valid. The URL must use the HTTPS protocol and the 443 port number."|"The value specified in the method field is not valid."|"The callback field is required if you specify the webhook transport method."|"The session_id field is required if you specify the WebSocket transport method."|"The websocket session is not connected."|"The shard id is outside of the conduit’s range."} message The error that occurred while updating the shard. Possible errors:
-         *
-         * - The length of the string in the secret field is not valid.
-         *
-         * - The URL in the transport's callback field is not valid. The URL must use the HTTPS protocol and the 443 port number.
-         *
-         * - The value specified in the method field is not valid.
-         *
-         * - The callback field is required if you specify the webhook transport method.
-         *
-         * - The session_id field is required if you specify the WebSocket transport method.
-         *
-         * - The websocket session is not connected.
-         *
-         * - The shard id is outside of the conduit’s range.
-         * @prop {string} code Error codes used to represent a specific error condition while attempting to update shards.
-         */
-        /**
-         * @typedef UpdateConduitShardsResponse
-         * @prop {UpdateConduitShardsResponse_Data[]} data List of successful shard updates.
-         * @prop {UpdateConduitShardsResponse_Errors[]} errors List of unsuccessful updates.
-         */
-        /**
-         * @typedef UpdateConduitShardsRequest_Shards_Transport
-         * @prop {"webhook"|"websocket"} method The transport method. Possible values are:
-         *
-         * - webhook
-         *
-         * - websocket
-         * @prop {string} callback The callback URL where the notifications are sent. The URL must use the HTTPS protocol and port 443. See Processing an event.Specify this field only if method is set to webhook.NOTE: Redirects are not followed.
-         * @prop {string} secret The secret used to verify the signature. The secret must be an ASCII string that’s a minimum of 10 characters long and a maximum of 100 characters long. For information about how the secret is used, see Verifying the event message.Specify this field only if method is set to webhook.
-         * @prop {string} sessionId An ID that identifies the WebSocket to send notifications to. When you connect to EventSub using WebSockets, the server returns the ID in the Welcome message.Specify this field only if method is set to websocket.
-         */
-        /**
-         * @typedef UpdateConduitShardsRequest_Shards
-         * @prop {string} id Shard ID.
-         * @prop {UpdateConduitShardsRequest_Shards_Transport} transport The transport details that you want Twitch to use when sending you notifications.
-         */
-        /**
          * Updates shard(s) for a conduit.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-conduit-shards)
          *
@@ -4328,7 +6036,7 @@ module.exports = (reqFunc) => ({
          *
          * ---
          * @param {string} conduitId Conduit ID.
-         * @param {UpdateConduitShardsRequest_Shards[]} shards List of shards to update.
+         * @param {UpdateConduitShardsRequest_Shards} shards List of shards to update.
          * @returns {Promise<UpdateConduitShardsResponse>} 
          */
         updateConduitShards(conduitId, shards) {
@@ -4342,20 +6050,6 @@ module.exports = (reqFunc) => ({
         },
     },
     CCLs: {
-        /**
-         * @typedef GetContentClassificationLabelsResponse_Data_Content_classification_labels
-         * @prop {string} id Unique identifier for the CCL.
-         * @prop {string} description Localized description of the CCL.
-         * @prop {string} name Localized name of the CCL.
-         */
-        /**
-         * @typedef GetContentClassificationLabelsResponse_Data
-         * @prop {GetContentClassificationLabelsResponse_Data_Content_classification_labels[]} contentClassificationLabels The list of CCLs available.
-         */
-        /**
-         * @typedef GetContentClassificationLabelsResponse
-         * @prop {GetContentClassificationLabelsResponse_Data[]} data A list that contains information about the available content classification labels.
-         */
         /**
          * Gets information about Twitch content classification labels.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-content-classification-labels)
@@ -4435,23 +6129,6 @@ module.exports = (reqFunc) => ({
         },
     },
     Entitlements: {
-        /**
-         * @typedef GetDropsEntitlementsResponse_Data
-         * @prop {string} id An ID that identifies the entitlement.
-         * @prop {string} benefitId An ID that identifies the benefit (reward).
-         * @prop {string} timestamp The UTC date and time (in RFC3339 format) of when the entitlement was granted.
-         * @prop {string} userId An ID that identifies the user who was granted the entitlement.
-         * @prop {string} gameId An ID that identifies the game the user was playing when the reward was entitled.
-         * @prop {"CLAIMED"|"FULFILLED"} fulfillmentStatus The entitlement’s fulfillment status. Possible values are: - CLAIMED
-         *
-         * - FULFILLED
-         * @prop {string} lastUpdated The UTC date and time (in RFC3339 format) of when the entitlement was last updated.
-         */
-        /**
-         * @typedef GetDropsEntitlementsResponse
-         * @prop {GetDropsEntitlementsResponse_Data[]} data The list of entitlements.
-         * @prop {(() => Promise<GetDropsEntitlementsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets an organization’s list of entitlements that have been granted to a game, a user, or both.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-drops-entitlements)
@@ -4544,25 +6221,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef UpdateDropsEntitlementsResponse_Data
-         * @prop {"INVALID_ID"|"NOT_FOUND"|"SUCCESS"|"UNAUTHORIZED"|"UPDATE_FAILED"} status A string that indicates whether the status of the entitlements in the `ids` field were successfully updated. Possible values are:
-         *
-         * - INVALID_ID — The entitlement IDs in the `ids` field are not valid.
-         *
-         * - NOT_FOUND — The entitlement IDs in the `ids` field were not found.
-         *
-         * - SUCCESS — The status of the entitlements in the `ids` field were successfully updated.
-         *
-         * - UNAUTHORIZED — The user or organization identified by the user access token is not authorized to update the entitlements.
-         *
-         * - UPDATE_FAILED — The update failed. These are considered transient errors and the request should be retried later.
-         * @prop {string[]} ids The list of entitlements that the status in the `status` field applies to.
-         */
-        /**
-         * @typedef UpdateDropsEntitlementsResponse
-         * @prop {UpdateDropsEntitlementsResponse_Data[]} data A list that indicates which entitlements were successfully updated and those that weren’t.
-         */
-        /**
          * Updates the Drop entitlement’s fulfillment status.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-drops-entitlements)
          *
@@ -4648,21 +6306,6 @@ module.exports = (reqFunc) => ({
         },
     },
     Extensions: {
-        /**
-         * @typedef GetExtensionConfigurationSegmentResponse_Data
-         * @prop {"broadcaster"|"developer"|"global"} segment The type of segment. Possible values are: - broadcaster
-         *
-         * - developer
-         *
-         * - global
-         * @prop {string} broadcasterId The ID of the broadcaster that installed the extension. The object includes this field only if the `segment` query parameter is set to developer or broadcaster.
-         * @prop {string} content The contents of the segment. This string may be a plain-text string or a string-encoded JSON object.
-         * @prop {string} version The version number that identifies this definition of the segment’s data.
-         */
-        /**
-         * @typedef GetExtensionConfigurationSegmentResponse
-         * @prop {GetExtensionConfigurationSegmentResponse_Data[]} data The list of requested configuration segments. The list is returned in the same order that you specified the list of segments in the request.
-         */
         /**
          * Gets the specified configuration segment from the specified extension.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-extension-configuration-segment)
@@ -4872,19 +6515,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetExtensionLiveChannelsResponse_Data
-         * @prop {string} broadcasterId The ID of the broadcaster that is streaming live and has installed or activated the extension.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} gameName The name of the category or game being streamed.
-         * @prop {string} gameId The ID of the category or game being streamed.
-         * @prop {string} title The title of the broadcaster’s stream. May be an empty string if not specified.
-         */
-        /**
-         * @typedef GetExtensionLiveChannelsResponse
-         * @prop {GetExtensionLiveChannelsResponse_Data[]} data The list of broadcasters that are streaming live and that have installed or activated the extension.
-         * @prop {(() => Promise<GetExtensionLiveChannelsResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets a list of broadcasters that are streaming live and have installed or activated the extension.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-extension-live-channels)
          *
@@ -5009,21 +6639,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef CreateExtensionSecretResponse_Data_Secrets
-         * @prop {string} content The raw secret that you use with JWT encoding.
-         * @prop {string} activeAt The UTC date and time (in RFC3339 format) that you may begin using this secret to sign a JWT.
-         * @prop {string} expiresAt The UTC date and time (in RFC3339 format) that you must stop using this secret to decode a JWT.
-         */
-        /**
-         * @typedef CreateExtensionSecretResponse_Data
-         * @prop {number} formatVersion The version number that identifies this definition of the secret’s data.
-         * @prop {CreateExtensionSecretResponse_Data_Secrets[]} secrets The list of secrets.
-         */
-        /**
-         * @typedef CreateExtensionSecretResponse
-         * @prop {CreateExtensionSecretResponse_Data[]} data A list that contains the newly added secrets.
-         */
-        /**
          * Creates a shared secret used to sign and verify JWT tokens.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#create-extension-secret)
          *
@@ -5135,102 +6750,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetExtensionsResponse_Data_Views_Mobile
-         * @prop {string} viewerUrl The HTML file that is shown to viewers on mobile devices. This page is presented to viewers as a panel behind the chat area of the mobile app.
-         */
-        /**
-         * @typedef GetExtensionsResponse_Data_Views_Panel
-         * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated in a Panel slot.
-         * @prop {number} height The height, in pixels, of the panel component that the extension is rendered in.
-         * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
-         */
-        /**
-         * @typedef GetExtensionsResponse_Data_Views_Video_overlay
-         * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated on the Video - Overlay slot.
-         * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
-         */
-        /**
-         * @typedef GetExtensionsResponse_Data_Views_Component
-         * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated in a Video - Component slot.
-         * @prop {number} aspectRatioX The width value of the ratio (width : height) which determines the extension’s width, and how the extension’s iframe will resize in different video player environments.
-         * @prop {number} aspectRatioY The height value of the ratio (width : height) which determines the extension’s height, and how the extension’s iframe will resize in different video player environments.
-         * @prop {boolean} autoscale A Boolean value that determines whether to apply CSS zoom. If *true*, a CSS zoom is applied such that the size of the extension is variable but the inner dimensions are fixed based on Scale Pixels. This allows your extension to render as if it is of fixed width and height. If *false*, the inner dimensions of the extension iframe are variable, meaning your extension must implement responsiveness.
-         * @prop {number} scalePixels The base width, in pixels, of the extension to use when scaling (see `autoscale`). This value is ignored if `autoscale` is *false*.
-         * @prop {number} targetHeight The height as a percent of the maximum height of a video component extension. Values are between 1% - 100%.
-         * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
-         */
-        /**
-         * @typedef GetExtensionsResponse_Data_Views_Config
-         * @prop {string} viewerUrl The HTML file shown to broadcasters while they are configuring your extension within the Extension Manager.
-         * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
-         */
-        /**
-         * @typedef GetExtensionsResponse_Data_Views
-         * @prop {GetExtensionsResponse_Data_Views_Mobile} mobile Describes how the extension is displayed on mobile devices.
-         * @prop {GetExtensionsResponse_Data_Views_Panel} panel Describes how the extension is rendered if the extension may be activated as a panel extension.
-         * @prop {GetExtensionsResponse_Data_Views_Video_overlay} videoOverlay Describes how the extension is rendered if the extension may be activated as a video-overlay extension.
-         * @prop {GetExtensionsResponse_Data_Views_Component} component Describes how the extension is rendered if the extension may be activated as a video-component extension.
-         * @prop {GetExtensionsResponse_Data_Views_Config} config Describes the view that is shown to broadcasters while they are configuring your extension within the Extension Manager.
-         */
-        /**
-         * @typedef GetExtensionsResponse_Data
-         * @prop {string} authorName The name of the user or organization that owns the extension.
-         * @prop {boolean} bitsEnabled A Boolean value that determines whether the extension has features that use Bits. Is *true* if the extension has features that use Bits.
-         * @prop {boolean} canInstall A Boolean value that determines whether a user can install the extension on their channel. Is *true* if a user can install the extension.Typically, this is set to *false* if the extension is currently in testing mode and requires users to be allowlisted (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Access*).
-         * @prop {"hosted"|"custom"|"none"} configurationLocation The location of where the extension’s configuration is stored. Possible values are:
-         *
-         * - hosted — The Extensions Configuration Service hosts the configuration.
-         *
-         * - custom — The Extension Backend Service (EBS) hosts the configuration.
-         *
-         * - none — The extension doesn't require configuration.
-         * @prop {string} description A longer description of the extension. It appears on the details page.
-         * @prop {string} eulaTosUrl A URL to the extension’s Terms of Service.
-         * @prop {boolean} hasChatSupport A Boolean value that determines whether the extension can communicate with the installed channel’s chat. Is *true* if the extension can communicate with the channel’s chat room.
-         * @prop {string} iconUrl A URL to the default icon that’s displayed in the Extensions directory.
-         * @prop {Map<string,string>} iconUrls A dictionary that contains URLs to different sizes of the default icon. The dictionary’s key identifies the icon’s size (for example, 24x24), and the dictionary’s value contains the URL to the icon.
-         * @prop {string} id The extension’s ID.
-         * @prop {string} name The extension’s name.
-         * @prop {string} privacyPolicyUrl A URL to the extension’s privacy policy.
-         * @prop {boolean} requestIdentityLink A Boolean value that determines whether the extension wants to explicitly ask viewers to link their Twitch identity.
-         * @prop {string[]} screenshotUrls A list of URLs to screenshots that are shown in the Extensions marketplace.
-         * @prop {"Approved"|"AssetsUploaded"|"Deleted"|"Deprecated"|"InReview"|"InTest"|"PendingAction"|"Rejected"|"Released"} state The extension’s state. Possible values are:
-         *
-         * - Approved
-         *
-         * - AssetsUploaded
-         *
-         * - Deleted
-         *
-         * - Deprecated
-         *
-         * - InReview
-         *
-         * - InTest
-         *
-         * - PendingAction
-         *
-         * - Rejected
-         *
-         * - Released
-         * @prop {"none"|"optional"} subscriptionsSupportLevel Indicates whether the extension can view the user’s subscription level on the channel that the extension is installed on. Possible values are:
-         *
-         * - none — The extension can't view the user’s subscription level.
-         *
-         * - optional — The extension can view the user’s subscription level.
-         * @prop {string} summary A short description of the extension that streamers see when hovering over the discovery splash screen in the Extensions manager.
-         * @prop {string} supportEmail The email address that users use to get support for the extension.
-         * @prop {string} version The extension’s version number.
-         * @prop {string} viewerSummary A brief description displayed on the channel to explain how the extension works.
-         * @prop {GetExtensionsResponse_Data_Views} views Describes all views-related information such as how the extension is displayed on mobile devices.
-         * @prop {string[]} allowlistedConfigUrls Allowlisted configuration URLs for displaying the extension (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Capabilities*).
-         * @prop {string[]} allowlistedPanelUrls Allowlisted panel URLs for displaying the extension (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Capabilities*).
-         */
-        /**
-         * @typedef GetExtensionsResponse
-         * @prop {GetExtensionsResponse_Data[]} data A list that contains the specified extension.
-         */
-        /**
          * Gets information about an extension.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-extensions)
          *
@@ -5333,102 +6852,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the list of extensions.", 400: "- The extension_id query parameter is required.", 401: "- The request must specify the Authorization header.\n- The Authorization header is required and must specify a JWT token.\n- The JWT token is not valid.\n- The request must specify the Client-Id header.", 404: "- The extension in the extension_id query parameter was not found."}
             );
         },
-        /**
-         * @typedef GetReleasedExtensionsResponse_Data_Views_Mobile
-         * @prop {string} viewerUrl The HTML file that is shown to viewers on mobile devices. This page is presented to viewers as a panel behind the chat area of the mobile app.
-         */
-        /**
-         * @typedef GetReleasedExtensionsResponse_Data_Views_Panel
-         * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated in a Panel slot.
-         * @prop {number} height The height, in pixels, of the panel component that the extension is rendered in.
-         * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
-         */
-        /**
-         * @typedef GetReleasedExtensionsResponse_Data_Views_Video_overlay
-         * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated on the Video - Overlay slot.
-         * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
-         */
-        /**
-         * @typedef GetReleasedExtensionsResponse_Data_Views_Component
-         * @prop {string} viewerUrl The HTML file that is shown to viewers on the channel page when the extension is activated in a Video - Component slot.
-         * @prop {number} aspectRatioX The width value of the ratio (width : height) which determines the extension’s width, and how the extension’s iframe will resize in different video player environments.
-         * @prop {number} aspectRatioY The height value of the ratio (width : height) which determines the extension’s height, and how the extension’s iframe will resize in different video player environments.
-         * @prop {boolean} autoscale A Boolean value that determines whether to apply CSS zoom. If *true*, a CSS zoom is applied such that the size of the extension is variable but the inner dimensions are fixed based on Scale Pixels. This allows your extension to render as if it is of fixed width and height. If *false*, the inner dimensions of the extension iframe are variable, meaning your extension must implement responsiveness.
-         * @prop {number} scalePixels The base width, in pixels, of the extension to use when scaling (see `autoscale`). This value is ignored if `autoscale` is *false*.
-         * @prop {number} targetHeight The height as a percent of the maximum height of a video component extension. Values are between 1% - 100%.
-         * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
-         */
-        /**
-         * @typedef GetReleasedExtensionsResponse_Data_Views_Config
-         * @prop {string} viewerUrl The HTML file shown to broadcasters while they are configuring your extension within the Extension Manager.
-         * @prop {boolean} canLinkExternalContent A Boolean value that determines whether the extension can link to non-Twitch domains.
-         */
-        /**
-         * @typedef GetReleasedExtensionsResponse_Data_Views
-         * @prop {GetReleasedExtensionsResponse_Data_Views_Mobile} mobile Describes how the extension is displayed on mobile devices.
-         * @prop {GetReleasedExtensionsResponse_Data_Views_Panel} panel Describes how the extension is rendered if the extension may be activated as a panel extension.
-         * @prop {GetReleasedExtensionsResponse_Data_Views_Video_overlay} videoOverlay Describes how the extension is rendered if the extension may be activated as a video-overlay extension.
-         * @prop {GetReleasedExtensionsResponse_Data_Views_Component} component Describes how the extension is rendered if the extension may be activated as a video-component extension.
-         * @prop {GetReleasedExtensionsResponse_Data_Views_Config} config Describes the view that is shown to broadcasters while they are configuring your extension within the Extension Manager.
-         */
-        /**
-         * @typedef GetReleasedExtensionsResponse_Data
-         * @prop {string} authorName The name of the user or organization that owns the extension.
-         * @prop {boolean} bitsEnabled A Boolean value that determines whether the extension has features that use Bits. Is *true* if the extension has features that use Bits.
-         * @prop {boolean} canInstall A Boolean value that determines whether a user can install the extension on their channel. Is *true* if a user can install the extension.Typically, this is set to *false* if the extension is currently in testing mode and requires users to be allowlisted (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Access*).
-         * @prop {"hosted"|"custom"|"none"} configurationLocation The location of where the extension’s configuration is stored. Possible values are:
-         *
-         * - hosted — The Extensions Configuration Service hosts the configuration.
-         *
-         * - custom — The Extension Backend Service (EBS) hosts the configuration.
-         *
-         * - none — The extension doesn't require configuration.
-         * @prop {string} description A longer description of the extension. It appears on the details page.
-         * @prop {string} eulaTosUrl A URL to the extension’s Terms of Service.
-         * @prop {boolean} hasChatSupport A Boolean value that determines whether the extension can communicate with the installed channel’s chat. Is *true* if the extension can communicate with the channel’s chat room.
-         * @prop {string} iconUrl A URL to the default icon that’s displayed in the Extensions directory.
-         * @prop {Map<string,string>} iconUrls A dictionary that contains URLs to different sizes of the default icon. The dictionary’s key identifies the icon’s size (for example, 24x24), and the dictionary’s value contains the URL to the icon.
-         * @prop {string} id The extension’s ID.
-         * @prop {string} name The extension’s name.
-         * @prop {string} privacyPolicyUrl A URL to the extension’s privacy policy.
-         * @prop {boolean} requestIdentityLink A Boolean value that determines whether the extension wants to explicitly ask viewers to link their Twitch identity.
-         * @prop {string[]} screenshotUrls A list of URLs to screenshots that are shown in the Extensions marketplace.
-         * @prop {"Approved"|"AssetsUploaded"|"Deleted"|"Deprecated"|"InReview"|"InTest"|"PendingAction"|"Rejected"|"Released"} state The extension’s state. Possible values are:
-         *
-         * - Approved
-         *
-         * - AssetsUploaded
-         *
-         * - Deleted
-         *
-         * - Deprecated
-         *
-         * - InReview
-         *
-         * - InTest
-         *
-         * - PendingAction
-         *
-         * - Rejected
-         *
-         * - Released
-         * @prop {"none"|"optional"} subscriptionsSupportLevel Indicates whether the extension can view the user’s subscription level on the channel that the extension is installed on. Possible values are:
-         *
-         * - none — The extension can't view the user’s subscription level.
-         *
-         * - optional — The extension can view the user’s subscription level.
-         * @prop {string} summary A short description of the extension that streamers see when hovering over the discovery splash screen in the Extensions manager.
-         * @prop {string} supportEmail The email address that users use to get support for the extension.
-         * @prop {string} version The extension’s version number.
-         * @prop {string} viewerSummary A brief description displayed on the channel to explain how the extension works.
-         * @prop {GetReleasedExtensionsResponse_Data_Views} views Describes all views-related information such as how the extension is displayed on mobile devices.
-         * @prop {string[]} allowlistedConfigUrls Allowlisted configuration URLs for displaying the extension (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Capabilities*).
-         * @prop {string[]} allowlistedPanelUrls Allowlisted panel URLs for displaying the extension (the allowlist is configured on Twitch’s [developer site](https://dev.twitch.tv/console/extensions) under the *Extensions* -> *Extension* -> *Version* -> *Capabilities*).
-         */
-        /**
-         * @typedef GetReleasedExtensionsResponse
-         * @prop {GetReleasedExtensionsResponse_Data[]} data A list that contains the specified extension.
-         */
         /**
          * Gets information about a released extension.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-released-extensions)
@@ -5533,26 +6956,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the extension.", 400: "- The extension_id query parameter is required.", 401: "- The Authorization header must specify an app access token or user access token.\n- The access token is not valid.\n- The ID in the Client-Id header must match the client ID in the access token.", 404: "- The extension specified in the extension_id query parameter was not found or is not released."}
             );
         },
-        /**
-         * @typedef GetExtensionBitsProductsResponse_Data_Cost
-         * @prop {number} amount The product’s price.
-         * @prop {"bits"} type The type of currency. Possible values are:
-         *
-         * - bits
-         */
-        /**
-         * @typedef GetExtensionBitsProductsResponse_Data
-         * @prop {string} sku The product’s SKU. The SKU is unique across an extension’s products.
-         * @prop {GetExtensionBitsProductsResponse_Data_Cost} cost An object that contains the product’s cost information.
-         * @prop {boolean} inDevelopment A Boolean value that indicates whether the product is in development. If *true*, the product is not available for public use.
-         * @prop {string} displayName The product’s name as displayed in the extension.
-         * @prop {string} expiration The date and time, in RFC3339 format, when the product expires.
-         * @prop {boolean} isBroadcast A Boolean value that determines whether Bits product purchase events are broadcast to all instances of an extension on a channel. The events are broadcast via the `onTransactionComplete` helper callback. Is *true* if the event is broadcast to all instances.
-         */
-        /**
-         * @typedef GetExtensionBitsProductsResponse
-         * @prop {GetExtensionBitsProductsResponse_Data[]} data A list of Bits products that the extension created. The list is in ascending SKU order. The list is empty if the extension hasn’t created any products or they’re all expired or disabled.
-         */
         /**
          * Gets the list of Bits products that belongs to the extension.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-extension-bits-products)
@@ -5847,18 +7250,6 @@ module.exports = (reqFunc) => ({
     },
     Games: {
         /**
-         * @typedef GetTopGamesResponse_Data
-         * @prop {string} id An ID that identifies the category or game.
-         * @prop {string} name The category’s or game’s name.
-         * @prop {string} boxArtUrl A URL to the category’s or game’s box art. You must replace the `{width}x{height}` placeholder with the size of image you want.
-         * @prop {string} igdbId The ID that [IGDB](https://www.igdb.com/) uses to identify this game. If the IGDB ID is not available to Twitch, this field is set to an empty string.
-         */
-        /**
-         * @typedef GetTopGamesResponse
-         * @prop {GetTopGamesResponse_Data[]} data The list of broadcasts. The broadcasts are sorted by the number of viewers, with the most popular first.
-         * @prop {(() => Promise<GetTopGamesResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets information about all broadcasts on Twitch.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-top-games)
          *
@@ -5910,17 +7301,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the list of broadcasts.", 400: "- The value in the first query parameter is not valid.\n- The cursor in the after or before query parameter is not valid.", 401: "- The Authorization header is required and must specify an app access token or user access token.\n- The access token is not valid.\n- The ID in the Client-Id header must match the client ID in the access token."}
             );
         },
-        /**
-         * @typedef GetGamesResponse_Data
-         * @prop {string} id An ID that identifies the category or game.
-         * @prop {string} name The category’s or game’s name.
-         * @prop {string} boxArtUrl A URL to the category’s or game’s box art. You must replace the `{width}x{height}` placeholder with the size of image you want.
-         * @prop {string} igdbId The ID that [IGDB](https://www.igdb.com/) uses to identify this game. If the IGDB ID is not available to Twitch, this field is set to an empty string.
-         */
-        /**
-         * @typedef GetGamesResponse
-         * @prop {GetGamesResponse_Data[]} data The list of categories and games. The list is empty if the specified categories and games weren’t found.
-         */
         /**
          * Gets information about specified games.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-games)
@@ -5978,38 +7358,6 @@ module.exports = (reqFunc) => ({
         },
     },
     Goals: {
-        /**
-         * @typedef GetCreatorGoalsResponse_Data
-         * @prop {string} id An ID that identifies this goal.
-         * @prop {string} broadcasterId An ID that identifies the broadcaster that created the goal.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {"follower"|"subscription"|"subscription_count"|"new_subscription"|"new_subscription_count"} type The type of goal. Possible values are: - follower — The goal is to increase followers.
-         *
-         * - subscription — The goal is to increase subscriptions. This type shows the net increase or decrease in tier points associated with the subscriptions.
-         *
-         * - subscription_count — The goal is to increase subscriptions. This type shows the net increase or decrease in the number of subscriptions.
-         *
-         * - new_subscription — The goal is to increase subscriptions. This type shows only the net increase in tier points associated with the subscriptions (it does not account for users that unsubscribed since the goal started).
-         *
-         * - new_subscription_count — The goal is to increase subscriptions. This type shows only the net increase in the number of subscriptions (it does not account for users that unsubscribed since the goal started).
-         * @prop {string} description A description of the goal. Is an empty string if not specified.
-         * @prop {number} currentAmount The goal’s current value.The goal’s `type` determines how this value is increased or decreased. - If `type` is follower, this field is set to the broadcaster's current number of followers. This number increases with new followers and decreases when users unfollow the broadcaster.
-         *
-         * - If `type` is subscription, this field is increased and decreased by the points value associated with the subscription tier. For example, if a tier-two subscription is worth 2 points, this field is increased or decreased by 2, not 1.
-         *
-         * - If `type` is subscription_count, this field is increased by 1 for each new subscription and decreased by 1 for each user that unsubscribes.
-         *
-         * - If `type` is new_subscription, this field is increased by the points value associated with the subscription tier. For example, if a tier-two subscription is worth 2 points, this field is increased by 2, not 1.
-         *
-         * - If `type` is new_subscription_count, this field is increased by 1 for each new subscription.
-         * @prop {number} targetAmount The goal’s target value. For example, if the broadcaster has 200 followers before creating the goal, and their goal is to double that number, this field is set to 400.
-         * @prop {string} createdAt The UTC date and time (in RFC3339 format) that the broadcaster created the goal.
-         */
-        /**
-         * @typedef GetCreatorGoalsResponse
-         * @prop {GetCreatorGoalsResponse_Data[]} data The list of goals. The list is empty if the broadcaster hasn’t created goals.
-         */
         /**
          * Gets the broadcaster’s list of active goals.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-creator-goals)
@@ -6070,16 +7418,6 @@ module.exports = (reqFunc) => ({
         },
     },
     GuestStar: {
-        /**
-         * @typedef GetChannelGuestStarSettingsResponse
-         * @prop {boolean} isModeratorSendLiveEnabled Flag determining if Guest Star moderators have access to control whether a guest is live once assigned to a slot.
-         * @prop {number} slotCount Number of slots the Guest Star call interface will allow the host to add to a call. Required to be between 1 and 6.
-         * @prop {boolean} isBrowserSourceAudioEnabled Flag determining if Browser Sources subscribed to sessions on this channel should output audio
-         * @prop {"TILED_LAYOUT"|"SCREENSHARE_LAYOUT"} groupLayout This setting determines how the guests within a session should be laid out within the browser source. Can be one of the following values: - `TILED_LAYOUT`: All live guests are tiled within the browser source with the same size.
-         *
-         * - `SCREENSHARE_LAYOUT`: All live guests are tiled within the browser source with the same size. If there is an active screen share, it is sized larger than the other guests.
-         * @prop {string} browserSourceToken View only token to generate browser source URLs
-         */
         /**
          * BETA Gets the channel settings for configuration of the Guest Star feature for a particular host.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-channel-guest-star-settings)
@@ -6172,45 +7510,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetGuestStarSessionResponse_Data_Guests_Audio_settings
-         * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s audio to be seen or heard within the session.
-         * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their audio to be transmitted to the session.
-         * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate audio device available to be transmitted to the session.
-         */
-        /**
-         * @typedef GetGuestStarSessionResponse_Data_Guests_Video_settings
-         * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s video to be seen or heard within the session.
-         * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their video to be transmitted to the session.
-         * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate video device available to be transmitted to the session.
-         */
-        /**
-         * @typedef GetGuestStarSessionResponse_Data_Guests
-         * @prop {string} slotId ID representing this guest’s slot assignment. - Host is always in slot "0"
-         *
-         * - Guests are assigned the following consecutive IDs (e.g, "1", "2", "3", etc)
-         *
-         * - Screen Share is represented as a special guest with the ID "SCREENSHARE"
-         *
-         * - The identifier here matches the ID referenced in browser source links used in broadcasting software.
-         * @prop {boolean} isLive Flag determining whether or not the guest is visible in the browser source in the host’s streaming software.
-         * @prop {string} userId User ID of the guest assigned to this slot.
-         * @prop {string} userDisplayName Display name of the guest assigned to this slot.
-         * @prop {string} userLogin Login of the guest assigned to this slot.
-         * @prop {number} volume Value from 0 to 100 representing the host’s volume setting for this guest.
-         * @prop {string} assignedAt Timestamp when this guest was assigned a slot in the session.
-         * @prop {GetGuestStarSessionResponse_Data_Guests_Audio_settings} audioSettings Information about the guest’s audio settings
-         * @prop {GetGuestStarSessionResponse_Data_Guests_Video_settings} videoSettings Information about the guest’s video settings
-         */
-        /**
-         * @typedef GetGuestStarSessionResponse_Data
-         * @prop {string} id ID uniquely representing the Guest Star session.
-         * @prop {GetGuestStarSessionResponse_Data_Guests} guests List of guests currently interacting with the Guest Star session.
-         */
-        /**
-         * @typedef GetGuestStarSessionResponse
-         * @prop {GetGuestStarSessionResponse_Data[]} data Summary of the session details
-         */
-        /**
          * BETA Gets information about an ongoing Guest Star session for a particular channel.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-guest-star-session)
          *
@@ -6299,45 +7598,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef CreateGuestStarSessionResponse_Data_Guests_Audio_settings
-         * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s audio to be seen or heard within the session.
-         * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their audio to be transmitted to the session.
-         * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate audio device available to be transmitted to the session.
-         */
-        /**
-         * @typedef CreateGuestStarSessionResponse_Data_Guests_Video_settings
-         * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s video to be seen or heard within the session.
-         * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their video to be transmitted to the session.
-         * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate video device available to be transmitted to the session.
-         */
-        /**
-         * @typedef CreateGuestStarSessionResponse_Data_Guests
-         * @prop {string} slotId ID representing this guest’s slot assignment. - Host is always in slot "0"
-         *
-         * - Guests are assigned the following consecutive IDs (e.g, "1", "2", "3", etc)
-         *
-         * - Screen Share is represented as a special guest with the ID "SCREENSHARE"
-         *
-         * - The identifier here matches the ID referenced in browser source links used in broadcasting software.
-         * @prop {boolean} isLive Flag determining whether or not the guest is visible in the browser source in the host’s streaming software.
-         * @prop {string} userId User ID of the guest assigned to this slot.
-         * @prop {string} userDisplayName Display name of the guest assigned to this slot.
-         * @prop {string} userLogin Login of the guest assigned to this slot.
-         * @prop {number} volume Value from 0 to 100 representing the host’s volume setting for this guest.
-         * @prop {string} assignedAt Timestamp when this guest was assigned a slot in the session.
-         * @prop {CreateGuestStarSessionResponse_Data_Guests_Audio_settings} audioSettings Information about the guest’s audio settings
-         * @prop {CreateGuestStarSessionResponse_Data_Guests_Video_settings} videoSettings Information about the guest’s video settings
-         */
-        /**
-         * @typedef CreateGuestStarSessionResponse_Data
-         * @prop {string} id ID uniquely representing the Guest Star session.
-         * @prop {CreateGuestStarSessionResponse_Data_Guests} guests List of guests currently interacting with the Guest Star session. On creation, the session will contain the broadcaster as a solo guest.
-         */
-        /**
-         * @typedef CreateGuestStarSessionResponse
-         * @prop {CreateGuestStarSessionResponse_Data[]} data Summary of the session details.
-         */
-        /**
          * BETA Programmatically creates a Guest Star session on behalf of the broadcaster.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#create-guest-star-session)
          *
@@ -6406,45 +7666,6 @@ module.exports = (reqFunc) => ({
                 {400: "- Missing broadcaster_id\n- Session limit reached (1 active call)", 401: "Phone verification missing", 403: "Insufficient authorization for creating session"}
             );
         },
-        /**
-         * @typedef EndGuestStarSessionResponse_Data_Guests_Audio_settings
-         * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s audio to be seen or heard within the session.
-         * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their audio to be transmitted to the session.
-         * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate audio device available to be transmitted to the session.
-         */
-        /**
-         * @typedef EndGuestStarSessionResponse_Data_Guests_Video_settings
-         * @prop {boolean} isHostEnabled Flag determining whether the host is allowing the guest’s video to be seen or heard within the session.
-         * @prop {boolean} isGuestEnabled Flag determining whether the guest is allowing their video to be transmitted to the session.
-         * @prop {boolean} isAvailable Flag determining whether the guest has an appropriate video device available to be transmitted to the session.
-         */
-        /**
-         * @typedef EndGuestStarSessionResponse_Data_Guests
-         * @prop {string} slotId ID representing this guest’s slot assignment. - Host is always in slot "0"
-         *
-         * - Guests are assigned the following consecutive IDs (e.g, "1", "2", "3", etc)
-         *
-         * - Screen Share is represented as a special guest with the ID "SCREENSHARE"
-         *
-         * - The identifier here matches the ID referenced in browser source links used in broadcasting software.
-         * @prop {boolean} isLive Flag determining whether or not the guest is visible in the browser source in the host’s streaming software.
-         * @prop {string} userId User ID of the guest assigned to this slot.
-         * @prop {string} userDisplayName Display name of the guest assigned to this slot.
-         * @prop {string} userLogin Login of the guest assigned to this slot.
-         * @prop {number} volume Value from 0 to 100 representing the host’s volume setting for this guest.
-         * @prop {string} assignedAt Timestamp when this guest was assigned a slot in the session.
-         * @prop {EndGuestStarSessionResponse_Data_Guests_Audio_settings} audioSettings Information about the guest’s audio settings
-         * @prop {EndGuestStarSessionResponse_Data_Guests_Video_settings} videoSettings Information about the guest’s video settings
-         */
-        /**
-         * @typedef EndGuestStarSessionResponse_Data
-         * @prop {string} id ID uniquely representing the Guest Star session.
-         * @prop {EndGuestStarSessionResponse_Data_Guests} guests List of guests currently interacting with the Guest Star session.
-         */
-        /**
-         * @typedef EndGuestStarSessionResponse
-         * @prop {EndGuestStarSessionResponse_Data[]} data Summary of the session details when the session was ended.
-         */
         /**
          * BETA Programmatically ends a Guest Star session on behalf of the broadcaster.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#end-guest-star-session)
@@ -6515,24 +7736,6 @@ module.exports = (reqFunc) => ({
                 {400: "- Missing or invalid broadcaster_id\n- Missing or invalid session_id\n- Session has already been ended", 403: "Insufficient authorization for ending session"}
             );
         },
-        /**
-         * @typedef GetGuestStarInvitesResponse_Data
-         * @prop {string} userId Twitch User ID corresponding to the invited guest
-         * @prop {string} invitedAt Timestamp when this user was invited to the session.
-         * @prop {string} status Status representing the invited user’s join state. Can be one of the following: - `INVITED`: The user has been invited to the session but has not acknowledged it.
-         *
-         * - `ACCEPTED`: The invited user has acknowledged the invite and joined the waiting room, but may still be setting up their media devices or otherwise preparing to join the call.
-         *
-         * - `READY`: The invited user has signaled they are ready to join the call from the waiting room.
-         * @prop {boolean} isVideoEnabled Flag signaling that the invited user has chosen to disable their local video device. The user has hidden themselves, but they may choose to reveal their video feed upon joining the session.
-         * @prop {boolean} isAudioEnabled Flag signaling that the invited user has chosen to disable their local audio device. The user has muted themselves, but they may choose to unmute their audio feed upon joining the session.
-         * @prop {boolean} isVideoAvailable Flag signaling that the invited user has a video device available for sharing.
-         * @prop {boolean} isAudioAvailable Flag signaling that the invited user has an audio device available for sharing.
-         */
-        /**
-         * @typedef GetGuestStarInvitesResponse
-         * @prop {GetGuestStarInvitesResponse_Data[]} data A list of invite objects describing the invited user as well as their ready status.
-         */
         /**
          * BETA Provides the caller with a list of pending invites to a Guest Star session.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-guest-star-invites)
@@ -6821,64 +8024,6 @@ module.exports = (reqFunc) => ({
     },
     HypeTrain: {
         /**
-         * @typedef GetHypeTrainStatusResponse_Data_Current_Top_contributions_Shared_train_participants
-         * @prop {string} broadcasterUserId The broadcaster ID.
-         * @prop {string} broadcasterUserLogin The broadcaster login.
-         * @prop {string} broadcasterUserName The broadcaster display name.
-         */
-        /**
-         * @typedef GetHypeTrainStatusResponse_Data_Current_Top_contributions
-         * @prop {string} userId The ID of the user that made the contribution.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userName The user’s display name.
-         * @prop {"treasure"|"golden_kappa"|"regular"} type The type of the Hype Train. Possible values are: - treasure
-         *
-         * - golden_kappa
-         *
-         * - regular
-         *
-         * [Learn More](https://help.twitch.tv/s/article/hype-train-guide#special)
-         * @prop {number} total The total number of points contributed for the type.
-         * @prop {GetHypeTrainStatusResponse_Data_Current_Top_contributions_Shared_train_participants[]} sharedTrainParticipants A list containing the broadcasters participating in the shared Hype Train. Null if the Hype Train is not shared.
-         * @prop {string} startedAt The time when the Hype Train started.
-         * @prop {string} expiresAt The time when the Hype Train expires. The expiration is extended when the Hype Train reaches a new level.
-         * @prop {boolean} isSharedTrain Indicates if the Hype Train is shared. When true, shared_train_participants will contain the list of broadcasters the train is shared with.
-         */
-        /**
-         * @typedef GetHypeTrainStatusResponse_Data_Current
-         * @prop {string} id The Hype Train ID.
-         * @prop {string} broadcasterUserId The broadcaster ID.
-         * @prop {string} broadcasterUserLogin The broadcaster login.
-         * @prop {string} broadcasterUserName The broadcaster display name.
-         * @prop {number} level The current level of the Hype Train.
-         * @prop {number} total Total points contributed to the Hype Train.
-         * @prop {number} progress The number of points contributed to the Hype Train at the current level.
-         * @prop {number} goal The number of points required to reach the next level.
-         * @prop {GetHypeTrainStatusResponse_Data_Current_Top_contributions[]} topContributions The contributors with the most points contributed.
-         */
-        /**
-         * @typedef GetHypeTrainStatusResponse_Data
-         * @prop {GetHypeTrainStatusResponse_Data_Current} current An object describing the current Hype Train. Null if a Hype Train is not active.
-         */
-        /**
-         * @typedef GetHypeTrainStatusResponse_All_time_high
-         * @prop {number} level The level of the record Hype Train.
-         * @prop {number} total Total points contributed to the record Hype Train.
-         * @prop {string} achievedAt The time when the record was achieved.
-         */
-        /**
-         * @typedef GetHypeTrainStatusResponse_Shared_all_time_high
-         * @prop {number} level The level of the record Hype Train.
-         * @prop {number} total Total points contributed to the record Hype Train.
-         * @prop {string} achievedAt The time when the record was achieved.
-         */
-        /**
-         * @typedef GetHypeTrainStatusResponse
-         * @prop {GetHypeTrainStatusResponse_Data[]} data A list that contains information related to the channel’s Hype Train.
-         * @prop {GetHypeTrainStatusResponse_All_time_high} allTimeHigh An object with information about the channel’s Hype Train records. Null if a Hype Train has not occurred.
-         * @prop {GetHypeTrainStatusResponse_Shared_all_time_high} sharedAllTimeHigh An object with information about the channel’s shared Hype Train records. Null if a Hype Train has not occurred.
-         */
-        /**
          * NEW Gets the status of a Hype Train for the specified broadcaster.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-hype-train-status)
          *
@@ -6980,20 +8125,6 @@ module.exports = (reqFunc) => ({
     },
     Moderation: {
         /**
-         * @typedef CheckAutoModStatusResponse_Data
-         * @prop {string} msgId The caller-defined ID passed in the request.
-         * @prop {boolean} isPermitted A Boolean value that indicates whether Twitch would approve the message for chat or hold it for moderator review or block it from chat. Is *true* if Twitch would approve the message; otherwise, *false* if Twitch would hold the message for moderator review or block it from chat.
-         */
-        /**
-         * @typedef CheckAutoModStatusResponse
-         * @prop {CheckAutoModStatusResponse_Data[]} data The list of messages and whether Twitch would approve them for chat.
-         */
-        /**
-         * @typedef CheckAutoModStatusRequest_Data
-         * @prop {string} msgId A caller-defined ID used to correlate this message with the same message in the response.
-         * @prop {string} msgText The message to check.
-         */
-        /**
          * Checks whether AutoMod would flag the specified message for review.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#check-automod-status)
          *
@@ -7056,7 +8187,7 @@ module.exports = (reqFunc) => ({
          *
          * ---
          * @param {string} broadcasterId The ID of the broadcaster whose AutoMod settings and list of blocked terms are used to check the message. This ID must match the user ID in the access token.
-         * @param {CheckAutoModStatusRequest_Data[]} data The list of messages to check. The list must contain at least one message and may contain up to a maximum of 100 messages.
+         * @param {CheckAutoModStatusRequest_Data} data The list of messages to check. The list must contain at least one message and may contain up to a maximum of 100 messages.
          * @returns {Promise<CheckAutoModStatusResponse>} 
          */
         checkAutoModStatus(broadcasterId, data) {
@@ -7118,24 +8249,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetAutoModSettingsResponse_Data
-         * @prop {string} broadcasterId The broadcaster’s ID.
-         * @prop {string} moderatorId The moderator’s ID.
-         * @prop {number} overallLevel The default AutoMod level for the broadcaster. This field is *null* if the broadcaster has set one or more of the individual settings.
-         * @prop {number} disability The Automod level for discrimination against disability.
-         * @prop {number} aggression The Automod level for hostility involving aggression.
-         * @prop {number} sexualitySexOrGender The AutoMod level for discrimination based on sexuality, sex, or gender.
-         * @prop {number} misogyny The Automod level for discrimination against women.
-         * @prop {number} bullying The Automod level for hostility involving name calling or insults.
-         * @prop {number} swearing The Automod level for profanity.
-         * @prop {number} raceEthnicityOrReligion The Automod level for racial discrimination.
-         * @prop {number} sexBasedTerms The Automod level for sexual content.
-         */
-        /**
-         * @typedef GetAutoModSettingsResponse
-         * @prop {GetAutoModSettingsResponse_Data[]} data The list of AutoMod settings. The list contains a single object that contains all the AutoMod settings.
-         */
-        /**
          * Gets the broadcaster’s AutoMod settings.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-automod-settings)
          *
@@ -7194,24 +8307,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the broadcaster’s AutoMod settings.", 400: "- The broadcaster_id query parameter is required.\n- The moderator_id query parameter is required.", 401: "- The ID in moderator_id must match the user ID in the user access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the moderator:read:automod_settings scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token.", 403: "- The user in moderator_id is not one of the broadcaster's moderators."}
             );
         },
-        /**
-         * @typedef UpdateAutoModSettingsResponse_Data
-         * @prop {string} broadcasterId The broadcaster’s ID.
-         * @prop {string} moderatorId The moderator’s ID.
-         * @prop {number} overallLevel The default AutoMod level for the broadcaster. This field is *null* if the broadcaster has set one or more of the individual settings.
-         * @prop {number} disability The Automod level for discrimination against disability.
-         * @prop {number} aggression The Automod level for hostility involving aggression.
-         * @prop {number} sexualitySexOrGender The AutoMod level for discrimination based on sexuality, sex, or gender.
-         * @prop {number} misogyny The Automod level for discrimination against women.
-         * @prop {number} bullying The Automod level for hostility involving name calling or insults.
-         * @prop {number} swearing The Automod level for profanity.
-         * @prop {number} raceEthnicityOrReligion The Automod level for racial discrimination.
-         * @prop {number} sexBasedTerms The Automod level for sexual content.
-         */
-        /**
-         * @typedef UpdateAutoModSettingsResponse
-         * @prop {UpdateAutoModSettingsResponse_Data[]} data The list of AutoMod settings. The list contains a single object that contains all the AutoMod settings.
-         */
         /**
          * Updates the broadcaster’s AutoMod settings.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-automod-settings)
@@ -7287,23 +8382,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetBannedUsersResponse_Data
-         * @prop {string} userId The ID of the banned user.
-         * @prop {string} userLogin The banned user’s login name.
-         * @prop {string} userName The banned user’s display name.
-         * @prop {string} expiresAt The UTC date and time (in RFC3339 format) of when the timeout expires, or an empty string if the user is permanently banned.
-         * @prop {string} createdAt The UTC date and time (in RFC3339 format) of when the user was banned.
-         * @prop {string} reason The reason the user was banned or put in a timeout if the moderator provided one.
-         * @prop {string} moderatorId The ID of the moderator that banned the user or put them in a timeout.
-         * @prop {string} moderatorLogin The moderator’s login name.
-         * @prop {string} moderatorName The moderator’s display name.
-         */
-        /**
-         * @typedef GetBannedUsersResponse
-         * @prop {GetBannedUsersResponse_Data[]} data The list of users that were banned or put in a timeout.
-         * @prop {(() => Promise<GetBannedUsersResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets all users that the broadcaster banned or put in a timeout.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-banned-users)
          *
@@ -7375,24 +8453,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the list of banned users.", 400: "- The broadcaster_id query parameter is required.", 401: "- The ID in broadcaster_id must match the user ID in the user access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the moderation:read scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token."}
             );
         },
-        /**
-         * @typedef BanUserResponse_Data
-         * @prop {string} broadcasterId The broadcaster whose chat room the user was banned from chatting in.
-         * @prop {string} moderatorId The moderator that banned or put the user in the timeout.
-         * @prop {string} userId The user that was banned or put in a timeout.
-         * @prop {string} createdAt The UTC date and time (in RFC3339 format) that the ban or timeout was placed.
-         * @prop {string} endTime The UTC date and time (in RFC3339 format) that the timeout will end. Is *null* if the user was banned instead of being put in a timeout.
-         */
-        /**
-         * @typedef BanUserResponse
-         * @prop {BanUserResponse_Data[]} data A list that contains the user you successfully banned or put in a timeout.
-         */
-        /**
-         * @typedef BanUserRequest_Data
-         * @prop {string} userId The ID of the user to ban or put in a timeout.
-         * @prop {number} duration To ban a user indefinitely, don’t include this field.To put a user in a timeout, include this field and specify the timeout period, in seconds. The minimum timeout is 1 second and the maximum is 1,209,600 seconds (2 weeks).To end a user’s timeout early, set this field to 1, or use the [Unban user](#unban-user) endpoint.
-         * @prop {string} reason The reason the you’re banning the user or putting them in a timeout. The text is user defined and is limited to a maximum of 500 characters.
-         */
         /**
          * Bans a user from participating in a broadcaster’s chat room or puts them in a timeout.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#ban-user)
@@ -7480,39 +8540,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetUnbanRequestsResponse_Data
-         * @prop {string} id Unban request ID.
-         * @prop {string} broadcasterId User ID of broadcaster whose channel is receiving the unban request.
-         * @prop {string} broadcasterName The broadcaster's display name.
-         * @prop {string} broadcasterLogin The broadcaster's login name.
-         * @prop {string} moderatorId User ID of moderator who approved/denied the request.
-         * @prop {string} moderatorLogin The moderator's login name.
-         * @prop {string} moderatorName The moderator's display name.
-         * @prop {string} userId User ID of the requestor who is asking for an unban.
-         * @prop {string} userLogin The user's login name.
-         * @prop {string} userName The user's display name.
-         * @prop {string} text Text of the request from the requesting user.
-         * @prop {string} status Status of the request. One of:
-         *
-         * - pending
-         *
-         * - approved
-         *
-         * - denied
-         *
-         * - acknowledged
-         *
-         * - canceled
-         * @prop {string} createdAt Timestamp of when the unban request was created.
-         * @prop {string} resolvedAt Timestamp of when moderator/broadcaster approved or denied the request.
-         * @prop {string} resolutionText Text input by the resolver (moderator) of the unban. request
-         */
-        /**
-         * @typedef GetUnbanRequestsResponse
-         * @prop {GetUnbanRequestsResponse_Data[]} data A list that contains information about the channel's unban requests.
-         * @prop {(() => Promise<GetUnbanRequestsResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets a list of unban requests for a broadcaster’s channel.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-unban-requests)
          *
@@ -7590,30 +8617,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef ResolveUnbanRequestsResponse_Data
-         * @prop {string} id Unban request ID.
-         * @prop {string} broadcasterId User ID of broadcaster whose channel is receiving the unban request.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} moderatorId User ID of moderator who approved/denied the request.
-         * @prop {string} moderatorLogin The moderator’s login name.
-         * @prop {string} moderatorName The moderator’s display name.
-         * @prop {string} userId User ID of the requestor who is asking for an unban.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userName The user’s display name.
-         * @prop {string} text Text of the request from the requesting user.
-         * @prop {string} status Status of the request. One of: - approved
-         *
-         * - denied
-         * @prop {string} createdAt Timestamp of when the unban request was created.
-         * @prop {string} resolvedAt Timestamp of when moderator/broadcaster approved or denied the request.
-         * @prop {string} resolutionText Text input by the resolver (moderator) of the unban request.
-         */
-        /**
-         * @typedef ResolveUnbanRequestsResponse
-         * @prop {ResolveUnbanRequestsResponse_Data[]} data 
-         */
-        /**
          * Resolves an unban request by approving or denying it.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#resolve-unban-requests)
          *
@@ -7679,21 +8682,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetBlockedTermsResponse_Data
-         * @prop {string} broadcasterId The broadcaster that owns the list of blocked terms.
-         * @prop {string} moderatorId The moderator that blocked the word or phrase from being used in the broadcaster’s chat room.
-         * @prop {string} id An ID that identifies this blocked term.
-         * @prop {string} text The blocked word or phrase.
-         * @prop {string} createdAt The UTC date and time (in RFC3339 format) that the term was blocked.
-         * @prop {string} updatedAt The UTC date and time (in RFC3339 format) that the term was updated.When the term is added, this timestamp is the same as `created_at`. The timestamp changes as AutoMod continues to deny the term.
-         * @prop {string} expiresAt The UTC date and time (in RFC3339 format) that the blocked term is set to expire. After the block expires, users may use the term in the broadcaster’s chat room.This field is *null* if the term was added manually or was permanently blocked by AutoMod.
-         */
-        /**
-         * @typedef GetBlockedTermsResponse
-         * @prop {GetBlockedTermsResponse_Data[]} data The list of blocked terms. The list is in descending order of when they were created (see the `created_at` timestamp).
-         * @prop {(() => Promise<GetBlockedTermsResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets the broadcaster’s list of non-private, blocked words or phrases.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-blocked-terms)
          *
@@ -7756,20 +8744,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the list of blocked terms.", 400: "- The broadcaster_id query parameter is required.\n- The moderator_id query parameter is required.", 401: "- The ID in moderator_id must match the user ID in the user access token.\n- The Authorization header must contain a user access token.\n- The user access token must include the moderator:read:blocked_terms scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token.", 403: "- The user in moderator_id is not one of the broadcaster's moderators."}
             );
         },
-        /**
-         * @typedef AddBlockedTermResponse_Data
-         * @prop {string} broadcasterId The broadcaster that owns the list of blocked terms.
-         * @prop {string} moderatorId The moderator that blocked the word or phrase from being used in the broadcaster’s chat room.
-         * @prop {string} id An ID that identifies this blocked term.
-         * @prop {string} text The blocked word or phrase.
-         * @prop {string} createdAt The UTC date and time (in RFC3339 format) that the term was blocked.
-         * @prop {string} updatedAt The UTC date and time (in RFC3339 format) that the term was updated.When the term is added, this timestamp is the same as `created_at`. The timestamp changes as AutoMod continues to deny the term.
-         * @prop {string} expiresAt The UTC date and time (in RFC3339 format) that the blocked term is set to expire. After the block expires, users may use the term in the broadcaster’s chat room.This field is *null* if the term was added manually or was permanently blocked by AutoMod.
-         */
-        /**
-         * @typedef AddBlockedTermResponse
-         * @prop {AddBlockedTermResponse_Data[]} data A list that contains the single blocked term that the broadcaster added.
-         */
         /**
          * Adds a word or phrase to the broadcaster’s list of blocked terms.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#add-blocked-term)
@@ -7894,17 +8868,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetModeratedChannelsResponse_Data
-         * @prop {string} broadcasterId An ID that uniquely identifies the channel this user can moderate.
-         * @prop {string} broadcasterLogin The channel’s login name.
-         * @prop {string} broadcasterName The channels’ display name.
-         */
-        /**
-         * @typedef GetModeratedChannelsResponse
-         * @prop {GetModeratedChannelsResponse_Data[]} data The list of channels that the user has moderator privileges in.
-         * @prop {(() => Promise<GetModeratedChannelsResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets a list of channels that the specified user has moderator privileges in.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-moderated-channels)
          *
@@ -7962,17 +8925,6 @@ module.exports = (reqFunc) => ({
                 {}
             );
         },
-        /**
-         * @typedef GetModeratorsResponse_Data
-         * @prop {string} userId The ID of the user that has permission to moderate the broadcaster’s channel.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userName The user’s display name.
-         */
-        /**
-         * @typedef GetModeratorsResponse
-         * @prop {GetModeratorsResponse_Data[]} data The list of moderators.
-         * @prop {(() => Promise<GetModeratorsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets all users allowed to moderate the broadcaster’s chat room.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-moderators)
@@ -8103,17 +9055,6 @@ module.exports = (reqFunc) => ({
                 {204: "Successfully removed the moderator.", 400: "- The ID in broadcaster_id was not found.\n- The ID in user_id was not found.\n- The user in user_id is not a moderator in the broadcaster's chat room.", 401: "- The Authorization header is required and must contain a user access token.\n- The user access token must include the channel:manage:moderators scope.\n- The access token is not valid.\n- The ID in the broadcaster_id query parameter must match the user ID in the access token.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token.", 429: "- The broadcaster has exceeded the number of requests allowed within a 10-second window. See this endpoint's rate limits."}
             );
         },
-        /**
-         * @typedef GetVIPsResponse_Data
-         * @prop {string} userId An ID that uniquely identifies the VIP user.
-         * @prop {string} userName The user’s display name.
-         * @prop {string} userLogin The user’s login name.
-         */
-        /**
-         * @typedef GetVIPsResponse
-         * @prop {GetVIPsResponse_Data[]} data The list of VIPs. The list is empty if the broadcaster doesn’t have VIP users.
-         * @prop {(() => Promise<GetVIPsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets a list of the broadcaster’s VIPs.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-vips)
@@ -8247,18 +9188,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef UpdateShieldModeStatusResponse_Data
-         * @prop {boolean} isActive A Boolean value that determines whether Shield Mode is active. Is *true* if Shield Mode is active; otherwise, *false*.
-         * @prop {string} moderatorId An ID that identifies the moderator that last activated Shield Mode.
-         * @prop {string} moderatorLogin The moderator’s login name.
-         * @prop {string} moderatorName The moderator’s display name.
-         * @prop {string} lastActivatedAt The UTC timestamp (in RFC3339 format) of when Shield Mode was last activated.
-         */
-        /**
-         * @typedef UpdateShieldModeStatusResponse
-         * @prop {UpdateShieldModeStatusResponse_Data[]} data A list that contains a single object with the broadcaster’s updated Shield Mode status.
-         */
-        /**
          * Activates or deactivates the broadcaster’s Shield Mode.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-shield-mode-status)
          *
@@ -8317,18 +9246,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef GetShieldModeStatusResponse_Data
-         * @prop {boolean} isActive A Boolean value that determines whether Shield Mode is active. Is *true* if the broadcaster activated Shield Mode; otherwise, *false*.
-         * @prop {string} moderatorId An ID that identifies the moderator that last activated Shield Mode. Is an empty string if Shield Mode hasn’t been previously activated.
-         * @prop {string} moderatorLogin The moderator’s login name. Is an empty string if Shield Mode hasn’t been previously activated.
-         * @prop {string} moderatorName The moderator’s display name. Is an empty string if Shield Mode hasn’t been previously activated.
-         * @prop {string} lastActivatedAt The UTC timestamp (in RFC3339 format) of when Shield Mode was last activated. Is an empty string if Shield Mode hasn’t been previously activated.
-         */
-        /**
-         * @typedef GetShieldModeStatusResponse
-         * @prop {GetShieldModeStatusResponse_Data[]} data A list that contains a single object with the broadcaster’s Shield Mode status.
-         */
-        /**
          * Gets the broadcaster’s Shield Mode activation status.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-shield-mode-status)
          *
@@ -8383,22 +9300,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the broadcaster’s Shield Mode activation status.", 400: "- The broadcaster_id query parameter is required.\n- The ID in the broadcaster_id query parameter is not valid.", 401: "- The ID in moderator_id must match the user ID in the user access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the moderator:read:shield_mode or moderator:manage:shield_mode scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token.", 403: "- The user in moderator_id is not one of the broadcaster's moderators."}
             );
         },
-        /**
-         * @typedef WarnChatUserResponse_Data
-         * @prop {string} broadcasterId The ID of the channel in which the warning will take effect.
-         * @prop {string} userId The ID of the warned user.
-         * @prop {string} moderatorId The ID of the user who applied the warning.
-         * @prop {string} reason The reason provided for warning.
-         */
-        /**
-         * @typedef WarnChatUserResponse
-         * @prop {WarnChatUserResponse_Data[]} data A list that contains information about the warning.
-         */
-        /**
-         * @typedef WarnChatUserRequest_Data
-         * @prop {string} userId The ID of the twitch user to be warned.
-         * @prop {string} reason A custom reason for the warning. *Max 500 chars.*
-         */
         /**
          * Warns a user in the specified broadcaster’s chat room, preventing them from chat interaction until the warning is acknowledged.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#warn-chat-user)
@@ -8513,19 +9414,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef RemoveSuspiciousStatusFromChatUserResponse_Data
-         * @prop {string} userId The ID of the user having the suspicious status removed.
-         * @prop {string} broadcasterId The user ID of the broadcaster indicating in which channel the status is being removed.
-         * @prop {string} moderatorId The user ID of the moderator who modified the last status.
-         * @prop {string} updatedAt The timestamp of the last time this user’s status was updated.
-         * @prop {string} status The type of suspicious status. Possible values are: NO_TREATMENT
-         * @prop {string[]} types An array of strings representing the type(s) of suspicious user this is. Possible values are: MANUALLY_ADDED, DETECTED_BAN_EVADER, DETECTED_SUS_CHATTER, BANNED_IN_SHARED_CHANNEL
-         */
-        /**
-         * @typedef RemoveSuspiciousStatusFromChatUserResponse
-         * @prop {RemoveSuspiciousStatusFromChatUserResponse_Data[]} data An array with one object containing information about the suspicious user action.
-         */
-        /**
          * NEW Remove a suspicious user status from a chatter on broadcaster’s channel.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#remove-suspicious-status-from-chat-user)
          *
@@ -8581,48 +9469,6 @@ module.exports = (reqFunc) => ({
         },
     },
     Polls: {
-        /**
-         * @typedef GetPollsResponse_Data_Choices
-         * @prop {string} id An ID that identifies this choice.
-         * @prop {string} title The choice's title. The title may contain a maximum of 25 characters.
-         * @prop {number} votes The total number of votes cast for this choice.
-         * @prop {number} channelPointsVotes The number of votes cast using Channel Points.
-         * @prop {number} bitsVotes Not used; will be set to 0.
-         */
-        /**
-         * @typedef GetPollsResponse_Data
-         * @prop {string} id An ID that identifies the poll.
-         * @prop {string} broadcasterId An ID that identifies the broadcaster that created the poll.
-         * @prop {string} broadcasterName The broadcaster's display name.
-         * @prop {string} broadcasterLogin The broadcaster's login name.
-         * @prop {string} title The question that viewers are voting on. For example, What game should I play next? The title may contain a maximum of 60 characters.
-         * @prop {GetPollsResponse_Data_Choices[]} choices A list of choices that viewers can choose from. The list will contain a minimum of two choices and up to a maximum of five choices.
-         * @prop {boolean} bitsVotingEnabled Not used; will be set to *false*.
-         * @prop {number} bitsPerVote Not used; will be set to 0.
-         * @prop {boolean} channelPointsVotingEnabled A Boolean value that indicates whether viewers may cast additional votes using Channel Points. For information about Channel Points, see [Channel Points Guide](https://help.twitch.tv/s/article/channel-points-guide).
-         * @prop {number} channelPointsPerVote The number of points the viewer must spend to cast one additional vote.
-         * @prop {string} status The poll's status. Valid values are:
-         *
-         * - ACTIVE — The poll is running.
-         *
-         * - COMPLETED — The poll ended on schedule (see the `duration` field).
-         *
-         * - TERMINATED — The poll was terminated before its scheduled end.
-         *
-         * - ARCHIVED — The poll has been archived and is no longer visible on the channel.
-         *
-         * - MODERATED — The poll was deleted.
-         *
-         * - INVALID — Something went wrong while determining the state.
-         * @prop {number} duration The length of time (in seconds) that the poll will run for.
-         * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the poll began.
-         * @prop {string} endedAt The UTC date and time (in RFC3339 format) of when the poll ended. If `status` is ACTIVE, this field is set to *null*.
-         */
-        /**
-         * @typedef GetPollsResponse
-         * @prop {GetPollsResponse_Data[]} data A list of polls. The polls are returned in descending order of start time unless you specify IDs in the request, in which case they're returned in the same order as you passed them in the request. The list is empty if the broadcaster hasn't created polls.
-         * @prop {(() => Promise<GetPollsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets a list of polls that the broadcaster created.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-polls)
@@ -8705,51 +9551,6 @@ module.exports = (reqFunc) => ({
             );
         },
         /**
-         * @typedef CreatePollResponse_Data_Choices
-         * @prop {string} id An ID that identifies this choice.
-         * @prop {string} title The choice’s title. The title may contain a maximum of 25 characters.
-         * @prop {number} votes The total number of votes cast for this choice.
-         * @prop {number} channelPointsVotes The number of votes cast using Channel Points.
-         * @prop {number} bitsVotes Not used; will be set to 0.
-         */
-        /**
-         * @typedef CreatePollResponse_Data
-         * @prop {string} id An ID that identifies the poll.
-         * @prop {string} broadcasterId An ID that identifies the broadcaster that created the poll.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} title The question that viewers are voting on. For example, What game should I play next? The title may contain a maximum of 60 characters.
-         * @prop {CreatePollResponse_Data_Choices[]} choices A list of choices that viewers can choose from. The list will contain a minimum of two choices and up to a maximum of five choices.
-         * @prop {boolean} bitsVotingEnabled Not used; will be set to *false*.
-         * @prop {number} bitsPerVote Not used; will be set to 0.
-         * @prop {boolean} channelPointsVotingEnabled A Boolean value that indicates whether viewers may cast additional votes using Channel Points. For information about Channel Points, see [Channel Points Guide](https://help.twitch.tv/s/article/channel-points-guide).
-         * @prop {number} channelPointsPerVote The number of points the viewer must spend to cast one additional vote.
-         * @prop {string} status The poll’s status. Valid values are:
-         *
-         * - ACTIVE — The poll is running.
-         *
-         * - COMPLETED — The poll ended on schedule (see the `duration` field).
-         *
-         * - TERMINATED — The poll was terminated before its scheduled end.
-         *
-         * - ARCHIVED — The poll has been archived and is no longer visible on the channel.
-         *
-         * - MODERATED — The poll was deleted.
-         *
-         * - INVALID — Something went wrong while determining the state.
-         * @prop {number} duration The length of time (in seconds) that the poll will run for.
-         * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the poll began.
-         * @prop {string} endedAt The UTC date and time (in RFC3339 format) of when the poll ended. If `status` is ACTIVE, this field is set to *null*.
-         */
-        /**
-         * @typedef CreatePollResponse
-         * @prop {CreatePollResponse_Data[]} data A list that contains the single poll that you created.
-         */
-        /**
-         * @typedef CreatePollRequest_Choices
-         * @prop {string} title One of the choices the viewer may select. The choice may contain a maximum of 25 characters.
-         */
-        /**
          * Creates a poll that viewers in the broadcaster’s channel can vote on.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#create-poll)
          *
@@ -8830,7 +9631,7 @@ module.exports = (reqFunc) => ({
          * ---
          * @param {string} broadcasterId The ID of the broadcaster that’s running the poll. This ID must match the user ID in the user access token.
          * @param {string} title The question that viewers will vote on. For example, What game should I play next? The question may contain a maximum of 60 characters.
-         * @param {CreatePollRequest_Choices[]} choices A list of choices that viewers may choose from. The list must contain a minimum of 2 choices and up to a maximum of 5 choices.
+         * @param {CreatePollRequest_Choices} choices A list of choices that viewers may choose from. The list must contain a minimum of 2 choices and up to a maximum of 5 choices.
          * @param {number} duration The length of time (in seconds) that the poll will run for. The minimum is 15 seconds and the maximum is 1800 seconds (30 minutes).
          * @param {boolean?} channelPointsVotingEnabled A Boolean value that indicates whether viewers may cast additional votes using Channel Points. If *true*, the viewer may cast more than one vote but each additional vote costs the number of Channel Points specified in `channel_points_per_vote`. The default is *false* (viewers may cast only one vote). For information about Channel Points, see [Channel Points Guide](https://help.twitch.tv/s/article/channel-points-guide).
          * @param {number?} channelPointsPerVote The number of points that the viewer must spend to cast one additional vote. The minimum is 1 and the maximum is 1000000. Set only if `ChannelPointsVotingEnabled` is *true*.
@@ -8845,47 +9646,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully created the poll.", 400: "- The `broadcaster_id` field is required.\n- The `title` field is required.\n- The `choices` field is required.\n- The `duration` field is required.\n- The value in `duration` is outside the allowed range of values.\n- The value in `channel_points_per_vote` is outside the allowed range of values.\n- The value in `bits_per_vote` is outside the allowed range of values.\n- The poll's `title` is too long.\n- The choice's `title` is too long.\n- The choice's `title` failed AutoMod checks.\n- The number of choices in the poll may not be less than 2 or greater that 5.\n- The broadcaster already has a poll that's running; you may not create another poll until the current poll completes.", 401: "- The ID in `broadcaster_id` must match the user ID in the access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token is missing the channel:manage:polls scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token."}
             );
         },
-        /**
-         * @typedef EndPollResponse_Data_Choices
-         * @prop {string} id An ID that identifies this choice.
-         * @prop {string} title The choice’s title. The title may contain a maximum of 25 characters.
-         * @prop {number} votes The total number of votes cast for this choice.
-         * @prop {number} channelPointsVotes The number of votes cast using Channel Points.
-         * @prop {number} bitsVotes Not used; will be set to 0.
-         */
-        /**
-         * @typedef EndPollResponse_Data
-         * @prop {string} id An ID that identifies the poll.
-         * @prop {string} broadcasterId An ID that identifies the broadcaster that created the poll.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} title The question that viewers are voting on. For example, What game should I play next? The title may contain a maximum of 60 characters.
-         * @prop {EndPollResponse_Data_Choices[]} choices A list of choices that viewers can choose from. The list will contain a minimum of two choices and up to a maximum of five choices.
-         * @prop {boolean} bitsVotingEnabled Not used; will be set to *false*.
-         * @prop {number} bitsPerVote Not used; will be set to 0.
-         * @prop {boolean} channelPointsVotingEnabled A Boolean value that indicates whether viewers may cast additional votes using Channel Points. For information about Channel Points, see [Channel Points Guide](https://help.twitch.tv/s/article/channel-points-guide).
-         * @prop {number} channelPointsPerVote The number of points the viewer must spend to cast one additional vote.
-         * @prop {string} status The poll’s status. Valid values are:
-         *
-         * - ACTIVE — The poll is running.
-         *
-         * - COMPLETED — The poll ended on schedule (see the `duration` field).
-         *
-         * - TERMINATED — The poll was terminated before its scheduled end.
-         *
-         * - ARCHIVED — The poll has been archived and is no longer visible on the channel.
-         *
-         * - MODERATED — The poll was deleted.
-         *
-         * - INVALID — Something went wrong while determining the state.
-         * @prop {number} duration The length of time (in seconds) that the poll will run for.
-         * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the poll began.
-         * @prop {string} endedAt The UTC date and time (in RFC3339 format) of when the poll ended. If `status` is ACTIVE, this field is set to *null*.
-         */
-        /**
-         * @typedef EndPollResponse
-         * @prop {EndPollResponse_Data[]} data A list that contains the poll that you ended.
-         */
         /**
          * End an active poll.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#end-poll)
@@ -8977,57 +9737,6 @@ module.exports = (reqFunc) => ({
     },
     Predictions: {
         /**
-         * @typedef GetPredictionsResponse_Data_Outcomes_Top_predictors
-         * @prop {string} userId An ID that identifies the viewer.
-         * @prop {string} userName The viewer’s display name.
-         * @prop {string} userLogin The viewer’s login name.
-         * @prop {number} channelPointsUsed The number of Channel Points the viewer spent.
-         * @prop {number} channelPointsWon The number of Channel Points distributed to the viewer.
-         */
-        /**
-         * @typedef GetPredictionsResponse_Data_Outcomes
-         * @prop {string} id An ID that identifies this outcome.
-         * @prop {string} title The outcome’s text.
-         * @prop {number} users The number of unique viewers that chose this outcome.
-         * @prop {number} channelPoints The number of Channel Points spent by viewers on this outcome.
-         * @prop {GetPredictionsResponse_Data_Outcomes_Top_predictors[]} topPredictors A list of viewers who were the top predictors; otherwise, *null* if none.
-         * @prop {"BLUE"|"PINK"} color The color that visually identifies this outcome in the UX. Possible values are:
-         *
-         * - BLUE
-         *
-         * - PINK
-         *
-         * If the number of outcomes is two, the color is BLUE for the first outcome and PINK for the second outcome. If there are more than two outcomes, the color is BLUE for all outcomes.
-         */
-        /**
-         * @typedef GetPredictionsResponse_Data
-         * @prop {string} id An ID that identifies this prediction.
-         * @prop {string} broadcasterId An ID that identifies the broadcaster that created the prediction.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} title The question that the prediction asks. For example, Will I finish this entire pizza?
-         * @prop {string} winningOutcomeId The ID of the winning outcome. Is *null* unless `status` is RESOLVED.
-         * @prop {GetPredictionsResponse_Data_Outcomes[]} outcomes The list of possible outcomes for the prediction.
-         * @prop {number} predictionWindow The length of time (in seconds) that the prediction will run for.
-         * @prop {string} status The prediction’s status. Valid values are:
-         *
-         * - ACTIVE — The Prediction is running and viewers can make predictions.
-         *
-         * - CANCELED — The broadcaster canceled the Prediction and refunded the Channel Points to the participants.
-         *
-         * - LOCKED — The broadcaster locked the Prediction, which means viewers can no longer make predictions.
-         *
-         * - RESOLVED — The winning outcome was determined and the Channel Points were distributed to the viewers who predicted the correct outcome.
-         * @prop {string} createdAt The UTC date and time of when the Prediction began.
-         * @prop {string} endedAt The UTC date and time of when the Prediction ended. If `status` is ACTIVE, this is set to *null*.
-         * @prop {string} lockedAt The UTC date and time of when the Prediction was locked. If `status` is not LOCKED, this is set to *null*.
-         */
-        /**
-         * @typedef GetPredictionsResponse
-         * @prop {GetPredictionsResponse_Data[]} data The broadcaster’s list of Channel Points Predictions. The list is sorted in descending ordered by when the prediction began (the most recent prediction is first). The list is empty if the broadcaster hasn’t created predictions.
-         * @prop {(() => Promise<GetPredictionsResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets a list of Channel Points Predictions that the broadcaster created.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-predictions)
          *
@@ -9104,60 +9813,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully retrieved the list of predictions.", 400: "- The broadcaster_id query parameter is required.", 401: "- The ID in broadcaster_id must match the user ID in the access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the channel:read:predictions scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token."}
             );
         },
-        /**
-         * @typedef CreatePredictionResponse_Data_Outcomes_Top_predictors
-         * @prop {string} userId An ID that identifies the viewer.
-         * @prop {string} userName The viewer’s display name.
-         * @prop {string} userLogin The viewer’s login name.
-         * @prop {number} channelPointsUsed The number of Channel Points the viewer spent.
-         * @prop {number} channelPointsWon The number of Channel Points distributed to the viewer.
-         */
-        /**
-         * @typedef CreatePredictionResponse_Data_Outcomes
-         * @prop {string} id An ID that identifies this outcome.
-         * @prop {string} title The outcome’s text.
-         * @prop {number} users The number of unique viewers that chose this outcome.
-         * @prop {number} channelPoints The number of Channel Points spent by viewers on this outcome.
-         * @prop {CreatePredictionResponse_Data_Outcomes_Top_predictors[]} topPredictors A list of viewers who were the top predictors; otherwise, *null* if none.
-         * @prop {"BLUE"|"PINK"} color The color that visually identifies this outcome in the UX. Possible values are:
-         *
-         * - BLUE
-         *
-         * - PINK
-         *
-         * If the number of outcomes is two, the color is BLUE for the first outcome and PINK for the second outcome. If there are more than two outcomes, the color is BLUE for all outcomes.
-         */
-        /**
-         * @typedef CreatePredictionResponse_Data
-         * @prop {string} id An ID that identifies this prediction.
-         * @prop {string} broadcasterId An ID that identifies the broadcaster that created the prediction.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} title The question that the prediction asks. For example, Will I finish this entire pizza?
-         * @prop {string} winningOutcomeId The ID of the winning outcome. Is *null* unless `status` is RESOLVED.
-         * @prop {CreatePredictionResponse_Data_Outcomes[]} outcomes The list of possible outcomes for the prediction.
-         * @prop {number} predictionWindow The length of time (in seconds) that the prediction will run for.
-         * @prop {string} status The prediction’s status. Valid values are:
-         *
-         * - ACTIVE — The Prediction is running and viewers can make predictions.
-         *
-         * - CANCELED — The broadcaster canceled the Prediction and refunded the Channel Points to the participants.
-         *
-         * - LOCKED — The broadcaster locked the Prediction, which means viewers can no longer make predictions.
-         *
-         * - RESOLVED — The winning outcome was determined and the Channel Points were distributed to the viewers who predicted the correct outcome.
-         * @prop {string} createdAt The UTC date and time of when the Prediction began.
-         * @prop {string} endedAt The UTC date and time of when the Prediction ended. If `status` is ACTIVE, this is set to *null*.
-         * @prop {string} lockedAt The UTC date and time of when the Prediction was locked. If `status` is not LOCKED, this is set to *null*.
-         */
-        /**
-         * @typedef CreatePredictionResponse
-         * @prop {CreatePredictionResponse_Data[]} data A list that contains the single prediction that you created.
-         */
-        /**
-         * @typedef CreatePredictionRequest_Outcomes
-         * @prop {string} title The text of one of the outcomes that the viewer may select. The title is limited to a maximum of 25 characters.
-         */
         /**
          * Create a Channel Points Prediction.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#create-prediction)
@@ -9240,7 +9895,7 @@ module.exports = (reqFunc) => ({
          * ---
          * @param {string} broadcasterId The ID of the broadcaster that’s running the prediction. This ID must match the user ID in the user access token.
          * @param {string} title The question that the broadcaster is asking. For example, Will I finish this entire pizza? The title is limited to a maximum of 45 characters.
-         * @param {CreatePredictionRequest_Outcomes[]} outcomes The list of possible outcomes that the viewers may choose from. The list must contain a minimum of 2 choices and up to a maximum of 10 choices.
+         * @param {CreatePredictionRequest_Outcomes} outcomes The list of possible outcomes that the viewers may choose from. The list must contain a minimum of 2 choices and up to a maximum of 10 choices.
          * @param {number} predictionWindow The length of time (in seconds) that the prediction will run for. The minimum is 30 seconds and the maximum is 1800 seconds (30 minutes).
          * @returns {Promise<CreatePredictionResponse>} 
          */
@@ -9253,56 +9908,6 @@ module.exports = (reqFunc) => ({
                 {200: "Successfully created the Channel Points Prediction.", 400: "- The `broadcaster_id` field is required.\n- The `title` field is required.\n- The `outcomes` field is required.\n- The `prediction_window` field is required.\n- The value in `prediction_window` is outside the allowed range of values.\n- The prediction's `title` is too long.\n- The outcome's `title` is too long.\n- The outcome's `title` failed AutoMod checks.\n- There must be 2 outcomes in the prediction.\n- The broadcaster already has a prediction that's running; you may not create another prediction until the current prediction is resolved or canceled.", 401: "- The ID in `broadcaster_id` must match the user ID in the access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the channel:manage:predictions scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token.", 429: ""}
             );
         },
-        /**
-         * @typedef EndPredictionResponse_Data_Outcomes_Top_predictors
-         * @prop {string} userId An ID that identifies the viewer.
-         * @prop {string} userName The viewer’s display name.
-         * @prop {string} userLogin The viewer’s login name.
-         * @prop {number} channelPointsUsed The number of Channel Points the viewer spent.
-         * @prop {number} channelPointsWon The number of Channel Points distributed to the viewer.
-         */
-        /**
-         * @typedef EndPredictionResponse_Data_Outcomes
-         * @prop {string} id An ID that identifies this outcome.
-         * @prop {string} title The outcome’s text.
-         * @prop {number} users The number of unique viewers that chose this outcome.
-         * @prop {number} channelPoints The number of Channel Points spent by viewers on this outcome.
-         * @prop {EndPredictionResponse_Data_Outcomes_Top_predictors[]} topPredictors A list of viewers who were the top predictors; otherwise, *null* if none.
-         * @prop {"BLUE"|"PINK"} color The color that visually identifies this outcome in the UX. Possible values are:
-         *
-         * - BLUE
-         *
-         * - PINK
-         *
-         * If the number of outcomes is two, the color is BLUE for the first outcome and PINK for the second outcome. If there are more than two outcomes, the color is BLUE for all outcomes.
-         */
-        /**
-         * @typedef EndPredictionResponse_Data
-         * @prop {string} id An ID that identifies this prediction.
-         * @prop {string} broadcasterId An ID that identifies the broadcaster that created the prediction.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} title The question that the prediction asks. For example, Will I finish this entire pizza?
-         * @prop {string} winningOutcomeId The ID of the winning outcome. Is *null* unless `status` is RESOLVED.
-         * @prop {EndPredictionResponse_Data_Outcomes[]} outcomes The list of possible outcomes for the prediction.
-         * @prop {number} predictionWindow The length of time (in seconds) that the prediction will run for.
-         * @prop {string} status The prediction’s status. Valid values are:
-         *
-         * - ACTIVE — The Prediction is running and viewers can make predictions.
-         *
-         * - CANCELED — The broadcaster canceled the Prediction and refunded the Channel Points to the participants.
-         *
-         * - LOCKED — The broadcaster locked the Prediction, which means viewers can no longer make predictions.
-         *
-         * - RESOLVED — The winning outcome was determined and the Channel Points were distributed to the viewers who predicted the correct outcome.
-         * @prop {string} createdAt The UTC date and time of when the Prediction began.
-         * @prop {string} endedAt The UTC date and time of when the Prediction ended. If `status` is ACTIVE, this is set to *null*.
-         * @prop {string} lockedAt The UTC date and time of when the Prediction was locked. If `status` is not LOCKED, this is set to *null*.
-         */
-        /**
-         * @typedef EndPredictionResponse
-         * @prop {EndPredictionResponse_Data[]} data A list that contains the single prediction that you updated.
-         */
         /**
          * Locks, resolves, or cancels a Channel Points Prediction.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#end-prediction)
@@ -9396,15 +10001,6 @@ module.exports = (reqFunc) => ({
         },
     },
     Raids: {
-        /**
-         * @typedef StartARaidResponse_Data
-         * @prop {string} createdAt The UTC date and time, in RFC3339 format, of when the raid was requested.
-         * @prop {boolean} isMature *IMPORTANT* This field is deprecated and returns only `false`.A Boolean value that indicates whether the channel being raided contains mature content.
-         */
-        /**
-         * @typedef StartARaidResponse
-         * @prop {StartARaidResponse_Data[]} data A list that contains a single object with information about the pending raid.
-         */
         /**
          * Raid another channel by sending the broadcaster’s viewers to the targeted channel.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#start-a-raid)
@@ -9504,40 +10100,6 @@ module.exports = (reqFunc) => ({
         },
     },
     Schedule: {
-        /**
-         * @typedef GetChannelStreamScheduleResponse_Data_Segments_Category
-         * @prop {string} id An ID that identifies the category that best represents the content that the broadcaster plans to stream. For example, the game’s ID if the broadcaster will play a game or the Just Chatting ID if the broadcaster will host a talk show.
-         * @prop {string} name The name of the category. For example, the game’s title if the broadcaster will playing a game or Just Chatting if the broadcaster will host a talk show.
-         */
-        /**
-         * @typedef GetChannelStreamScheduleResponse_Data_Segments
-         * @prop {string} id An ID that identifies this broadcast segment.
-         * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcast starts.
-         * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcast ends.
-         * @prop {string} title The broadcast segment’s title.
-         * @prop {string} canceledUntil Indicates whether the broadcaster canceled this segment of a recurring broadcast. If the broadcaster canceled this segment, this field is set to the same value that’s in the `end_time` field; otherwise, it’s set to *null*.
-         * @prop {GetChannelStreamScheduleResponse_Data_Segments_Category} category The type of content that the broadcaster plans to stream or *null* if not specified.
-         * @prop {boolean} isRecurring A Boolean value that determines whether the broadcast is part of a recurring series that streams at the same time each week or is a one-time broadcast. Is *true* if the broadcast is part of a recurring series.
-         */
-        /**
-         * @typedef GetChannelStreamScheduleResponse_Data_Vacation
-         * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation starts.
-         * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation ends.
-         */
-        /**
-         * @typedef GetChannelStreamScheduleResponse_Data
-         * @prop {GetChannelStreamScheduleResponse_Data_Segments[]} segments The list of broadcasts in the broadcaster’s streaming schedule.
-         * @prop {string} broadcasterId The ID of the broadcaster that owns the broadcast schedule.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {GetChannelStreamScheduleResponse_Data_Vacation} vacation The dates when the broadcaster is on vacation and not streaming. Is set to *null* if vacation mode is not enabled.
-         * @prop {(() => Promise<GetChannelStreamScheduleResponse_Data>)?} nextPage Retrieves the next page of data
-         */
-        /**
-         * @typedef GetChannelStreamScheduleResponse
-         * @prop {GetChannelStreamScheduleResponse_Data} data The broadcaster’s streaming schedule.
-         * @prop {(() => Promise<GetChannelStreamScheduleResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets the broadcaster’s streaming schedule.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-channel-stream-schedule)
@@ -9698,38 +10260,6 @@ The Content-Type response header is set to `text/calendar`.
             );
         },
         /**
-         * @typedef CreateChannelStreamScheduleSegmentResponse_Data_Segments_Category
-         * @prop {string} id An ID that identifies the category that best represents the content that the broadcaster plans to stream. For example, the game’s ID if the broadcaster will play a game or the Just Chatting ID if the broadcaster will host a talk show.
-         * @prop {string} name The name of the category. For example, the game’s title if the broadcaster will play a game or Just Chatting if the broadcaster will host a talk show.
-         */
-        /**
-         * @typedef CreateChannelStreamScheduleSegmentResponse_Data_Segments
-         * @prop {string} id An ID that identifies this broadcast segment.
-         * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcast starts.
-         * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcast ends.
-         * @prop {string} title The broadcast segment’s title.
-         * @prop {string} canceledUntil Indicates whether the broadcaster canceled this segment of a recurring broadcast. If the broadcaster canceled this segment, this field is set to the same value that’s in the `end_time` field; otherwise, it’s set to *null*.
-         * @prop {CreateChannelStreamScheduleSegmentResponse_Data_Segments_Category} category The type of content that the broadcaster plans to stream or *null* if not specified.
-         * @prop {boolean} isRecurring A Boolean value that determines whether the broadcast is part of a recurring series that streams at the same time each week or is a one-time broadcast. Is *true* if the broadcast is part of a recurring series.
-         */
-        /**
-         * @typedef CreateChannelStreamScheduleSegmentResponse_Data_Vacation
-         * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation starts.
-         * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation ends.
-         */
-        /**
-         * @typedef CreateChannelStreamScheduleSegmentResponse_Data
-         * @prop {CreateChannelStreamScheduleSegmentResponse_Data_Segments[]} segments A list that contains the single broadcast segment that you added.
-         * @prop {string} broadcasterId The ID of the broadcaster that owns the broadcast schedule.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {CreateChannelStreamScheduleSegmentResponse_Data_Vacation} vacation The dates when the broadcaster is on vacation and not streaming. Is set to *null* if vacation mode is not enabled.
-         */
-        /**
-         * @typedef CreateChannelStreamScheduleSegmentResponse
-         * @prop {CreateChannelStreamScheduleSegmentResponse_Data} data The broadcaster’s streaming scheduled.
-         */
-        /**
          * Adds a single or recurring broadcast to the broadcaster’s streaming schedule.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#create-channel-stream-schedule-segment)
          *
@@ -9807,38 +10337,6 @@ The Content-Type response header is set to `text/calendar`.
                 {200: "Successfully added the broadcast segment.", 400: "- The broadcaster_id query parameter is required.\n- The ID in the broadcaster_id query parameter is not valid.\n- The format of the date and time in the `start_time` field is not valid.\n- The value in the `timezone` field is not valid.\n- The value in the `duration` field is not valid.\n- The ID in the `category_id` field is not valid.\n- The string in the `title` field is too long.", 401: "- The ID in the broadcaster_id query parameter must match the user ID in the user access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the channel:manage:schedule scope.\n- The access token is not valid.\n- The ID in the Client-Id header must match the client ID in the access token.", 403: "- Only partners and affiliates may add non-recurring broadcast segments."}
             );
         },
-        /**
-         * @typedef UpdateChannelStreamScheduleSegmentResponse_Data_Segments_Category
-         * @prop {string} id An ID that identifies the category that best represents the content that the broadcaster plans to stream. For example, the game’s ID if the broadcaster will play a game or the Just Chatting ID if the broadcaster will host a talk show.
-         * @prop {string} name The name of the category. For example, the game’s title if the broadcaster will play a game or Just Chatting if the broadcaster will host a talk show.
-         */
-        /**
-         * @typedef UpdateChannelStreamScheduleSegmentResponse_Data_Segments
-         * @prop {string} id An ID that identifies this broadcast segment.
-         * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcast starts.
-         * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcast ends.
-         * @prop {string} title The broadcast segment’s title.
-         * @prop {string} canceledUntil Indicates whether the broadcaster canceled this segment of a recurring broadcast. If the broadcaster canceled this segment, this field is set to the same value that’s in the `end_time` field; otherwise, it’s set to *null*.
-         * @prop {UpdateChannelStreamScheduleSegmentResponse_Data_Segments_Category} category The type of content that the broadcaster plans to stream or *null* if not specified.
-         * @prop {boolean} isRecurring A Boolean value that determines whether the broadcast is part of a recurring series that streams at the same time each week or is a one-time broadcast. Is *true* if the broadcast is part of a recurring series.
-         */
-        /**
-         * @typedef UpdateChannelStreamScheduleSegmentResponse_Data_Vacation
-         * @prop {string} startTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation starts.
-         * @prop {string} endTime The UTC date and time (in RFC3339 format) of when the broadcaster’s vacation ends.
-         */
-        /**
-         * @typedef UpdateChannelStreamScheduleSegmentResponse_Data
-         * @prop {UpdateChannelStreamScheduleSegmentResponse_Data_Segments[]} segments A list that contains the single broadcast segment that you updated.
-         * @prop {string} broadcasterId The ID of the broadcaster that owns the broadcast schedule.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {UpdateChannelStreamScheduleSegmentResponse_Data_Vacation} vacation The dates when the broadcaster is on vacation and not streaming. Is set to *null* if vacation mode is not enabled.
-         */
-        /**
-         * @typedef UpdateChannelStreamScheduleSegmentResponse
-         * @prop {UpdateChannelStreamScheduleSegmentResponse_Data} data The broadcaster’s streaming scheduled.
-         */
         /**
          * Updates a scheduled broadcast segment.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-channel-stream-schedule-segment)
@@ -9956,17 +10454,6 @@ The Content-Type response header is set to `text/calendar`.
     },
     Search: {
         /**
-         * @typedef SearchCategoriesResponse_Data
-         * @prop {string} boxArtUrl A URL to an image of the game’s box art or streaming category.
-         * @prop {string} name The name of the game or category.
-         * @prop {string} id An ID that uniquely identifies the game or category.
-         */
-        /**
-         * @typedef SearchCategoriesResponse
-         * @prop {SearchCategoriesResponse_Data[]} data The list of games or categories that match the query. The list is empty if there are no matches.
-         * @prop {(() => Promise<SearchCategoriesResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets the games or categories that match the specified query.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#search-categories)
          *
@@ -10024,26 +10511,6 @@ The Content-Type response header is set to `text/calendar`.
                 {200: "Successfully retrieved the list of category names that matched the specified query string.", 400: "- The query query parameter is required.", 401: "- The Authorization header is required and must contain an app access token or user access token.\n- The access token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token."}
             );
         },
-        /**
-         * @typedef SearchChannelsResponse_Data
-         * @prop {string} broadcasterLanguage The ISO 639-1 two-letter language code of the language used by the broadcaster. For example, en for English. If the broadcaster uses a language not in the list of [supported stream languages](https://help.twitch.tv/s/article/languages-on-twitch#streamlang), the value is other.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} displayName The broadcaster’s display name.
-         * @prop {string} gameId The ID of the game that the broadcaster is playing or last played.
-         * @prop {string} gameName The name of the game that the broadcaster is playing or last played.
-         * @prop {string} id An ID that uniquely identifies the channel (this is the broadcaster’s ID).
-         * @prop {boolean} isLive A Boolean value that determines whether the broadcaster is streaming live. Is *true* if the broadcaster is streaming live; otherwise, *false*.
-         * @prop {string[]} tagIds *IMPORTANT* As of February 28, 2023, this field is deprecated and returns only an empty array. If you use this field, please update your code to use the `tags` field.The list of tags that apply to the stream. The list contains IDs only when the channel is steaming live. For a list of possible tags, see [List of All Tags](https://www.twitch.tv/directory/all/tags). The list doesn’t include Category Tags.
-         * @prop {string[]} tags The tags applied to the channel.
-         * @prop {string} thumbnailUrl A URL to a thumbnail of the broadcaster’s profile image.
-         * @prop {string} title The stream’s title. Is an empty string if the broadcaster didn’t set it.
-         * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the broadcaster started streaming. The string is empty if the broadcaster is not streaming live.
-         */
-        /**
-         * @typedef SearchChannelsResponse
-         * @prop {SearchChannelsResponse_Data[]} data The list of channels that match the query. The list is empty if there are no matches.
-         * @prop {(() => Promise<SearchChannelsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets the channels that match the specified query and have streamed content within the past 6 months.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#search-channels)
@@ -10157,14 +10624,6 @@ The Content-Type response header is set to `text/calendar`.
     },
     Streams: {
         /**
-         * @typedef GetStreamKeyResponse_Data
-         * @prop {string} streamKey The channel’s stream key.
-         */
-        /**
-         * @typedef GetStreamKeyResponse
-         * @prop {GetStreamKeyResponse_Data[]} data A list that contains the channel’s stream key.
-         */
-        /**
          * Gets the channel’s stream key.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-stream-key)
          *
@@ -10209,33 +10668,6 @@ The Content-Type response header is set to `text/calendar`.
                 {200: "Successfully retrieved the stream’s key.", 400: "- The broadcaster_id field is required.\n- The ID in the broadcaster_id field is not valid.", 401: "- The ID in broadcaster_id must match the user ID in the access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the channel:read:stream_key scope.\n- The access token is not valid.\n- The client ID specified in the Client-Id header must match the client ID specified in the access token.", 403: "The user must complete additional steps in order to stream. Present the user with the returned error message."}
             );
         },
-        /**
-         * @typedef GetStreamsResponse_Data
-         * @prop {string} id An ID that identifies the stream. You can use this ID later to look up the video on demand (VOD).
-         * @prop {string} userId The ID of the user that’s broadcasting the stream.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userName The user’s display name.
-         * @prop {string} gameId The ID of the category or game being played.
-         * @prop {string} gameName The name of the category or game being played.
-         * @prop {"live"} type The type of stream. Possible values are:
-         *
-         * - live
-         *
-         * If an error occurs, this field is set to an empty string.
-         * @prop {string} title The stream’s title. Is an empty string if not set.
-         * @prop {string[]} tags The tags applied to the stream.
-         * @prop {number} viewerCount The number of users watching the stream.
-         * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the broadcast began.
-         * @prop {string} language The language that the stream uses. This is an ISO 639-1 two-letter language code or other if the stream uses a language not in the list of [supported stream languages](https://help.twitch.tv/s/article/languages-on-twitch#streamlang).
-         * @prop {string} thumbnailUrl A URL to an image of a frame from the last 5 minutes of the stream. Replace the width and height placeholders in the URL (`{width}x{height}`) with the size of the image you want, in pixels.
-         * @prop {string[]} tagIds *IMPORTANT* As of February 28, 2023, this field is deprecated and returns only an empty array. If you use this field, please update your code to use the `tags` field.The list of tags that apply to the stream. The list contains IDs only when the channel is steaming live. For a list of possible tags, see [List of All Tags](https://www.twitch.tv/directory/all/tags). The list doesn’t include Category Tags.
-         * @prop {boolean} isMature *IMPORTANT* This field is deprecated and returns only `false`.A Boolean value that indicates whether the stream is meant for mature audiences.
-         */
-        /**
-         * @typedef GetStreamsResponse
-         * @prop {GetStreamsResponse_Data[]} data The list of streams.
-         * @prop {(() => Promise<GetStreamsResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets a list of all streams.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-streams)
@@ -10354,33 +10786,6 @@ The Content-Type response header is set to `text/calendar`.
             );
         },
         /**
-         * @typedef GetFollowedStreamsResponse_Data
-         * @prop {string} id An ID that identifies the stream. You can use this ID later to look up the video on demand (VOD).
-         * @prop {string} userId The ID of the user that’s broadcasting the stream.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string} userName The user’s display name.
-         * @prop {string} gameId The ID of the category or game being played.
-         * @prop {string} gameName The ID of the category or game being played.
-         * @prop {"live"} type The type of stream. Possible values are:
-         *
-         * - live
-         *
-         * If an error occurs, this field is set to an empty string.
-         * @prop {string} title The stream’s title. Is an empty string if not set.
-         * @prop {number} viewerCount The number of users watching the stream.
-         * @prop {string} startedAt The UTC date and time (in RFC3339 format) of when the broadcast began.
-         * @prop {string} language The language that the stream uses. This is an ISO 639-1 two-letter language code or other if the stream uses a language not in the list of [supported stream languages](https://help.twitch.tv/s/article/languages-on-twitch#streamlang).
-         * @prop {string} thumbnailUrl A URL to an image of a frame from the last 5 minutes of the stream. Replace the width and height placeholders in the URL (`{width}x{height}`) with the size of the image you want, in pixels.
-         * @prop {string[]} tagIds *IMPORTANT* As of February 28, 2023, this field is deprecated and returns only an empty array. If you use this field, please update your code to use the `tags` field.The list of tags that apply to the stream. The list contains IDs only when the channel is steaming live. For a list of possible tags, see [List of All Tags](https://www.twitch.tv/directory/all/tags). The list doesn’t include Category Tags.
-         * @prop {string[]} tags The tags applied to the stream.
-         * @prop {boolean} isMature *IMPORTANT* This field is deprecated and returns only `false`.A Boolean value that indicates whether the stream is meant for mature audiences.
-         */
-        /**
-         * @typedef GetFollowedStreamsResponse
-         * @prop {GetFollowedStreamsResponse_Data[]} data The list of live streams of broadcasters that the specified user follows. The list is in descending order by the number of viewers watching the stream. Because viewers come and go during a stream, it’s possible to find duplicate or missing streams in the list as you page through the results. The list is empty if none of the followed broadcasters are streaming live.
-         * @prop {(() => Promise<GetFollowedStreamsResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets the list of broadcasters that the user follows and that are streaming live.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-followed-streams)
          *
@@ -10444,17 +10849,6 @@ The Content-Type response header is set to `text/calendar`.
                 {200: "Successfully retrieved the list of broadcasters that the user follows and that are streaming live.", 400: "- The user_id query parameter is required.", 401: "- The ID in user_id must match the user ID found in the access token.\n- The Authorization header is required and must contain a user access token.\n- The user access token must include the user:read:follows scope.\n- The OAuth token is not valid.\n- The client ID specified in the Client-Id header does not match the client ID specified in the access token."}
             );
         },
-        /**
-         * @typedef CreateStreamMarkerResponse_Data
-         * @prop {string} id An ID that identifies this marker.
-         * @prop {string} createdAt The UTC date and time (in RFC3339 format) of when the user created the marker.
-         * @prop {number} positionSeconds The relative offset (in seconds) of the marker from the beginning of the stream.
-         * @prop {string} description A description that the user gave the marker to help them remember why they marked the location.
-         */
-        /**
-         * @typedef CreateStreamMarkerResponse
-         * @prop {CreateStreamMarkerResponse_Data[]} data A list that contains the single marker that you added.
-         */
         /**
          * Adds a marker to a live stream.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#create-stream-marker)
@@ -10701,18 +11095,6 @@ The Content-Type response header is set to `text/calendar`.
     },
     Tags: {
         /**
-         * @typedef GetAllStreamTagsResponse_Data
-         * @prop {string} tagId An ID that identifies this tag.
-         * @prop {boolean} isAuto A Boolean value that determines whether the tag is an automatic tag. An automatic tag is one that Twitch adds to the stream. Broadcasters may not add automatic tags to their channel. The value is *true* if the tag is an automatic tag; otherwise, *false*.
-         * @prop {Map<string,string>} localizationNames A dictionary that contains the localized names of the tag. The key is in the form, <locale>-<country/region>. For example, en-us. The value is the localized name.
-         * @prop {Map<string,string>} localizationDescriptions A dictionary that contains the localized descriptions of the tag. The key is in the form, <locale>-<country/region>. For example, en-us. The value is the localized description.
-         */
-        /**
-         * @typedef GetAllStreamTagsResponse
-         * @prop {GetAllStreamTagsResponse_Data[]} data The list of stream tags that the broadcaster can apply to their channel.
-         * @prop {(() => Promise<GetAllStreamTagsResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets the list of all stream tags that Twitch defines. You can also filter the list by one or more tag IDs.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-all-stream-tags)
          *
@@ -10790,17 +11172,6 @@ The Content-Type response header is set to `text/calendar`.
             );
         },
         /**
-         * @typedef GetStreamTagsResponse_Data
-         * @prop {string} tagId An ID that identifies this tag.
-         * @prop {boolean} isAuto A Boolean value that determines whether the tag is an automatic tag. An automatic tag is one that Twitch adds to the stream. Broadcasters may not add automatic tags to their channel. The value is *true* if the tag is an automatic tag; otherwise, *false*.
-         * @prop {Map<string,string>} localizationNames A dictionary that contains the localized names of the tag. The key is in the form, <locale>-<coutry/region>. For example, en-us. The value is the localized name.
-         * @prop {Map<string,string>} localizationDescriptions A dictionary that contains the localized descriptions of the tag. The key is in the form, <locale>-<coutry/region>. For example, en-us. The value is the localized description.
-         */
-        /**
-         * @typedef GetStreamTagsResponse
-         * @prop {GetStreamTagsResponse_Data[]} data The list of stream tags. The list is empty if the broadcaster or Twitch hasn’t added tags to the broadcaster’s channel.
-         */
-        /**
          * Gets the list of stream tags that the broadcaster or Twitch added to their channel.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-stream-tags)
          *
@@ -10871,25 +11242,6 @@ The Content-Type response header is set to `text/calendar`.
     },
     Teams: {
         /**
-         * @typedef GetChannelTeamsResponse_Data
-         * @prop {string} broadcasterId An ID that identifies the broadcaster.
-         * @prop {string} broadcasterLogin The broadcaster’s login name.
-         * @prop {string} broadcasterName The broadcaster’s display name.
-         * @prop {string} backgroundImageUrl A URL to the team’s background image.
-         * @prop {string} banner A URL to the team’s banner.
-         * @prop {string} createdAt The UTC date and time (in RFC3339 format) of when the team was created.
-         * @prop {string} updatedAt The UTC date and time (in RFC3339 format) of the last time the team was updated.
-         * @prop {string} info The team’s description. The description may contain formatting such as Markdown, HTML, newline (\n) characters, etc.
-         * @prop {string} thumbnailUrl A URL to a thumbnail image of the team’s logo.
-         * @prop {string} teamName The team’s name.
-         * @prop {string} teamDisplayName The team’s display name.
-         * @prop {string} id An ID that identifies the team.
-         */
-        /**
-         * @typedef GetChannelTeamsResponse
-         * @prop {GetChannelTeamsResponse_Data[]} data The list of teams that the broadcaster is a member of. Returns an empty array if the broadcaster is not a member of a team.
-         */
-        /**
          * Gets the list of Twitch teams that the broadcaster is a member of.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-channel-teams)
          *
@@ -10945,29 +11297,6 @@ The Content-Type response header is set to `text/calendar`.
                 {200: "Successfully retrieved the list of teams.", 400: "- The broadcaster_id query parameter is missing or invalid.", 401: "- The Authorization header must contain an app access token or user access token.\n- The access token is not valid.\n- The ID specified in the Client-Id header does not match the client ID specified in the access token.", 404: "- The broadcaster was not found."}
             );
         },
-        /**
-         * @typedef GetTeamsResponse_Data_Users
-         * @prop {string} userId An ID that identifies the team member.
-         * @prop {string} userLogin The team member’s login name.
-         * @prop {string} userName The team member’s display name.
-         */
-        /**
-         * @typedef GetTeamsResponse_Data
-         * @prop {GetTeamsResponse_Data_Users[]} users The list of team members.
-         * @prop {string} backgroundImageUrl A URL to the team’s background image.
-         * @prop {string} banner A URL to the team’s banner.
-         * @prop {string} createdAt The UTC date and time (in RFC3339 format) of when the team was created.
-         * @prop {string} updatedAt The UTC date and time (in RFC3339 format) of the last time the team was updated.
-         * @prop {string} info The team’s description. The description may contain formatting such as Markdown, HTML, newline (\n) characters, etc.
-         * @prop {string} thumbnailUrl A URL to a thumbnail image of the team’s logo.
-         * @prop {string} teamName The team’s name.
-         * @prop {string} teamDisplayName The team’s display name.
-         * @prop {string} id An ID that identifies the team.
-         */
-        /**
-         * @typedef GetTeamsResponse
-         * @prop {GetTeamsResponse_Data[]} data A list that contains the single team that you requested.
-         */
         /**
          * Gets information about the specified Twitch team.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-teams)
@@ -11041,34 +11370,6 @@ The Content-Type response header is set to `text/calendar`.
     },
     Users: {
         /**
-         * @typedef GetUsersResponse_Data
-         * @prop {string} id An ID that identifies the user.
-         * @prop {string} login The user’s login name.
-         * @prop {string} displayName The user’s display name.
-         * @prop {"admin"|"global_mod"|"staff"|""} type The type of user. Possible values are: - admin — Twitch administrator
-         *
-         * - global_mod
-         *
-         * - staff — Twitch staff
-         *
-         * - "" — Normal user
-         * @prop {"affiliate"|"partner"|""} broadcasterType The type of broadcaster. Possible values are: - affiliate — An affiliate broadcaster [affiliate broadcaster](https://help.twitch.tv/s/article/joining-the-affiliate-program target=)
-         *
-         * - partner — A partner broadcaster [partner broadcaster](https://help.twitch.tv/s/article/partner-program-overview)
-         *
-         * - "" — A normal broadcaster
-         * @prop {string} description The user’s description of their channel.
-         * @prop {string} profileImageUrl A URL to the user’s profile image.
-         * @prop {string} offlineImageUrl A URL to the user’s offline image.
-         * @prop {number} viewCount The number of times the user’s channel has been viewed. *NOTE*: This field has been deprecated (see [Get Users API endpoint – “view_count” deprecation](https://discuss.dev.twitch.tv/t/get-users-api-endpoint-view-count-deprecation/37777)). Any data in this field is not valid and should not be used.
-         * @prop {string} email The user’s verified email address. The object includes this field only if the user access token includes the *user:read:email* scope. If the request contains more than one user, only the user associated with the access token that provided consent will include an email address — the email address for all other users will be empty.
-         * @prop {string} createdAt The UTC date and time that the user’s account was created. The timestamp is in RFC3339 format.
-         */
-        /**
-         * @typedef GetUsersResponse
-         * @prop {GetUsersResponse_Data[]} data The list of users.
-         */
-        /**
          * Gets information about one or more users.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-users)
          *
@@ -11128,38 +11429,6 @@ The Content-Type response header is set to `text/calendar`.
             );
         },
         /**
-         * @typedef UpdateUserResponse_Data
-         * @prop {string} id An ID that identifies the user.
-         * @prop {string} login The user's login name.
-         * @prop {string} displayName The user's display name.
-         * @prop {"admin"|"global_mod"|"staff"|""} type The type of user. Possible values are:
-         *
-         * - admin — Twitch administrator
-         *
-         * - global_mod
-         *
-         * - staff — Twitch staff
-         *
-         * - "" — Normal user
-         * @prop {"affiliate"|"partner"|""} broadcasterType The type of broadcaster. Possible values are:
-         *
-         * - affiliate — An [affiliate broadcaster](https://help.twitch.tv/s/article/joining-the-affiliate-program target=)
-         *
-         * - partner — A [partner broadcaster](https://help.twitch.tv/s/article/partner-program-overview)
-         *
-         * - "" — A normal broadcaster
-         * @prop {string} description The user's description of their channel.
-         * @prop {string} profileImageUrl A URL to the user's profile image.
-         * @prop {string} offlineImageUrl A URL to the user's offline image.
-         * @prop {number} viewCount The number of times the user's channel has been viewed.*NOTE*: This field has been deprecated (see [Get Users API endpoint – "view_count" deprecation](https://discuss.dev.twitch.tv/t/get-users-api-endpoint-view-count-deprecation/37777)). Any data in this field is not valid and should not be used.
-         * @prop {string} email The user's verified email address. The object includes this field only if the user access token includes the *user:read:email* scope.If the request contains more than one user, only the user associated with the access token that provided consent will include an email address — the email address for all other users will be empty.
-         * @prop {string} createdAt The UTC date and time that the user's account was created. The timestamp is in RFC3339 format.
-         */
-        /**
-         * @typedef UpdateUserResponse
-         * @prop {UpdateUserResponse_Data[]} data A list contains the single user that you updated.
-         */
-        /**
          * Updates the user’s information.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-user)
          *
@@ -11217,17 +11486,6 @@ The Content-Type response header is set to `text/calendar`.
                 {200: "Successfully updated the specified user's information.", 400: "- The string in the description query parameter is too long.", 401: "- The Authorization header is required and must contain a user access token.\n- The user access token must include the user:edit scope.\n- The access token is not valid.\n- The ID specified in the Client-Id header does not match the client ID specified in the access token.", 429: "The app exceeded the number of requests that it may make."}
             );
         },
-        /**
-         * @typedef GetAuthorizationByUserResponse_Data
-         * @prop {string} userId The user’s ID.
-         * @prop {string} userName The user’s display name.
-         * @prop {string} userLogin The user’s login name.
-         * @prop {string[]} scopes An array of all the scopes the user has granted to the client ID.
-         */
-        /**
-         * @typedef GetAuthorizationByUserResponse
-         * @prop {GetAuthorizationByUserResponse_Data[]} data List of users and their authorized scopes.
-         */
         /**
          * NEW Gets the authorization scopes that the specified user has granted the application.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-authorization-by-user)
@@ -11291,17 +11549,6 @@ The Content-Type response header is set to `text/calendar`.
                 {200: "Successfully retrieved user authorization.", 400: "Request is malformed - invalid parameters or missing parameters.", 401: "- The access token is not valid.\n- Authorization header is required and must specify an app access token.", 403: "The client-id in the header must match the client ID in the access token.", 500: "Internal Server Error."}
             );
         },
-        /**
-         * @typedef GetUserBlockListResponse_Data
-         * @prop {string} userId An ID that identifies the blocked user.
-         * @prop {string} userLogin The blocked user’s login name.
-         * @prop {string} displayName The blocked user’s display name.
-         */
-        /**
-         * @typedef GetUserBlockListResponse
-         * @prop {GetUserBlockListResponse_Data[]} data The list of blocked users. The list is in descending order by when the user was blocked.
-         * @prop {(() => Promise<GetUserBlockListResponse>)?} nextPage Retrieves the next page of data
-         */
         /**
          * Gets the list of users that the broadcaster has blocked.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-user-block-list)
@@ -11446,26 +11693,6 @@ The Content-Type response header is set to `text/calendar`.
             );
         },
         /**
-         * @typedef GetUserExtensionsResponse_Data
-         * @prop {string} id An ID that identifies the extension.
-         * @prop {string} version The extension's version.
-         * @prop {string} name The extension's name.
-         * @prop {boolean} canActivate A Boolean value that determines whether the extension is configured and can be activated. Is *true* if the extension is configured and can be activated.
-         * @prop {"component"|"mobile"|"overlay"|"panel"} type The extension types that you can activate for this extension. Possible values are:
-         *
-         * - component
-         *
-         * - mobile
-         *
-         * - overlay
-         *
-         * - panel
-         */
-        /**
-         * @typedef GetUserExtensionsResponse
-         * @prop {GetUserExtensionsResponse_Data[]} data The list of extensions that the user has installed.
-         */
-        /**
          * Gets a list of all extensions (both active and inactive) that the broadcaster has installed.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-user-extensions)
          *
@@ -11562,39 +11789,6 @@ The Content-Type response header is set to `text/calendar`.
             );
         },
         /**
-         * @typedef GetUserActiveExtensionsResponse_Data_Panel
-         * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured this panel extension.
-         * @prop {string} id An ID that identifies the extension.
-         * @prop {string} version The extension’s version.
-         * @prop {string} name The extension’s name.
-         */
-        /**
-         * @typedef GetUserActiveExtensionsResponse_Data_Overlay
-         * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured this overlay extension.
-         * @prop {string} id An ID that identifies the extension.
-         * @prop {string} version The extension’s version.
-         * @prop {string} name The extension’s name.
-         */
-        /**
-         * @typedef GetUserActiveExtensionsResponse_Data_Component
-         * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured this component extension.
-         * @prop {string} id An ID that identifies the extension.
-         * @prop {string} version The extension’s version.
-         * @prop {string} name The extension’s name.
-         * @prop {number} x The x-coordinate where the extension is placed.
-         * @prop {number} y The y-coordinate where the extension is placed.
-         */
-        /**
-         * @typedef GetUserActiveExtensionsResponse_Data
-         * @prop {GetUserActiveExtensionsResponse_Data_Panel} panel A dictionary that contains the data for a panel extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the panel’s data for each key.
-         * @prop {GetUserActiveExtensionsResponse_Data_Overlay} overlay A dictionary that contains the data for a video-overlay extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the overlay’s data for each key.
-         * @prop {GetUserActiveExtensionsResponse_Data_Component} component A dictionary that contains the data for a video-component extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the component’s data for each key.
-         */
-        /**
-         * @typedef GetUserActiveExtensionsResponse
-         * @prop {GetUserActiveExtensionsResponse_Data} data The active extensions that the broadcaster has installed.
-         */
-        /**
          * Gets the active extensions that the broadcaster has installed for each configuration.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-user-active-extensions)
          *
@@ -11682,39 +11876,6 @@ The Content-Type response header is set to `text/calendar`.
                 {200: "Successfully retrieved the user's active extensions.", 400: "- The user_id query parameter is required if you specify an app access token.", 401: "- The Authorization header is required and must contain an app access token or user access token.\n- The access token is not valid.\n- The ID specified in the Client-Id header does not match the client ID specified in the access token."}
             );
         },
-        /**
-         * @typedef UpdateUserExtensionsResponse_Data_Panel
-         * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured a panel extension.
-         * @prop {string} id An ID that identifies the extension.
-         * @prop {string} version The extension’s version.
-         * @prop {string} name The extension’s name.
-         */
-        /**
-         * @typedef UpdateUserExtensionsResponse_Data_Overlay
-         * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured an overlay extension.
-         * @prop {string} id An ID that identifies the extension.
-         * @prop {string} version The extension’s version.
-         * @prop {string} name The extension’s name.
-         */
-        /**
-         * @typedef UpdateUserExtensionsResponse_Data_Component
-         * @prop {boolean} active A Boolean value that determines the extension’s activation state. If *false*, the user has not configured a component extension.
-         * @prop {string} id An ID that identifies the extension.
-         * @prop {string} version The extension’s version.
-         * @prop {string} name The extension’s name.
-         * @prop {number} x The x-coordinate where the extension is placed.
-         * @prop {number} y The y-coordinate where the extension is placed.
-         */
-        /**
-         * @typedef UpdateUserExtensionsResponse_Data
-         * @prop {UpdateUserExtensionsResponse_Data_Panel} panel A dictionary that contains the data for a panel extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the panel’s data for each key.
-         * @prop {UpdateUserExtensionsResponse_Data_Overlay} overlay A dictionary that contains the data for a video-overlay extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the overlay’s data for each key.
-         * @prop {UpdateUserExtensionsResponse_Data_Component} component A dictionary that contains the data for a video-component extension. The dictionary’s key is a sequential number beginning with 1. The following fields contain the component’s data for each key.
-         */
-        /**
-         * @typedef UpdateUserExtensionsResponse
-         * @prop {UpdateUserExtensionsResponse_Data} data The extensions that the broadcaster updated.
-         */
         /**
          * Updates an installed extension’s information.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#update-user-extensions)
@@ -11847,42 +12008,6 @@ The Content-Type response header is set to `text/calendar`.
     },
     Videos: {
         /**
-         * @typedef GetVideosResponse_Data_Muted_segments
-         * @prop {number} duration The duration of the muted segment, in seconds.
-         * @prop {number} offset The offset, in seconds, from the beginning of the video to where the muted segment begins.
-         */
-        /**
-         * @typedef GetVideosResponse_Data
-         * @prop {string} id An ID that identifies the video.
-         * @prop {string} streamId The ID of the stream that the video originated from if the video's type is "archive;" otherwise, *null*.
-         * @prop {string} userId The ID of the broadcaster that owns the video.
-         * @prop {string} userLogin The broadcaster's login name.
-         * @prop {string} userName The broadcaster's display name.
-         * @prop {string} title The video's title.
-         * @prop {string} description The video's description.
-         * @prop {string} createdAt The date and time, in UTC, of when the video was created. The timestamp is in RFC3339 format.
-         * @prop {string} publishedAt The date and time, in UTC, of when the video was published. The timestamp is in RFC3339 format.
-         * @prop {string} url The video's URL.
-         * @prop {string} thumbnailUrl A URL to a thumbnail image of the video. Before using the URL, you must replace the `%{width}` and `%{height}` placeholders with the width and height of the thumbnail you want returned. Due to current limitations, `${width}` must be 320 and `${height}` must be 180.
-         * @prop {string} viewable The video's viewable state. Always set to *public*.
-         * @prop {number} viewCount The number of times that users have watched the video.
-         * @prop {string} language The ISO 639-1 two-letter language code that the video was broadcast in. For example, the language code is DE if the video was broadcast in German. For a list of supported languages, see [Supported Stream Language](https://help.twitch.tv/s/article/languages-on-twitch#streamlang). The language value is "other" if the video was broadcast in a language not in the list of supported languages.
-         * @prop {"archive"|"highlight"|"upload"} type The video's type. Possible values are:
-         *
-         * - archive — An on-demand video (VOD) of one of the broadcaster's past streams.
-         *
-         * - highlight — A highlight reel of one of the broadcaster's past streams. See [Creating Highlights](https://help.twitch.tv/s/article/creating-highlights-and-stream-markers).
-         *
-         * - upload — A video that the broadcaster uploaded to their video library. See Upload under [Video Producer](https://help.twitch.tv/s/article/video-on-demand?language=en_US#videoproducer).
-         * @prop {string} duration The video's length in ISO 8601 duration format. For example, 3m21s represents 3 minutes, 21 seconds.
-         * @prop {GetVideosResponse_Data_Muted_segments[]} mutedSegments The segments that Twitch Audio Recognition muted; otherwise, *null*.
-         */
-        /**
-         * @typedef GetVideosResponse
-         * @prop {GetVideosResponse_Data[]} data The list of published videos that match the filter criteria.
-         * @prop {(() => Promise<GetVideosResponse>)?} nextPage Retrieves the next page of data
-         */
-        /**
          * Gets information about one or more published videos.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#get-videos)
          *
@@ -11991,10 +12116,6 @@ The Content-Type response header is set to `text/calendar`.
                 {200: "Successfully retrieved the list of videos.", 400: "- The request must specify either the id or user_id or game_id query parameter.\n- The id, user_id, and game_id query parameters are mutually exclusive; you must specify only one of them.\n- The value in the id query parameter is not valid.\n- The ID in the game_id query parameter is not valid.\n- The value in the type query parameter is not valid.\n- The value in the period query parameter is not valid.\n- The value in the sort query parameter is not valid.", 401: "- The Authorization header is required and must contain an app access token or user access token.\n- The access token is not valid.\n- The ID specified in the Client-Id header does not match the client ID specified in the access token.", 404: "- The ID in the game_id query parameter was not found.\n- The ID in the id query parameter was not found. Returned only if all the IDs were not found; otherwise, the ID is ignored."}
             );
         },
-        /**
-         * @typedef DeleteVideosResponse
-         * @prop {string[]} data The list of IDs of the videos that were deleted.
-         */
         /**
          * Deletes one or more videos.
          * [Learn More](https://dev.twitch.tv/docs/api/reference/#delete-videos)

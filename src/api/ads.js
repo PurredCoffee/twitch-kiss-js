@@ -1,5 +1,6 @@
 //@ts-check
 
+const mkr = require('../helpers/makeReadonly.js');
 /**
  * 
  * @param {import('../TwitchBot').TwitchBot} twitchBot 
@@ -33,8 +34,25 @@ module.exports = (twitchBot, api) => ({
      * @returns 
      */
     startCommercial(length) {
-        if(typeof length != 'number' || length > 180) throw Promise.reject(TypeError('length is not a number or > 180!'));
-        return api.startCommercial(twitchBot.userID ?? "", length);
+        if(typeof length != 'number')
+        return api.startCommercial(twitchBot.userID ?? "", length).then(v => mkr(() => {if(v.data[0]) return {
+            /**
+             * The length of the commercial you requested. If you request a commercial that’s longer than 180 seconds, the API uses 180 seconds.
+             */
+            length: v.data[0].length,
+            /**
+             * A message that indicates whether Twitch was able to serve an ad.
+             */
+            message: v.data[0].message,
+            /**
+             * The number of seconds you must wait before running another commercial.
+             */
+            retryAfter: v.data[0].retryAfter,
+            /**
+             * The raw data from twitch, can be subject to jank!
+             */
+            raw: v
+        }; throw 1}));
     },
     /**
      * Returns ad schedule related information.
@@ -62,9 +80,51 @@ module.exports = (twitchBot, api) => ({
      * ```
      */
     getAdSchedule() {
-        return api.getAdSchedule(twitchBot.userID ?? "");
+        return api.getAdSchedule(twitchBot.userID ?? "").then(v => mkr(() => {if(v.data[0]) return {
+            /**
+             * The length in seconds of the scheduled upcoming ad break.
+             */
+            duration: v.data[0].duration,
+            /**
+             * The Date/Time of the broadcaster’s last scheduled ad. Empty if the channel has no ad scheduled or is not live.
+             */
+            lastAdAt: (v.data[0].lastAdAt)?new Date(v.data[0].lastAdAt):null,
+            /**
+             * The Date/Time of the broadcaster’s next scheduled ad. Empty if the channel has no ad scheduled or is not live.
+             */
+            nextAdAt: (v.data[0].nextAdAt)?new Date(v.data[0].nextAdAt):null,
+            /**
+             * The amount of pre-roll free time remaining for the channel in seconds. Returns 0 if they are currently not pre-roll free.
+             */
+            prerollFreeTime: v.data[0].prerollFreeTime,
+            /**
+             * The number of snoozes available for the broadcaster.
+             */
+            snoozeCount: v.data[0].snoozeCount,
+            /**
+             * The Date/Time when the broadcaster will gain an additional snooze,
+             */
+            snoozeRefreshAt: v.data[0].snoozeRefreshAt,
+            /**
+             * The raw data from twitch, can be subject to jank!
+             */
+            raw: v
+        }; throw 1}));
     },
     snoozeNextAd() {
-        return api.snoozeNextAd(twitchBot.userID ?? "");
+        return api.snoozeNextAd(twitchBot.userID ?? "").then(v => mkr(() => {if(v.data[0]) return {
+            /**
+             * The Date/Time of the broadcaster’s next scheduled ad.
+             */
+            nextAdAt: new Date(v.data[0].nextAdAt),
+            /**
+             * The number of snoozes available for the broadcaster.
+             */
+            snoozeCount: v.data[0].snoozeCount,
+            /**
+             * The Date/Time timestamp when the broadcaster will gain an additional snooze
+             */
+            snoozeRefreshAt: new Date(v.data[0].snoozeRefreshAt)
+        }; throw 1}));
     }
 })

@@ -66,6 +66,7 @@ function paramIfy(str) {
 }
 
 let finalFile = "";
+let types = "";
 /**
  * 
  * @param  {...string} str 
@@ -73,6 +74,14 @@ let finalFile = "";
 function addStr(...str) {
     finalFile += str.join(' ');
     finalFile += '\n';
+}
+/**
+ * 
+ * @param  {...string} str 
+ */
+function addType(...str) {
+    types += str.join(' ');
+    types += '\n';
 }
 /**
  * 
@@ -84,10 +93,14 @@ function addStr(...str) {
  *  original: string,
  *  type: string,
  *  required: boolean?,
- *  description: string
+ *  description: string,
+ *  isObject: boolean,
+ *  isArray: boolean
  * }}
  */
 function convertParam(param, name, prevName) {
+    let isObject = false;
+    const isArray = param.type.endsWith('[]');
     switch (param.type) {
         case 'integer': param.type = 'number'; break;
         case 'float': param.type = 'number'; break;
@@ -95,28 +108,13 @@ function convertParam(param, name, prevName) {
         case 'int64': param.type = 'number'; break;
         case 'bool': param.type = 'boolean'; break;
     }
-    if(name == 'pagination') {
-        return {
-            name: 'nextPage',
-            original: name,
-            type: `(() => Promise<${prevName}>)?`,
-            //@ts-ignore
-            required: (param.required)?param.required: undefined,
-            description: "Retrieves the next page of data"
-        }
-    }
     if(param.type.startsWith('map')) {
         param.type = param.type.replaceAll(/map<(.*),(.*)>/g, 'Map<$1,$2>');
     }
     if(param.attr) {
-        const values = Object.entries(param.attr).map(([v, attr]) => convertParam(attr, v, `${prevName}_${classIfy(name)}`));
-        addStr('        /**');
-        addStr(`         * @typedef ${prevName}_${classIfy(name)}`);
-        for(let v of values) {
-            addStr(`         * @prop {${v.type}} ${v.name} ${v.description?.replaceAll('\n', '\n         *\n         * ')}`);
-        }
-        addStr('         */');
-        param.type = `${prevName}_${classIfy(name)}` + (param.type.endsWith('[]')?"[]":"");
+        convertAllParams(Object.entries(param.attr),`${prevName}_${classIfy(name)}`);
+        param.type = `${prevName}_${classIfy(name)}`;
+        isObject = true;
     }
     if(param.possible) {
         return {
@@ -125,7 +123,9 @@ function convertParam(param, name, prevName) {
             type: param.possible.map(v => '"'+v+'"').join('|'),
             //@ts-ignore
             required: (param.required)?param.required: undefined,
-            description: param.description
+            description: param.description,
+            isObject,
+            isArray
         }
     }
     return {
@@ -134,8 +134,34 @@ function convertParam(param, name, prevName) {
         type: param.type,
         //@ts-ignore
         required: (param.required)?param.required: undefined,
-        description: param.description
+        description: param.description,
+        isObject,
+        isArray
     }
+}
+/**
+ * 
+ * @param {[string, param|response][]} entries 
+ * @param {string} prevName 
+ * @returns {{
+ *  name: string,
+ *  original: string,
+ *  type: string,
+ *  required: boolean?,
+ *  description: string,
+ *  isObject: boolean,
+ *  isArrray: boolean
+ * }[]}
+ */
+function convertAllParams(entries, prevName) {
+    const values = entries.map(([v, attr]) => convertParam(attr, v, prevName));
+    addType('/**');
+    addType(` * @typedef ${prevName}`);
+    for(let v of values) {
+        addType(` * @prop {${v.type}${v.isArray?'[]':''}} ${v.name} ${v.description?.replaceAll('\n', '\n         *\n         * ')}`);
+    }
+    addType(' */');
+    return values;
 }
 /**
  * 
@@ -144,13 +170,7 @@ function convertParam(param, name, prevName) {
  */
 function processFunc(doc, name) {
     if(Object.keys(doc.body).length > 0) {
-        const values = Object.entries(doc.body).map(([v, attr]) => convertParam(attr, v, classIfy(name)+"Response"));
-        addStr('        /**');
-        addStr(`         * @typedef ${classIfy(name)}Response`);
-        for(let v of values) {
-            addStr(`         * @prop {${v.type}} ${v.name} ${v.description?.replaceAll('\n', '\n         *\n         * ')}`)
-        }
-        addStr('         */');
+        convertAllParams(Object.entries(doc.body), classIfy(name)+"Response");
     }
     const params = [];
     for(let v in doc.params) {
@@ -230,7 +250,10 @@ function processFunc(doc, name) {
     addStr(`        },`);
 }
 
-addStr('//@ts-check');
+addStr('/**');
+addStr(' * @typedef {Array<T> & {nextPage(): Promise<twitchArray<T>?>}} twitchArray');
+addStr(' * @template T');
+addStr(' */');
 addStr('/**');
 addStr(' * @param {(method: string, url: string, scopes: string[], token: string[], params: {}, body: {}, errorCodes: {}) => Promise<any>} reqFunc');
 addStr(' */');
@@ -247,7 +270,9 @@ addStr("})");
 
 const fs = require('fs');
 
-fs.writeFileSync('./src/api/api.js', finalFile);
+fs.writeFileSync('./src/api/api.js', `//@ts-check
+${types}
+${finalFile}`);
 
 Object.entries(docs).forEach(([v, entry]) => {
     if(fs.existsSync('./src/api/' + v.toLowerCase() + '.js')) return;
