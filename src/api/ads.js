@@ -34,7 +34,7 @@ module.exports = (twitchBot, api) => ({
      * @returns 
      */
     startCommercial(length) {
-        if(typeof length != 'number')
+        if(typeof length != 'number') return Promise.reject(new TypeError('length is not a number!'));
         return api.startCommercial(twitchBot.userID ?? "", length).then(v => mkr(() => {if(v.data[0]) return {
             /**
              * The length of the commercial you requested. If you request a commercial that’s longer than 180 seconds, the API uses 180 seconds.
